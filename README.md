@@ -1,3 +1,3 @@
 # OPA!
 
-This framework provides simple Object Persistence Approach.
+This framework provides a simple Object Persistence Approach.
