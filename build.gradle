@@ -5,6 +5,7 @@ plugins {
 }
 
 repositories {
+    mavenLocal()
     jcenter()
 }
 
@@ -12,9 +13,9 @@ dependencies {
     compile  'org.tinylog:tinylog:1.2-beta-1'
     runtime 'org.tinylog:slf4j-binding:1.2-beta-1'
     testCompile 'junit:junit:4.12',
-            'com.github.nwillc:jdk_contract_tests:1.8.0',
+            'com.github.nwillc:jdk_contract_tests:1.8.1',
             'org.mockito:mockito-core:2.2.9',
-            'org.assertj:assertj-core:1.7.1'
+            'org.assertj:assertj-core:3.6.0'
 }
 
 configurations {
