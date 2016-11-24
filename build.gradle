@@ -14,7 +14,7 @@ dependencies {
     testCompile 'junit:junit:4.12',
             'com.github.nwillc:jdk_contract_tests:1.8.0',
             'org.mockito:mockito-core:2.2.9',
-            'org.assertj:assertj-core:3.6.0'
+            'org.assertj:assertj-core:1.7.1'
 }
 
 configurations {

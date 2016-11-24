@@ -38,4 +38,19 @@ public class HasKey<K> {
                 "key=" + key +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        HasKey<?> hasKey = (HasKey<?>) o;
+
+        return key.equals(hasKey.key);
+    }
+
+    @Override
+    public int hashCode() {
+        return key.hashCode();
+    }
 }
