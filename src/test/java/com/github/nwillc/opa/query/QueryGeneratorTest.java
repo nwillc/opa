@@ -12,7 +12,6 @@
  * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- *
  */
 
 package com.github.nwillc.opa.query;
@@ -32,7 +31,7 @@ public class QueryGeneratorTest {
     }
 
     @Test
-    public void testEq() throws Exception {
+    public void testContains() throws Exception {
         QueryGenerator generator = queryGenerator
                 .contains("key", "42");
         assertThat(generator.toString()).isEqualTo("contains(\"key\",\"42\")");
