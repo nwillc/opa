@@ -65,6 +65,27 @@ public class QueryGeneratorTest {
         assertThat(generator.toString()).isEqualTo("or(contains(\"key\",\"1\"),contains(\"key\",\"2\"))");
     }
 
+    @Test
+    public void testNoOperations() throws Exception {
+        assertThat(queryGenerator.getFilter()).isNull();
+    }
+
+    @Test
+    public void testSingleOperator() throws Exception {
+        Query<Bean> filter = queryGenerator.eq("key", "foo").getFilter();
+
+        assertThat(filter).isInstanceOf(Comparison.class);
+        assertThat(filter.getOperator()).isEqualTo(Operator.EQ);
+    }
+
+    @Test
+    public void testAutoOrOperator() throws Exception {
+        Query<Bean> filter = queryGenerator.eq("key", "foo").eq("key","bar").getFilter();
+
+        assertThat(filter).isInstanceOf(Logical.class);
+        assertThat(filter.getOperator()).isEqualTo(Operator.OR);
+    }
+
     public class Bean extends HasKey<String> {
         private final String value;
         private String second;
