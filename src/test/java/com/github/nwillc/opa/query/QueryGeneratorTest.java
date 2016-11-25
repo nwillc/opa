@@ -12,7 +12,6 @@
  * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- *
  */
 
 package com.github.nwillc.opa.query;
@@ -32,7 +31,7 @@ public class QueryGeneratorTest {
     }
 
     @Test
-    public void testEq() throws Exception {
+    public void testContains() throws Exception {
         QueryGenerator generator = queryGenerator
                 .contains("key", "42");
         assertThat(generator.toString()).isEqualTo("contains(\"key\",\"42\")");
@@ -63,6 +62,27 @@ public class QueryGeneratorTest {
                 .contains("key","2")
                 .or();
         assertThat(generator.toString()).isEqualTo("or(contains(\"key\",\"1\"),contains(\"key\",\"2\"))");
+    }
+
+    @Test
+    public void testNoOperations() throws Exception {
+        assertThat(queryGenerator.getFilter()).isNull();
+    }
+
+    @Test
+    public void testSingleOperator() throws Exception {
+        Query<Bean> filter = queryGenerator.eq("key", "foo").getFilter();
+
+        assertThat(filter).isInstanceOf(Comparison.class);
+        assertThat(filter.getOperator()).isEqualTo(Operator.EQ);
+    }
+
+    @Test
+    public void testAutoOrOperator() throws Exception {
+        Query<Bean> filter = queryGenerator.eq("key", "foo").eq("key","bar").getFilter();
+
+        assertThat(filter).isInstanceOf(Logical.class);
+        assertThat(filter.getOperator()).isEqualTo(Operator.OR);
     }
 
     public class Bean extends HasKey<String> {

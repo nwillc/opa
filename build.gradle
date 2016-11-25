@@ -1,7 +1,12 @@
 
 plugins {
     id "java"
+    id "maven"
+    id "maven-publish"
+    id "jacoco"
+    id "pmd"
     id "com.github.nwillc.vplugin" version "1.3.4"
+    id "com.jfrog.bintray" version "1.7.3"
 }
 
 repositories {
@@ -23,7 +28,7 @@ configurations {
 }
 
 group = "com.github.nwillc"
-version = "0.1.0"
+version = "0.1.1-SNAPSHOT"
 targetCompatibility = "1.8"
 sourceCompatibility = "1.8"
 
@@ -44,4 +49,86 @@ test {
     testLogging {
         exceptionFormat "full"
     }
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourceJar
+            artifact javadocJar
+        }
+    }
+}
+
+bintrayUpload.onlyIf { !project.version.toString().endsWith('SNAPSHOT') }
+
+bintray {
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_API_KEY')
+
+    dryRun = false
+    publish = true
+    publications = ['mavenJava']
+    pkg {
+        repo = 'maven'
+        name = project.name
+        desc = 'Simple/trivial light weight object persistence approach.'
+        websiteUrl = 'https://github.com/nwillc/opa'
+        issueTrackerUrl = 'https://github.com/nwillc/opa/issues'
+        vcsUrl = 'https://github.com/nwillc/opa.git'
+        licenses = ['ISC']
+        labels = ['jdk8', 'persistence']
+        publicDownloadNumbers = true
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+    }
+}
+
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
+pmd {
+    toolVersion = '4.3'
+    sourceSets = [sourceSets.main]
+    ignoreFailures = true
+    ruleSets = [
+            "basic",
+            "braces",
+            "naming",
+            "clone",
+            "codesize",
+            "controversial",
+            "design",
+            "finalizers",
+            "imports",
+            "junit",
+            "logging-java",
+            "migrating",
+            "optimizations",
+            "strictexception",
+            "strings",
+            "sunsecure",
+            "typeresolution",
+            "unusedcode"
+    ]
 }

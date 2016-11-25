@@ -18,16 +18,18 @@ package com.github.nwillc.opa.query;
 
 import org.junit.Test;
 
-public class QueryMapperTest {
+import java.util.Arrays;
+import java.util.Collection;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+
+public class OperatorTest {
+    private Collection<String> labels = Arrays.asList("EQ", "CONTAINS", "NOT", "AND", "OR");
 
     @Test
-    public void testVisitor() throws Exception {
-        QueryGenerator<Bean> generator = new QueryGenerator<>(Bean.class);
-        generator.eq("foo","bar").eq("foo","baz").or();
-        generator.getFilter().accept(System.out::println);
-    }
-
-    class Bean {
-        String foo;
+    public void nameNames() throws Exception {
+        assertThat(Operator.values()).hasSize(labels.size());
+        labels.forEach(l -> assertThat(Operator.valueOf(l)).isNotNull());
     }
 }

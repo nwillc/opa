@@ -12,7 +12,6 @@
  * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- *
  */
 
 package com.github.nwillc.opa.util;
@@ -25,6 +24,8 @@ import java.util.UUID;
 import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.spy;
 
 public class AccessorTest extends UtilityClassContract {
 
@@ -38,15 +39,31 @@ public class AccessorTest extends UtilityClassContract {
         final Bean bean = new Bean("foo");
 
         assertThat(bean.getValue()).isEqualTo("foo");
-        Function<Bean,String> accessor = Accessor.getFunction("value", Bean.class);
+        Function<Bean, String> accessor = Accessor.getFunction("value", Bean.class);
         assertThat(accessor.apply(bean)).isEqualTo("foo");
+    }
+
+    @Test
+    public void getIlleagalAccess() throws Exception {
+        final Bean bean = new Bean("foo");
+
+        assertThat(bean.getValue()).isEqualTo("foo");
+        Function<Bean, String> accessor = Accessor.getFunction("value", Bean.class);
+        assertThat(accessor.apply(bean)).isEqualTo("foo");
+    }
+
+    @Test
+    public void testBadField() {
+        assertThatThrownBy(() -> Accessor.getFunction("notHere", Bean.class))
+                .isInstanceOf(NoSuchFieldException.class)
+                .hasMessageContaining("notHere");
     }
 
     @Test
     public void getSuperFunction() throws Exception {
         final Bean bean = new Bean("foo");
 
-        Function<Bean,String> accessor = Accessor.getFunction("key", Bean.class);
+        Function<Bean, String> accessor = Accessor.getFunction("key", Bean.class);
         assertThat(accessor).isNotNull();
         assertThat(accessor.apply(bean)).isEqualTo(bean.getKey());
     }

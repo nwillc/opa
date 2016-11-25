@@ -12,7 +12,6 @@
  * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- *
  */
 
 package com.github.nwillc.opa.memory;
@@ -36,6 +35,20 @@ public class MemoryQueryMapperTest {
         bean.value = "1";
         assertThat(predicate.test(bean)).isTrue();
         bean.value = "2";
+        assertThat(predicate.test(bean)).isFalse();
+    }
+
+    @Test
+    public void testContains() throws Exception {
+        QueryGenerator<Bean> generator = new QueryGenerator<>(Bean.class).contains("value", "1");
+
+        MemoryQueryMapper<Bean> b = new MemoryQueryMapper<>();
+        generator.getFilter().accept(b);
+        Predicate<Bean> predicate = b.getPredicate();
+        Bean bean = new Bean();
+        bean.value = "1 2 3";
+        assertThat(predicate.test(bean)).isTrue();
+        bean.value = "2 3 4";
         assertThat(predicate.test(bean)).isFalse();
     }
 
@@ -65,6 +78,9 @@ public class MemoryQueryMapperTest {
         bean.value2 = "2";
         assertThat(predicate.test(bean)).isTrue();
         bean.value2 = "3";
+        assertThat(predicate.test(bean)).isFalse();
+        bean.value = "3";
+        bean.value2 = "2";
         assertThat(predicate.test(bean)).isFalse();
     }
 

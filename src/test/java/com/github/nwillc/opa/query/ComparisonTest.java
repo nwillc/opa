@@ -18,16 +18,18 @@ package com.github.nwillc.opa.query;
 
 import org.junit.Test;
 
-public class QueryMapperTest {
+import static org.assertj.core.api.Java6Assertions.assertThat;
 
+
+public class ComparisonTest {
     @Test
-    public void testVisitor() throws Exception {
-        QueryGenerator<Bean> generator = new QueryGenerator<>(Bean.class);
-        generator.eq("foo","bar").eq("foo","baz").or();
-        generator.getFilter().accept(System.out::println);
+    public void getFieldName() throws Exception {
+        Comparison comparison = new Comparison<>(Bean.class, "label", "value", Operator.EQ);
+
+        assertThat(comparison.getFieldName()).isEqualTo("label");
     }
 
-    class Bean {
-        String foo;
+    static class Bean {
+        String label;
     }
 }

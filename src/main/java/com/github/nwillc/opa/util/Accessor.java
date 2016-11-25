@@ -12,7 +12,6 @@
  * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- *
  */
 
 package com.github.nwillc.opa.util;
@@ -37,6 +36,7 @@ public final class Accessor {
      * @param fieldName the instance variable name
      * @param clz       the class
      * @param <T>       the instance type of the argument to the function
+     * @throws NoSuchFieldException if the fieldName is not one present in the class
      * @return an accessor function
      */
     @SuppressWarnings("unchecked")
