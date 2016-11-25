@@ -27,7 +27,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class MemoryQueryMapper<T> implements QueryMapper<T> {
-    final Deque<Predicate<T>> predicates = new ArrayDeque<>();
+    private final Deque<Predicate<T>> predicates = new ArrayDeque<>();
 
     @Override
     @SuppressWarnings("unchecked")

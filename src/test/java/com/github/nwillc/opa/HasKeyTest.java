@@ -13,18 +13,18 @@ public class HasKeyTest extends EqualsContract<HasKey<String>> {
     @SuppressWarnings("unchecked")
     @Override
     protected List<HasKey<String>> getEquals() {
-        return Arrays.asList(new HasKey<String>("foo"), new HasKey<String>("foo"));
+        return Arrays.asList(new HasKey<>("foo"), new HasKey<>("foo"));
     }
 
     @SuppressWarnings("unchecked")
     @Override
     protected List<HasKey<String>> getNotEquals() {
-        return Arrays.asList(new HasKey<String>("foo"), new HasKey<String>("bar"));
+        return Arrays.asList(new HasKey<>("foo"), new HasKey<>("bar"));
     }
 
     @Test
     public void testHasKey() throws Exception {
-        HasKey<String> hasKey = new HasKey<String>("foo");
+        HasKey<String> hasKey = new HasKey<>("foo");
 
         assertThat(hasKey.getKey()).isEqualTo("foo");
     }
