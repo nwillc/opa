@@ -37,6 +37,7 @@ public final class Accessor {
      * @param fieldName the instance variable name
      * @param clz       the class
      * @param <T>       the instance type of the argument to the function
+     * @throws NoSuchFieldException if the fieldName is not one present in the class
      * @return an accessor function
      */
     @SuppressWarnings("unchecked")
