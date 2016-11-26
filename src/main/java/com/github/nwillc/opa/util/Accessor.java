@@ -20,10 +20,9 @@ package com.github.nwillc.opa.util;
 import org.pmw.tinylog.Logger;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.nio.file.WatchEvent;
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -49,52 +48,39 @@ public final class Accessor {
     public static <T> Function<T, String> getFunction(final String fieldName, final Class<T> clz)
             throws NoSuchFieldException {
 
-        Class<?> classPtr = clz;
-        String getter = "get" + fieldName;
-
-        Method method = getDeclaredMethod(clz, getter);
-        if (method != null) {
+        // Check for public getter
+        Optional<Method> methodOptional = getMethod(clz, "get" + fieldName);
+        if (methodOptional.isPresent()) {
+            final Method method = methodOptional.get();
             return t -> {
                 try {
-                    method.setAccessible(true);
                     return method.invoke(t).toString();
                 } catch (Exception e) {
-                   Logger.error("Failed invoking " + method.getName() + " on " + clz.getName() + ": " + e);
+                   Logger.error("Failed invoking " + method.getName() + " of " + clz.getName(), e);
                 }
                 return null;
             };
         }
 
-        Field field = null;
-
-        do {
-            try {
-                field = classPtr.getDeclaredField(fieldName);
-                field.setAccessible(true);
-                break;
-            } catch (NoSuchFieldException e) {
-                classPtr = classPtr.getSuperclass();
-            }
-        } while (classPtr != null);
-
-        if (field == null) {
+        // Try field itself next
+        Optional<Field> fieldOptional = getField(clz, fieldName);
+        if (!fieldOptional.isPresent()) {
             throw new NoSuchFieldException("No field " + fieldName + " found in " + clz.getName());
         }
 
-        final Field finalField = field;
+        final Field field = fieldOptional.get();
         return t -> {
             try {
-                return finalField.get(t).toString();
-            } catch (IllegalAccessException e) {
-                Logger.error("Can not access field: " + clz.getName() + '.' + fieldName, e);
+                return field.get(t).toString();
+            } catch (Exception e) {
+                Logger.error("Can not access field  " + fieldName + " of " + clz.getName(), e);
             }
             return null;
         };
     }
 
-    private static Method getDeclaredMethod(final Class<?> clz, String methodName) {
+    private static Optional<Method> getMethod(final Class<?> clz, String methodName) {
         Class<?> classPtr = clz;
-
         do {
             Method[] methods = classPtr.getDeclaredMethods();
             for (Method method : methods) {
@@ -102,11 +88,26 @@ public final class Accessor {
                         (method.getModifiers() & Modifier.PUBLIC) != 0 &&
                          method.getParameterCount() == 0
                         ) {
-                    return method;
+                    method.setAccessible(true);
+                    return Optional.of(method);
                 }
             }
             classPtr = classPtr.getSuperclass();
         } while (classPtr != null);
-        return null;
+        return Optional.empty();
+    }
+
+    private static Optional<Field> getField(final Class<?> clz, String fieldName) {
+        Class<?> classPtr = clz;
+        do {
+            try {
+                Field field = classPtr.getDeclaredField(fieldName);
+                field.setAccessible(true);
+                return Optional.of(field);
+            } catch (NoSuchFieldException e) {
+                classPtr = classPtr.getSuperclass();
+            }
+        } while (classPtr != null);
+        return Optional.empty();
     }
 }
