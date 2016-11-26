@@ -24,6 +24,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.ObjDoubleConsumer;
 
 /**
  * A utility to convert Reflection access to a function.
@@ -54,7 +55,7 @@ public final class Accessor {
             final Method method = methodOptional.get();
             return t -> {
                 try {
-                    return method.invoke(t).toString();
+                    return valueOf(method.invoke(t));
                 } catch (Exception e) {
                    Logger.error("Failed invoking " + method.getName() + " of " + clz.getName(), e);
                 }
@@ -71,12 +72,20 @@ public final class Accessor {
         final Field field = fieldOptional.get();
         return t -> {
             try {
-                return field.get(t).toString();
+                return valueOf(field.get(t));
             } catch (Exception e) {
-                Logger.error("Can not access field  " + fieldName + " of " + clz.getName(), e);
+                Logger.error("Can not access field " + fieldName + " of " + clz.getName(), e);
             }
             return null;
         };
+    }
+
+    private static String valueOf(Object o) {
+        if (o == null) {
+            return null;
+        }
+
+        return o.toString();
     }
 
     private static Optional<Method> getMethod(final Class<?> clz, String methodName) {

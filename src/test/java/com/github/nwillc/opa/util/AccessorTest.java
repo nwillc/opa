@@ -70,6 +70,19 @@ public class AccessorTest extends UtilityClassContract {
     }
 
     @Test
+    public void testAccessorException() throws Exception {
+        final Bean bean = new Bean("foo");
+
+        Function<Bean, String> accessor = Accessor.getFunction("exception", Bean.class);
+        String apply = accessor.apply(bean);
+        assertThat(apply).isNull();
+
+        accessor = Accessor.getFunction("error", Bean.class);
+        apply = accessor.apply(bean);
+        assertThat(apply).isNull();
+    }
+
+    @Test
     public void testGetter() throws Exception {
         Bean bean = new Bean("foo");
         Bean spy = spy(bean);
@@ -80,11 +93,20 @@ public class AccessorTest extends UtilityClassContract {
 
     public static class Bean extends HasKey<String> {
         public final String value;
+        public final Object error = new Object() {
+            @Override
+            public String toString() {
+                throw new RuntimeException();
+            }
+        };
 
         public Bean(String value) {
             super(UUID.randomUUID().toString());
             this.value = value;
         }
 
+        public Exception getException() {
+            throw new RuntimeException();
+        }
     }
 }
