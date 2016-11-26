@@ -26,6 +26,7 @@ import java.util.function.Function;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 public class AccessorTest extends UtilityClassContract {
 
@@ -38,7 +39,7 @@ public class AccessorTest extends UtilityClassContract {
     public void getFunction() throws Exception {
         final Bean bean = new Bean("foo");
 
-        assertThat(bean.getValue()).isEqualTo("foo");
+        assertThat(bean.value).isEqualTo("foo");
         Function<Bean, String> accessor = Accessor.getFunction("value", Bean.class);
         assertThat(accessor.apply(bean)).isEqualTo("foo");
     }
@@ -47,7 +48,7 @@ public class AccessorTest extends UtilityClassContract {
     public void getIlleagalAccess() throws Exception {
         final Bean bean = new Bean("foo");
 
-        assertThat(bean.getValue()).isEqualTo("foo");
+        assertThat(bean.value).isEqualTo("foo");
         Function<Bean, String> accessor = Accessor.getFunction("value", Bean.class);
         assertThat(accessor.apply(bean)).isEqualTo("foo");
     }
@@ -68,16 +69,22 @@ public class AccessorTest extends UtilityClassContract {
         assertThat(accessor.apply(bean)).isEqualTo(bean.getKey());
     }
 
+    @Test
+    public void testGetter() throws Exception {
+        Bean bean = new Bean("foo");
+        Bean spy = spy(bean);
+        Function<Bean, String> accessor = Accessor.getFunction("key", Bean.class);
+        accessor.apply(spy);
+        verify(spy).getKey();
+    }
+
     public static class Bean extends HasKey<String> {
-        private final String value;
+        public final String value;
 
         public Bean(String value) {
             super(UUID.randomUUID().toString());
             this.value = value;
         }
 
-        public String getValue() {
-            return value;
-        }
     }
 }

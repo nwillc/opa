@@ -20,6 +20,10 @@ package com.github.nwillc.opa.util;
 import org.pmw.tinylog.Logger;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.nio.file.WatchEvent;
 import java.util.function.Function;
 
 /**
@@ -32,6 +36,8 @@ public final class Accessor {
 
     /**
      * Create a Function from a instance variable name that returns it's value in a class, or super classes.
+     * If a public getter for the field is available the function will utilize that, otherwise it will access
+     * the field directly.
      *
      * @param fieldName the instance variable name
      * @param clz       the class
@@ -43,8 +49,24 @@ public final class Accessor {
     public static <T> Function<T, String> getFunction(final String fieldName, final Class<T> clz)
             throws NoSuchFieldException {
 
-        Field field = null;
         Class<?> classPtr = clz;
+        String getter = "get" + fieldName;
+
+        Method method = getDeclaredMethod(clz, getter);
+        if (method != null) {
+            return t -> {
+                try {
+                    method.setAccessible(true);
+                    return method.invoke(t).toString();
+                } catch (Exception e) {
+                   Logger.error("Failed invoking " + method.getName() + " on " + clz.getName() + ": " + e);
+                }
+                return null;
+            };
+        }
+
+        Field field = null;
+
         do {
             try {
                 field = classPtr.getDeclaredField(fieldName);
@@ -68,5 +90,23 @@ public final class Accessor {
             }
             return null;
         };
+    }
+
+    private static Method getDeclaredMethod(final Class<?> clz, String methodName) {
+        Class<?> classPtr = clz;
+
+        do {
+            Method[] methods = classPtr.getDeclaredMethods();
+            for (Method method : methods) {
+                if (method.getName().equalsIgnoreCase(methodName) &&
+                        (method.getModifiers() & Modifier.PUBLIC) != 0 &&
+                         method.getParameterCount() == 0
+                        ) {
+                    return method;
+                }
+            }
+            classPtr = classPtr.getSuperclass();
+        } while (classPtr != null);
+        return null;
     }
 }
