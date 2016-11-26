@@ -21,10 +21,42 @@ import com.github.nwillc.opa.query.Query;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+/**
+ * A simplistic data access object interface. Supporting create/update, deletion and retrieval.
+ * @param <K> the type of the key for the persisted type
+ * @param <T> the type being persisted
+ */
 public interface Dao<K,T extends HasKey<K>> {
+
+    /**
+     * Find an object based on the key.
+     * @param key the key to search for
+     * @return an optional holding the object if found
+     */
     Optional<T> findOne(final K key);
+
+    /**
+     * Return a stream of the objects
+     * @return stream of objects
+     */
     Stream<T> findAll();
+
+    /**
+     * Find the objects matching a query.
+     * @param query the query to base the search on
+     * @return a stream of any objects that match
+     */
     Stream<T> find(Query<T> query);
+
+    /**
+     * Save the object, create it or update if it exists.
+     * @param entity the enity to save or update
+     */
     void save(final T entity);
+
+    /**
+     * Delete an based on its key.
+     * @param key the key of the object to delete
+     */
     void delete(final K key);
 }
