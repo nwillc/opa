@@ -16,92 +16,15 @@
 
 package com.github.nwillc.opa.memory;
 
-import com.github.nwillc.opa.query.QueryGenerator;
-import org.junit.Test;
+import com.github.nwillc.opa.Dao;
+import com.github.nwillc.opa_impl_tests.DaoTest.TestEntity;
+import com.github.nwillc.opa_impl_tests.QueryMapperTest;
 
-import java.util.function.Predicate;
+public class MemoryQueryMapperTest extends QueryMapperTest {
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-public class MemoryQueryMapperTest {
-    @Test
-    public void testEquals() throws Exception {
-        QueryGenerator<Bean> generator = new QueryGenerator<>(Bean.class).eq("value", "1");
-
-        MemoryQueryMapper<Bean> b = new MemoryQueryMapper<>();
-        generator.getFilter().accept(b);
-        Predicate<Bean> predicate = b.getPredicate();
-        Bean bean = new Bean();
-        bean.value = "1";
-        assertThat(predicate.test(bean)).isTrue();
-        bean.value = "2";
-        assertThat(predicate.test(bean)).isFalse();
+    @Override
+    protected Dao<String, TestEntity> getDao() {
+        return new MemoryBackedDao<>();
     }
 
-    @Test
-    public void testContains() throws Exception {
-        QueryGenerator<Bean> generator = new QueryGenerator<>(Bean.class).contains("value", "1");
-
-        MemoryQueryMapper<Bean> b = new MemoryQueryMapper<>();
-        generator.getFilter().accept(b);
-        Predicate<Bean> predicate = b.getPredicate();
-        Bean bean = new Bean();
-        bean.value = "1 2 3";
-        assertThat(predicate.test(bean)).isTrue();
-        bean.value = "2 3 4";
-        assertThat(predicate.test(bean)).isFalse();
-    }
-
-    @Test
-    public void testNot() throws Exception {
-        QueryGenerator<Bean> generator = new QueryGenerator<>(Bean.class).eq("value", "1").not();
-
-        MemoryQueryMapper<Bean> b = new MemoryQueryMapper<>();
-        generator.getFilter().accept(b);
-        Predicate<Bean> predicate = b.getPredicate();
-        Bean bean = new Bean();
-        bean.value = "1";
-        assertThat(predicate.test(bean)).isFalse();
-        bean.value = "2";
-        assertThat(predicate.test(bean)).isTrue();
-    }
-
-    @Test
-    public void testAnd() throws Exception {
-        QueryGenerator<Bean> generator = new QueryGenerator<>(Bean.class).eq("value", "1").eq("value2","2").and();
-
-        MemoryQueryMapper<Bean> b = new MemoryQueryMapper<>();
-        generator.getFilter().accept(b);
-        Predicate<Bean> predicate = b.getPredicate();
-        Bean bean = new Bean();
-        bean.value = "1";
-        bean.value2 = "2";
-        assertThat(predicate.test(bean)).isTrue();
-        bean.value2 = "3";
-        assertThat(predicate.test(bean)).isFalse();
-        bean.value = "3";
-        bean.value2 = "2";
-        assertThat(predicate.test(bean)).isFalse();
-    }
-
-    @Test
-    public void testOr() throws Exception {
-        QueryGenerator<Bean> generator = new QueryGenerator<>(Bean.class).eq("value", "1").eq("value","2").or();
-
-        MemoryQueryMapper<Bean> b = new MemoryQueryMapper<>();
-        generator.getFilter().accept(b);
-        Predicate<Bean> predicate = b.getPredicate();
-        Bean bean = new Bean();
-        bean.value = "1";
-        assertThat(predicate.test(bean)).isTrue();
-        bean.value = "2";
-        assertThat(predicate.test(bean)).isTrue();
-        bean.value = "3";
-        assertThat(predicate.test(bean)).isFalse();
-    }
-
-    class Bean {
-        public String value;
-        public String value2;
-    }
 }

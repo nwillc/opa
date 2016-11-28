@@ -19,6 +19,7 @@ package com.github.nwillc.opa.memory;
 import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.HasKey;
 import com.github.nwillc.opa.query.QueryGenerator;
+import com.github.nwillc.opa_impl_tests.DaoTest;
 import org.junit.Test;
 
 import java.util.UUID;
@@ -27,52 +28,9 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Fail.fail;
 
-public class MemoryBackedDaoTest {
-    private Dao<String, TestEntity> testEntityDao = new MemoryBackedDao<>();
-
-    @Test
-    public void shouldDelete() throws Exception {
-        testEntityDao.save(new TestEntity("foo"));
-        assertThat(testEntityDao.findOne("foo").get().getKey()).isEqualTo("foo");
-        testEntityDao.delete("foo");
-        testEntityDao.findOne("foo").ifPresent(one -> fail("Entity foo still present"));
-    }
-
-    @Test
-    public void shouldFindAll() throws Exception {
-        testEntityDao.save(new TestEntity("foo"));
-        testEntityDao.save(new TestEntity("bar"));
-        assertThat(testEntityDao.findAll().map(TestEntity::getKey).collect(Collectors.toList())).contains("foo", "bar");
-    }
-
-	@Test
-	public void shouldFindFilter() throws Exception {
-		final TestEntity foo = new TestEntity("foo");
-		testEntityDao.save(foo);
-		testEntityDao.save(new TestEntity("bar"));
-        QueryGenerator<TestEntity> generator = new QueryGenerator<>(TestEntity.class);
-        generator.eq("key", "foo");
-		assertThat(testEntityDao.find(generator.getFilter()).collect(Collectors.toList())).containsExactly(foo);
-	}
-
-    @Test
-    public void shouldSaveAndFindOne() throws Exception {
-        testEntityDao.findOne("foo").ifPresent(one -> fail("Entity foo already present"));
-        testEntityDao.save(new TestEntity("foo"));
-        assertThat(testEntityDao.findOne("foo").get().getKey()).isEqualTo("foo");
-    }
-
-    private class TestEntity extends HasKey<String> {
-        private final String key;
-
-        public TestEntity(String key) {
-            super(UUID.randomUUID().toString());
-            this.key = key;
-        }
-
-        @Override
-        public String getKey() {
-            return key;
-        }
+public class MemoryBackedDaoTest  extends DaoTest {
+    @Override
+    protected Dao<String, TestEntity> getDao() {
+        return new MemoryBackedDao<>();
     }
 }

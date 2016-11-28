@@ -91,6 +91,13 @@ public class AccessorTest extends UtilityClassContract {
         verify(spy).getKey();
     }
 
+    @Test
+    public void testNullValue() throws Exception {
+        Bean bean = new Bean(null);
+        Function<Bean, String> accessor = Accessor.getFunction("value", Bean.class);
+        assertThat(accessor.apply(bean)).isNull();
+    }
+
     public static class Bean extends HasKey<String> {
         public final String value;
         public final Object error = new Object() {
