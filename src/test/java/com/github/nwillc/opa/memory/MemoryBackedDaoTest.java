@@ -28,9 +28,9 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Fail.fail;
 
-public class MemoryBackedDaoTest  extends DaoTest {
+public class MemoryBackedDaoTest extends DaoTest {
     @Override
-    protected Dao<String, TestEntity> getDao() {
+    public Dao<String, TestEntity> get() {
         return new MemoryBackedDao<>();
     }
 }

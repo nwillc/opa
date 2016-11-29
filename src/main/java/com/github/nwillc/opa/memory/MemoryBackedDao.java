@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class MemoryBackedDao<K, T extends HasKey<K>> implements Dao<K,T> {
+public class MemoryBackedDao<K, T extends HasKey<K>> implements Dao<K, T> {
     private final Map<K, T> entities = new HashMap<>();
 
     @Override

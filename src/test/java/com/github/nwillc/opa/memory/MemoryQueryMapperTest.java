@@ -23,7 +23,7 @@ import com.github.nwillc.opa_impl_tests.QueryMapperTest;
 public class MemoryQueryMapperTest extends QueryMapperTest {
 
     @Override
-    protected Dao<String, TestEntity> getDao() {
+    public Dao<String, TestEntity> get() {
         return new MemoryBackedDao<>();
     }
 

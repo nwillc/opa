@@ -28,7 +28,6 @@ import java.util.function.ObjDoubleConsumer;
 
 /**
  * A utility to convert Reflection access to a function.
- *
  */
 public final class Accessor {
     private Accessor() {
@@ -42,8 +41,8 @@ public final class Accessor {
      * @param fieldName the instance variable name
      * @param clz       the class
      * @param <T>       the instance type of the argument to the function
-     * @throws NoSuchFieldException if the fieldName is not one present in the class
      * @return an accessor function
+     * @throws NoSuchFieldException if the fieldName is not one present in the class
      */
     @SuppressWarnings("unchecked")
     public static <T> Function<T, String> getFunction(final String fieldName, final Class<T> clz)
@@ -57,7 +56,7 @@ public final class Accessor {
                 try {
                     return valueOf(method.invoke(t));
                 } catch (Exception e) {
-                   Logger.error("Failed invoking " + method.getName() + " of " + clz.getName(), e);
+                    Logger.error("Failed invoking " + method.getName() + " of " + clz.getName(), e);
                 }
                 return null;
             };
@@ -95,7 +94,7 @@ public final class Accessor {
             for (Method method : methods) {
                 if (method.getName().equalsIgnoreCase(methodName) &&
                         (method.getModifiers() & Modifier.PUBLIC) != 0 &&
-                         method.getParameterCount() == 0
+                        method.getParameterCount() == 0
                         ) {
                     method.setAccessible(true);
                     return Optional.of(method);

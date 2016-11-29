@@ -36,7 +36,10 @@ public class Comparison<T> extends Query<T> {
         return accessor;
     }
 
-    public String getFieldName() { return fieldName; }
+    public String getFieldName() {
+        return fieldName;
+    }
+
     public String getValue() {
         return value;
     }
