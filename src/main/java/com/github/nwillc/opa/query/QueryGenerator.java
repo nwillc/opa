@@ -74,7 +74,7 @@ public class QueryGenerator<T> {
     }
 
     /**
-     * @return
+     * @return generated Query
      * @deprecated As of 0.1.5, replaced by {@link #getQuery()}
      */
     @Deprecated
