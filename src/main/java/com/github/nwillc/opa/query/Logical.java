@@ -20,6 +20,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+/**
+ * @see QueryGenerator
+ * @param <T> type your doing a logical comparison on
+ */
 public class Logical<T> extends Query<T> {
     private final Collection<Query<T>> queries;
 

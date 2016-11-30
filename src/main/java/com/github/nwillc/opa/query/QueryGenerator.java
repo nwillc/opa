@@ -20,6 +20,10 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.stream.Collectors;
 
+/**
+ * Use this to build a query.
+ * @param <T> type the query operates on
+ */
 public class QueryGenerator<T> {
     private Deque<Query<T>> queries = new ArrayDeque<>();
     private final Class<T> tClass;
@@ -57,7 +61,7 @@ public class QueryGenerator<T> {
         return this;
     }
 
-    public Query<T> getFilter() {
+    public Query<T> getQuery() {
         if (queries.isEmpty()) {
             return null;
         }
@@ -67,6 +71,15 @@ public class QueryGenerator<T> {
         }
 
         return new Logical<>(Operator.OR, queries);
+    }
+
+    /**
+     * @return
+     * @deprecated As of 0.1.5, replaced by {@link #getQuery()}
+     */
+    @Deprecated
+    public Query<T> getFilter() {
+      return getQuery();
     }
 
     @Override

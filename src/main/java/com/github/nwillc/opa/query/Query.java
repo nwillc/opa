@@ -18,6 +18,10 @@ package com.github.nwillc.opa.query;
 
 import java.util.function.Consumer;
 
+/**
+ * @see QueryGenerator
+ * @param <T> type the query operates on
+ */
 public class Query<T> implements Consumer<QueryMapper<T>> {
     private final Operator operator;
 

@@ -20,6 +20,11 @@ import com.github.nwillc.opa.util.Accessor;
 
 import java.util.function.Function;
 
+/**
+ * A query based on a comparison.
+ * @see QueryGenerator
+ * @param <T> tyoe the comparison will operate on
+ */
 public class Comparison<T> extends Query<T> {
     private final String value;
     private final String fieldName;
