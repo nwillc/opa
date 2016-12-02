@@ -12,22 +12,20 @@
  * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
  * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ *
  */
 
-package com.github.nwillc.opa.query;
+package com.github.nwillc.opa.caching;
 
-import org.junit.Test;
 
-public class QueryMapperTest {
+import com.github.nwillc.opa.Dao;
+import com.github.nwillc.opa.memory.MemoryBackedDao;
+import com.github.nwillc.opa_impl_tests.DaoTest;
 
-    @Test
-    public void testVisitor() throws Exception {
-        QueryGenerator<Bean> generator = new QueryGenerator<>(Bean.class);
-        generator.eq("foo","bar").eq("foo","baz").or();
-        generator.getQuery().accept(System.out::println);
-    }
+public class CachingDaoTest extends DaoTest {
 
-    class Bean {
-        String foo;
+    @Override
+    public Dao<String, TestEntity> get() {
+        return new CachingDao<>(new MemoryBackedDao<>());
     }
 }

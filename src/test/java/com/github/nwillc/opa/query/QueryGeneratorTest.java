@@ -66,12 +66,12 @@ public class QueryGeneratorTest {
 
     @Test
     public void testNoOperations() throws Exception {
-        assertThat(queryGenerator.getFilter()).isNull();
+        assertThat(queryGenerator.getQuery()).isNull();
     }
 
     @Test
     public void testSingleOperator() throws Exception {
-        Query<Bean> filter = queryGenerator.eq("key", "foo").getFilter();
+        Query<Bean> filter = queryGenerator.eq("key", "foo").getQuery();
 
         assertThat(filter).isInstanceOf(Comparison.class);
         assertThat(filter.getOperator()).isEqualTo(Operator.EQ);
@@ -79,7 +79,7 @@ public class QueryGeneratorTest {
 
     @Test
     public void testAutoOrOperator() throws Exception {
-        Query<Bean> filter = queryGenerator.eq("key", "foo").eq("key","bar").getFilter();
+        Query<Bean> filter = queryGenerator.eq("key", "foo").eq("key","bar").getQuery();
 
         assertThat(filter).isInstanceOf(Logical.class);
         assertThat(filter.getOperator()).isEqualTo(Operator.OR);
