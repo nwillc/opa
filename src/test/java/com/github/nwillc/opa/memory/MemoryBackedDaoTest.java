@@ -17,16 +17,7 @@
 package com.github.nwillc.opa.memory;
 
 import com.github.nwillc.opa.Dao;
-import com.github.nwillc.opa.HasKey;
-import com.github.nwillc.opa.query.QueryGenerator;
 import com.github.nwillc.opa_impl_tests.DaoTest;
-import org.junit.Test;
-
-import java.util.UUID;
-import java.util.stream.Collectors;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Fail.fail;
 
 public class MemoryBackedDaoTest extends DaoTest {
     @Override

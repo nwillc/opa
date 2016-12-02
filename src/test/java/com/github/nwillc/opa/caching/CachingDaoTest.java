@@ -21,11 +21,43 @@ package com.github.nwillc.opa.caching;
 import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.memory.MemoryBackedDao;
 import com.github.nwillc.opa_impl_tests.DaoTest;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
 public class CachingDaoTest extends DaoTest {
+    private Dao<String, TestEntity> backingDao;
+    private Dao<String, TestEntity> cachingDao;
+
+    @Override
+    @Before
+    public void setUp() {
+        backingDao = spy(new MemoryBackedDao<>());
+        cachingDao = new CachingDao<>(backingDao);
+        super.setUp();
+    }
 
     @Override
     public Dao<String, TestEntity> get() {
-        return new CachingDao<>(new MemoryBackedDao<>());
+        return cachingDao;
+    }
+
+    @Test
+    public void testFindAllCaches() throws Exception {
+        backingDao.save(new TestEntity("1", "one"));
+        assertThat(cachingDao.findAll().count()).isEqualTo(1);
+        assertThat(cachingDao.findOne("1").get().getKey()).isEqualTo("1");
+        verify(backingDao, times(0)).findOne("1");
+    }
+
+    @Test
+    public void testFindOneCaches() throws Exception {
+        backingDao.save(new TestEntity("1", "one"));
+        assertThat(cachingDao.findOne("1").get().getKey()).isEqualTo("1");
+        verify(backingDao, times(1)).findOne("1");
+        assertThat(cachingDao.findOne("1").get().getKey()).isEqualTo("1");
+        verify(backingDao, times(1)).findOne("1");
     }
 }

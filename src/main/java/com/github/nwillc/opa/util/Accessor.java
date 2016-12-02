@@ -24,7 +24,6 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.ObjDoubleConsumer;
 
 /**
  * A utility to convert Reflection access to a function.
