@@ -19,9 +19,11 @@ package com.github.nwillc.opa.memory;
 import com.github.nwillc.opa.query.Comparison;
 import com.github.nwillc.opa.query.Query;
 import com.github.nwillc.opa.query.QueryMapper;
+import org.pmw.tinylog.Logger;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -34,6 +36,8 @@ public class MemoryQueryMapper<T> implements QueryMapper<T> {
         Predicate<T> one, two;
         Function<T, String> accessor;
         String value;
+
+        Objects.requireNonNull(tQuery.getOperator());
 
         switch (tQuery.getOperator()) {
             case EQ:

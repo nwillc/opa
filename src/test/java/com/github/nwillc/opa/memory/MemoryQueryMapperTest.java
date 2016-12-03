@@ -17,8 +17,13 @@
 package com.github.nwillc.opa.memory;
 
 import com.github.nwillc.opa.Dao;
+import com.github.nwillc.opa.query.Query;
+import com.github.nwillc.opa.query.QueryMapper;
 import com.github.nwillc.opa_impl_tests.DaoTest.TestEntity;
 import com.github.nwillc.opa_impl_tests.QueryMapperTest;
+import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class MemoryQueryMapperTest extends QueryMapperTest {
 
@@ -27,4 +32,11 @@ public class MemoryQueryMapperTest extends QueryMapperTest {
         return new MemoryBackedDao<>();
     }
 
+    @Test
+    public void testException() throws Exception {
+        Query<TestEntity> query = new Query<>(null);
+        QueryMapper<TestEntity> queryMapper = new MemoryQueryMapper<>();
+
+        assertThatThrownBy(() -> { queryMapper.accept(query);}).isInstanceOf(NullPointerException.class);
+    }
 }
