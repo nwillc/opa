@@ -20,21 +20,21 @@ import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.HasKey;
 import com.github.nwillc.opa.query.Query;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
 public class MemoryBackedDao<K, T extends HasKey<K>> implements Dao<K, T> {
-    private final Map<K, T> entities = new HashMap<>();
+    private final Map<K, T> entities = new ConcurrentHashMap<>();
 
     @Override
-    public void delete(K s) {
+    public void delete(final K s) {
         entities.remove(s);
     }
 
     @Override
-    public Optional<T> findOne(K s) {
+    public Optional<T> findOne(final K s) {
         return Optional.ofNullable(entities.get(s));
     }
 
@@ -44,14 +44,14 @@ public class MemoryBackedDao<K, T extends HasKey<K>> implements Dao<K, T> {
     }
 
     @Override
-    public Stream<T> find(Query<T> query) {
-        MemoryQueryMapper<T> mapper = new MemoryQueryMapper<>();
+    public Stream<T> find(final Query<T> query) {
+        final MemoryQueryMapper<T> mapper = new MemoryQueryMapper<>();
         query.accept(mapper);
         return findAll().filter(mapper.getPredicate());
     }
 
     @Override
-    public void save(T t) {
+    public void save(final T t) {
         entities.put(t.getKey(), t);
     }
 }

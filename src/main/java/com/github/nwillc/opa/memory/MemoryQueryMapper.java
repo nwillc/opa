@@ -19,7 +19,6 @@ package com.github.nwillc.opa.memory;
 import com.github.nwillc.opa.query.Comparison;
 import com.github.nwillc.opa.query.Query;
 import com.github.nwillc.opa.query.QueryMapper;
-import org.pmw.tinylog.Logger;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -32,7 +31,7 @@ public class MemoryQueryMapper<T> implements QueryMapper<T> {
 
     @Override
     @SuppressWarnings("unchecked")
-    public void accept(Query<T> tQuery) {
+    public void accept(final Query<T> tQuery) {
         Predicate<T> one, two;
         Function<T, String> accessor;
         String value;

@@ -48,7 +48,7 @@ public final class Accessor {
             throws NoSuchFieldException {
 
         // Check for public getter
-        Optional<Method> methodOptional = getMethod(clz, "get" + fieldName);
+        final Optional<Method> methodOptional = getMethod(clz, "get" + fieldName);
         if (methodOptional.isPresent()) {
             final Method method = methodOptional.get();
             return t -> {
@@ -62,7 +62,7 @@ public final class Accessor {
         }
 
         // Try field itself next
-        Optional<Field> fieldOptional = getField(clz, fieldName);
+        final Optional<Field> fieldOptional = getField(clz, fieldName);
         if (!fieldOptional.isPresent()) {
             throw new NoSuchFieldException("No field " + fieldName + " found in " + clz.getName());
         }
@@ -78,7 +78,7 @@ public final class Accessor {
         };
     }
 
-    private static String valueOf(Object o) {
+    private static String valueOf(final Object o) {
         if (o == null) {
             return null;
         }
@@ -86,11 +86,11 @@ public final class Accessor {
         return o.toString();
     }
 
-    private static Optional<Method> getMethod(final Class<?> clz, String methodName) {
+    private static Optional<Method> getMethod(final Class<?> clz, final String methodName) {
         Class<?> classPtr = clz;
         do {
-            Method[] methods = classPtr.getDeclaredMethods();
-            for (Method method : methods) {
+            final Method[] methods = classPtr.getDeclaredMethods();
+            for (final Method method : methods) {
                 if (method.getName().equalsIgnoreCase(methodName) &&
                         (method.getModifiers() & Modifier.PUBLIC) != 0 &&
                         method.getParameterCount() == 0
@@ -104,11 +104,11 @@ public final class Accessor {
         return Optional.empty();
     }
 
-    private static Optional<Field> getField(final Class<?> clz, String fieldName) {
+    private static Optional<Field> getField(final Class<?> clz, final String fieldName) {
         Class<?> classPtr = clz;
         do {
             try {
-                Field field = classPtr.getDeclaredField(fieldName);
+                final Field field = classPtr.getDeclaredField(fieldName);
                 field.setAccessible(true);
                 return Optional.of(field);
             } catch (NoSuchFieldException e) {

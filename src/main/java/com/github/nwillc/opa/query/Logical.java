@@ -27,17 +27,17 @@ import java.util.stream.Collectors;
 public class Logical<T> extends Query<T> {
     private final Collection<Query<T>> queries;
 
-    public Logical(Operator operator, Query<T> query) {
+    public Logical(final Operator operator, final Query<T> query) {
         this(operator, Collections.singletonList(query));
     }
 
-    public Logical(Operator operator, Collection<Query<T>> queries) {
+    public Logical(final Operator operator, final Collection<Query<T>> queries) {
         super(operator);
         this.queries = queries;
     }
 
     @Override
-    public void accept(QueryMapper<T> tQueryMapper) {
+    public void accept(final QueryMapper<T> tQueryMapper) {
         queries.forEach(tFilter -> tFilter.accept(tQueryMapper));
         tQueryMapper.accept(this);
     }

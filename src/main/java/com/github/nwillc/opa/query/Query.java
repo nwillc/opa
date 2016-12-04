@@ -25,12 +25,12 @@ import java.util.function.Consumer;
 public class Query<T> implements Consumer<QueryMapper<T>> {
     private final Operator operator;
 
-    public Query(Operator operator) {
+    public Query(final Operator operator) {
         this.operator = operator;
     }
 
     @Override
-    public void accept(QueryMapper<T> tQueryMapper) {
+    public void accept(final QueryMapper<T> tQueryMapper) {
         tQueryMapper.accept(this);
     }
 

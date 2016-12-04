@@ -30,7 +30,7 @@ public class Comparison<T> extends Query<T> {
     private final String fieldName;
     private final Function<T, String> accessor;
 
-    public Comparison(Class<T> tClass, String fieldName, String value, Operator operator) throws NoSuchFieldException {
+    public Comparison(final Class<T> tClass, final String fieldName, final String value, final Operator operator) throws NoSuchFieldException {
         super(operator);
         accessor = Accessor.getFunction(fieldName, tClass);
         this.fieldName = fieldName;

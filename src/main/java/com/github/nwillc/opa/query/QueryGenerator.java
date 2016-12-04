@@ -28,16 +28,16 @@ public class QueryGenerator<T> {
     private Deque<Query<T>> queries = new ArrayDeque<>();
     private final Class<T> tClass;
 
-    public QueryGenerator(Class<T> tClass) {
+    public QueryGenerator(final Class<T> tClass) {
         this.tClass = tClass;
     }
 
-    public QueryGenerator<T> contains(String key, String value) throws NoSuchFieldException {
+    public QueryGenerator<T> contains(final String key, final String value) throws NoSuchFieldException {
         queries.addLast(new Comparison<>(tClass, key, value, Operator.CONTAINS));
         return this;
     }
 
-    public QueryGenerator<T> eq(String key, String value) throws NoSuchFieldException {
+    public QueryGenerator<T> eq(final String key, final String value) throws NoSuchFieldException {
         queries.addLast(new Comparison<>(tClass, key, value, Operator.EQ));
         return this;
     }
@@ -48,14 +48,14 @@ public class QueryGenerator<T> {
     }
 
     public QueryGenerator<T> and() {
-        Query<T> and = new Logical<>(Operator.AND, queries);
+        final Query<T> and = new Logical<>(Operator.AND, queries);
         queries = new ArrayDeque<>();
         queries.addFirst(and);
         return this;
     }
 
     public QueryGenerator<T> or() {
-        Query<T> and = new Logical<>(Operator.OR, queries);
+        final Query<T> and = new Logical<>(Operator.OR, queries);
         queries = new ArrayDeque<>();
         queries.addFirst(and);
         return this;

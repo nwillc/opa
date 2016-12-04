@@ -111,28 +111,27 @@ tasks.withType(FindBugs) {
 }
 
 pmd {
-    toolVersion = '4.3'
     sourceSets = [sourceSets.main]
     ignoreFailures = true
     ruleSets = [
-            "basic",
-            "braces",
-            "naming",
-            "clone",
-            "codesize",
-            "controversial",
-            "design",
-            "finalizers",
-            "imports",
-            "junit",
-            "logging-java",
-            "migrating",
-            "optimizations",
-            "strictexception",
-            "strings",
-            "sunsecure",
-            "typeresolution",
-            "unusedcode"
+            "java-basic",
+            "java-braces",
+            "java-naming",
+            "java-clone",
+            "java-codesize",
+            "java-controversial",
+            "java-design",
+            "java-finalizers",
+            "java-imports",
+            "java-junit",
+            "java-logging-java",
+            "java-migrating",
+            "java-optimizations",
+            "java-strictexception",
+            "java-strings",
+            "java-sunsecure",
+            "java-typeresolution",
+            "java-unusedcode"
     ]
 }
 

@@ -38,16 +38,16 @@ public class CachingDao<K, T extends HasKey<K>> implements Dao<K, T>
     private final Dao<K,T> dao;
     private final Map<K,T> map = new ConcurrentHashMap<>();
 
-    public CachingDao(Dao<K, T> dao) {
+    public CachingDao(final Dao<K, T> dao) {
         this.dao = dao;
     }
 
     @Override
-    public Optional<T> findOne(K key) {
+    public Optional<T> findOne(final K key) {
         if (map.containsKey(key)) {
             return Optional.of(map.get(key));
         } else {
-            Optional<T> one = dao.findOne(key);
+            final Optional<T> one = dao.findOne(key);
             if (one.isPresent()) {
                 map.put(key, one.get());
             }
@@ -61,17 +61,17 @@ public class CachingDao<K, T extends HasKey<K>> implements Dao<K, T>
     }
 
     @Override
-    public Stream<T> find(Query<T> query) {
+    public Stream<T> find(final Query<T> query) {
         return dao.find(query).peek(t -> map.put(t.getKey(), t));
     }
 
     @Override
-    public void save(T entity) {
+    public void save(final T entity) {
         dao.save(entity);
     }
 
     @Override
-    public void delete(K key) {
+    public void delete(final K key) {
         dao.delete(key);
         map.remove(key);
     }

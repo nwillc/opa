@@ -19,7 +19,7 @@ package com.github.nwillc.opa;
 public class HasKey<K> {
     private K key;
 
-    public HasKey(K key) {
+    public HasKey(final K key) {
         this.key = key;
     }
 
@@ -27,7 +27,7 @@ public class HasKey<K> {
         return key;
     }
 
-    public void setKey(K key) {
+    public void setKey(final K key) {
         this.key = key;
     }
 
@@ -39,11 +39,16 @@ public class HasKey<K> {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
 
-        HasKey<?> hasKey = (HasKey<?>) o;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        final HasKey<?> hasKey = (HasKey<?>) o;
 
         return key.equals(hasKey.key);
     }
