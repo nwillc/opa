@@ -30,8 +30,8 @@ import java.util.stream.Stream;
 /**
  * A simple cache in front on another dao.
  * @since 0.2.0
- * @param <K>
- * @param <T>
+ * @param <K> cache's key type
+ * @param <T> cache's stored type
  */
 public class CachingDao<K, T extends HasKey<K>> implements Dao<K, T>
 {
