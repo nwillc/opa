@@ -16,6 +16,10 @@
 
 package com.github.nwillc.opa;
 
+/**
+ * Base class of an entity that has a key.
+ * @param <K> key type
+ */
 public class HasKey<K> {
     private K key;
 
