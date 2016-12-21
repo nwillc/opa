@@ -65,4 +65,5 @@ public interface Dao<K, T extends HasKey<K>> {
      * @param key the key of the object to delete
      */
     void delete(final K key);
+
 }
