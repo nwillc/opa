@@ -66,4 +66,10 @@ public interface Dao<K, T extends HasKey<K>> {
      */
     void delete(final K key);
 
+    default Transaction createTransaction() {
+        return null;
+    }
+
+    default void commit(Integer transactionId) {}
+    default void rollback(Integer transactionId) {}
 }
