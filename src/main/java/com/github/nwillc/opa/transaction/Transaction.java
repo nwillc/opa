@@ -22,6 +22,10 @@ public interface Transaction extends AutoCloseable {
     default void rollback() {}
     default void add(Memento memento) {}
 
+    /**
+     * If a transaction is closed without being committed it is rolled back.
+     * @throws Exception
+     */
     @Override
     default void close() throws Exception {
         this.rollback();
