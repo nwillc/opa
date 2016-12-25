@@ -8,7 +8,7 @@ public class MomentoTransaction implements Transaction {
 
     @Override
     public void commit() {
-        momentos.iterator().forEachRemaining(Momento::commit);
+     momentos.iterator().forEachRemaining(Momento::commit);
     }
 
     @Override
@@ -17,6 +17,6 @@ public class MomentoTransaction implements Transaction {
     }
 
     public void add(Momento momento) {
-        momentos.addFirst(momento);
+        momentos.addLast(momento);
     }
 }

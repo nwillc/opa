@@ -1,14 +1,11 @@
 package com.github.nwillc.opa.transaction;
 
 import com.github.nwillc.opa.Dao;
-import com.github.nwillc.opa.HasKey;
-import com.github.nwillc.opa.memory.MemoryBackedDao;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InOrder;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 public class MomentoTransactionTest {
     private MomentoTransaction instance;
@@ -21,18 +18,26 @@ public class MomentoTransactionTest {
     }
 
     @Test
-    public void testSimpleCommit() throws Exception {
-       Momento momento = mock(Momento.class);
-       instance.add(momento);
-       instance.commit();
-       verify(momento, times(1)).commit();
+    public void testCommit() throws Exception {
+        Momento m1 = mock(Momento.class);
+        Momento m2 = mock(Momento.class);
+        instance.add(m1);
+        instance.add(m2);
+        instance.commit();
+        InOrder inOrder = inOrder(m1,m2);
+        inOrder.verify(m1).commit();
+        inOrder.verify(m2).commit();
     }
 
     @Test
-    public void testSimpleRollback() throws Exception {
-        Momento momento = mock(Momento.class);
-        instance.add(momento);
+    public void testRollback() throws Exception {
+        Momento m1 = mock(Momento.class);
+        Momento m2 = mock(Momento.class);
+        instance.add(m1);
+        instance.add(m2);
         instance.rollback();
-        verify(momento, times(1)).rollback();
+        InOrder inOrder = inOrder(m2,m1);
+        inOrder.verify(m2).rollback();
+        inOrder.verify(m1).rollback();
     }
 }
