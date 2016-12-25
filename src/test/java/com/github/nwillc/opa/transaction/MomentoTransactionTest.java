@@ -5,7 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
 
 public class MomentoTransactionTest {
     private MomentoTransaction instance;
