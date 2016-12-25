@@ -42,10 +42,8 @@ public class UpdateMomentoTest {
     private class TestEntity extends HasKey<String> {
         String value;
 
-        public TestEntity(String key) {
+        TestEntity(String key) {
             super(key);
         }
-
-
     }
 }
