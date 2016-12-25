@@ -10,12 +10,10 @@ import static org.mockito.Mockito.mock;
 
 public class MomentoTransactionTest {
     private MomentoTransaction instance;
-    private Dao dao;
 
     @Before
     public void setUp() throws Exception {
         instance = new MomentoTransaction();
-        dao = mock(Dao.class);
     }
 
     @Test
