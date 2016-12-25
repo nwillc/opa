@@ -1,4 +1,4 @@
-package com.github.nwillc.opa;
+package com.github.nwillc.opa.transaction;
 
 import org.junit.Test;
 

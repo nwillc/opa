@@ -1,13 +1,14 @@
-package com.github.nwillc.opa;
+package com.github.nwillc.opa.transaction;
 
+import com.github.nwillc.opa.Dao;
+import com.github.nwillc.opa.HasKey;
 import com.github.nwillc.opa.memory.MemoryBackedDao;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 
-public class SaveMomentoTest {
+public class DeleteMomentoTest {
     public static final String KEY = "foo";
     private Dao<String, TestEntity> dao;
     private TestEntity instance;
@@ -20,12 +21,13 @@ public class SaveMomentoTest {
 
     @Test
     public void rollback() throws Exception {
-        assertThat(dao.findOne(instance.getKey()).isPresent()).isFalse();
-        final Momento momento = new SaveMomento<>(dao, KEY);
         dao.save(instance);
         assertThat(dao.findOne(instance.getKey()).isPresent()).isTrue();
+        final Momento momento = new DeleteMomento<>(dao, KEY);
+        dao.delete(KEY);
+        assertThat(dao.findOne(instance.getKey()).isPresent()).isFalse();
         momento.rollback();
-        assertThat(dao.findOne(KEY).isPresent()).isFalse();
+        assertThat(dao.findOne(instance.getKey()).isPresent()).isTrue();
     }
 
     private class TestEntity extends HasKey<String> {
