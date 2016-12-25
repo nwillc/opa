@@ -14,28 +14,10 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.github.nwillc.opa.transaction;
-
-import com.github.nwillc.opa.Dao;
-import com.github.nwillc.opa.HasKey;
-
-import java.util.Optional;
-
 /**
- * A memento of a delete.
- * @param <K>
- * @param <T>
+ *  A simplistic transaction package based on the memento pattern. A transaction is created, and then
+ *  passed into modification requests. While the modifications may occur immediately, the transaction
+ *  can be rolled back and the modifications undone.
+ *  @since 0.3.0
  */
-public class DeleteMemento<K, T extends HasKey<K>> extends Memento<K,T> {
-    private final Optional<T> element;
-
-    public DeleteMemento(Dao<K, T> dao, K key) {
-        super(dao, key);
-        element = dao.findOne(key);
-    }
-
-    @Override
-    public void rollback() {
-        element.ifPresent(getDao()::save);
-    }
-}
+package com.github.nwillc.opa.transaction;

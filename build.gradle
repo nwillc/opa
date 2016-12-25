@@ -31,7 +31,7 @@ configurations {
 }
 
 group = "com.github.nwillc"
-version = "0.2.3-SNAPSHOT"
+version = "0.3.0-SNAPSHOT"
 targetCompatibility = "1.8"
 sourceCompatibility = "1.8"
 

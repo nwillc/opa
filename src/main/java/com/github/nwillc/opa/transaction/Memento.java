@@ -19,6 +19,13 @@ package com.github.nwillc.opa.transaction;
 import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.HasKey;
 
+/**
+ * A memento is designed to be enough context information of a persistence activity
+ * to undo it at a later time.
+ * @param <K> key type on the entities
+ * @param <T> type of the entities
+ *     @since 0.3.0
+ */
 public class Memento<K, T extends HasKey<K>> implements Transaction {
     private final Dao<K,T> dao;
     private final K key;

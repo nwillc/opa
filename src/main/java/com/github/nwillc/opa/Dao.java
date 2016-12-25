@@ -61,6 +61,12 @@ public interface Dao<K, T extends HasKey<K>> {
      */
     void save(final T entity);
 
+    /**
+     * Save entity in a transaction which can be rolled back.
+     * @param entity the entity to save
+     * @param transaction the transaction which this is a part of
+     * @since 0.3.0
+     */
     default void save(final T entity, Transaction transaction) {
         Objects.requireNonNull(transaction);
         Optional<T> stored = findOne(entity.getKey());
@@ -78,6 +84,12 @@ public interface Dao<K, T extends HasKey<K>> {
      */
     void delete(final K key);
 
+    /**
+     * Delete entity in a transaction which can be rolled back.
+     * @param key the key of the entity to delete
+     * @param transaction the transaction which this is a part of
+     * @since 0.3.0
+     */
     default void delete(final K key, Transaction transaction) {
         Objects.requireNonNull(transaction);
         Memento<K, T> memento = new DeleteMemento<>(this, key);
