@@ -18,6 +18,7 @@
 package com.github.nwillc.opa.caching;
 
 
+import com.github.nwillc.opa.CachingDao;
 import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.memory.MemoryBackedDao;
 import com.github.nwillc.opa_impl_tests.DaoTest;

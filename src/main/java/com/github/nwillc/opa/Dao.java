@@ -57,19 +57,20 @@ public interface Dao<K, T extends HasKey<K>> {
      *
      * @param entity the enity to save or update
      */
-    void save(final T entity);
+    default void save(final T entity) {
+        save(entity, null);
+    }
+
+    void save(final T entity, Transaction transaction);
 
     /**
      * Delete an based on its key.
      *
      * @param key the key of the object to delete
      */
-    void delete(final K key);
-
-    default Transaction createTransaction() {
-        return null;
+    default void delete(final K key) {
+        delete(key, null);
     }
 
-    default void commit(Integer transactionId) {}
-    default void rollback(Integer transactionId) {}
+    void delete(final K key, Transaction transaction);
 }

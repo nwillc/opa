@@ -18,6 +18,7 @@ package com.github.nwillc.opa.memory;
 
 import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.HasKey;
+import com.github.nwillc.opa.Transaction;
 import com.github.nwillc.opa.query.Query;
 
 import java.util.Map;
@@ -29,7 +30,7 @@ public class MemoryBackedDao<K, T extends HasKey<K>> implements Dao<K, T> {
     private final Map<K, T> entities = new ConcurrentHashMap<>();
 
     @Override
-    public void delete(final K s) {
+    public void delete(final K s, Transaction transaction) {
         entities.remove(s);
     }
 
@@ -51,7 +52,7 @@ public class MemoryBackedDao<K, T extends HasKey<K>> implements Dao<K, T> {
     }
 
     @Override
-    public void save(final T t) {
+    public void save(final T t, Transaction transaction) {
         entities.put(t.getKey(), t);
     }
 }

@@ -15,7 +15,7 @@
  *
  */
 
-package com.github.nwillc.opa.caching;
+package com.github.nwillc.opa;
 
 import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.HasKey;
@@ -66,12 +66,12 @@ public class CachingDao<K, T extends HasKey<K>> implements Dao<K, T>
     }
 
     @Override
-    public void save(final T entity) {
+    public void save(final T entity, Transaction transaction) {
         dao.save(entity);
     }
 
     @Override
-    public void delete(final K key) {
+    public void delete(final K key, Transaction transaction) {
         dao.delete(key);
         map.remove(key);
     }
