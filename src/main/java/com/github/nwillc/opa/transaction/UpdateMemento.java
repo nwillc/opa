@@ -5,10 +5,10 @@ import com.github.nwillc.opa.HasKey;
 
 import java.util.Optional;
 
-public class UpdateMomento<K, T extends HasKey<K>> extends Momento<K,T> {
+public class UpdateMemento<K, T extends HasKey<K>> extends Memento<K,T> {
     private final Optional<T> entity;
 
-    UpdateMomento(Dao<K,T> dao, K key) {
+    UpdateMemento(Dao<K,T> dao, K key) {
         super(dao,key);
         entity = dao.findOne(key);
     }

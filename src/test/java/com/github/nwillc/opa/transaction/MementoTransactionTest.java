@@ -1,6 +1,5 @@
 package com.github.nwillc.opa.transaction;
 
-import com.github.nwillc.opa.Dao;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InOrder;
@@ -8,18 +7,18 @@ import org.mockito.InOrder;
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 
-public class MomentoTransactionTest {
-    private MomentoTransaction instance;
+public class MementoTransactionTest {
+    private MementoTransaction instance;
 
     @Before
     public void setUp() throws Exception {
-        instance = new MomentoTransaction();
+        instance = new MementoTransaction();
     }
 
     @Test
     public void testCommit() throws Exception {
-        Momento m1 = mock(Momento.class);
-        Momento m2 = mock(Momento.class);
+        Memento m1 = mock(Memento.class);
+        Memento m2 = mock(Memento.class);
         instance.add(m1);
         instance.add(m2);
         instance.commit();
@@ -30,8 +29,8 @@ public class MomentoTransactionTest {
 
     @Test
     public void testRollback() throws Exception {
-        Momento m1 = mock(Momento.class);
-        Momento m2 = mock(Momento.class);
+        Memento m1 = mock(Memento.class);
+        Memento m2 = mock(Memento.class);
         instance.add(m1);
         instance.add(m2);
         instance.rollback();

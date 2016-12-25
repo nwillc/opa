@@ -6,9 +6,11 @@ import com.github.nwillc.opa.memory.MemoryBackedDao;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SaveMomentoTest {
+public class UpdateMementoTest {
     public static final String KEY = "foo";
     private Dao<String, TestEntity> dao;
     private TestEntity instance;
@@ -21,16 +23,26 @@ public class SaveMomentoTest {
 
     @Test
     public void rollback() throws Exception {
-        assertThat(dao.findOne(instance.getKey()).isPresent()).isFalse();
-        final Momento momento = new SaveMomento<>(dao, KEY);
+        instance.value = "bar";
         dao.save(instance);
         assertThat(dao.findOne(instance.getKey()).isPresent()).isTrue();
-        momento.rollback();
-        assertThat(dao.findOne(KEY).isPresent()).isFalse();
+        final TestEntity entity = new TestEntity(KEY);
+        Memento memento = new UpdateMemento(dao, KEY);
+        entity.value = "baz";
+        dao.save(entity);
+        final Optional<TestEntity> entity1 = dao.findOne(KEY);
+        assertThat(entity1.isPresent()).isTrue();
+        assertThat(entity1.get().value).isEqualTo("baz");
+        memento.rollback();
+        final Optional<TestEntity> entity2 = dao.findOne(KEY);
+        assertThat(entity2.isPresent()).isTrue();
+        assertThat(entity2.get().value).isEqualTo("bar");
     }
 
     private class TestEntity extends HasKey<String> {
-        public TestEntity(String key) {
+        String value;
+
+        TestEntity(String key) {
             super(key);
         }
     }

@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DeleteMomentoTest {
+public class DeleteMementoTest {
     public static final String KEY = "foo";
     private Dao<String, TestEntity> dao;
     private TestEntity instance;
@@ -23,10 +23,10 @@ public class DeleteMomentoTest {
     public void rollback() throws Exception {
         dao.save(instance);
         assertThat(dao.findOne(instance.getKey()).isPresent()).isTrue();
-        final Momento momento = new DeleteMomento<>(dao, KEY);
+        final Memento memento = new DeleteMemento<>(dao, KEY);
         dao.delete(KEY);
         assertThat(dao.findOne(instance.getKey()).isPresent()).isFalse();
-        momento.rollback();
+        memento.rollback();
         assertThat(dao.findOne(instance.getKey()).isPresent()).isTrue();
     }
 

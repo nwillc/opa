@@ -5,10 +5,10 @@ import com.github.nwillc.opa.HasKey;
 
 import java.util.Optional;
 
-public class DeleteMomento<K, T extends HasKey<K>> extends Momento<K,T> {
+public class DeleteMemento<K, T extends HasKey<K>> extends Memento<K,T> {
     private final Optional<T> element;
 
-    DeleteMomento(Dao<K, T> dao, K key) {
+    DeleteMemento(Dao<K, T> dao, K key) {
         super(dao, key);
         element = dao.findOne(key);
     }
