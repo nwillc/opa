@@ -47,9 +47,7 @@ public class CachingDao<K, T extends HasKey<K>> implements Dao<K, T>
             return Optional.of(map.get(key));
         } else {
             final Optional<T> one = dao.findOne(key);
-            if (one.isPresent()) {
-                map.put(key, one.get());
-            }
+            one.ifPresent(t -> map.put(key, t));
             return one;
         }
     }
@@ -65,12 +63,12 @@ public class CachingDao<K, T extends HasKey<K>> implements Dao<K, T>
     }
 
     @Override
-    public void save(final T entity, Transaction transaction) {
+    public void save(final T entity) {
         dao.save(entity);
     }
 
     @Override
-    public void delete(final K key, Transaction transaction) {
+    public void delete(final K key) {
         dao.delete(key);
         map.remove(key);
     }

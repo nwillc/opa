@@ -17,8 +17,9 @@
 package com.github.nwillc.opa;
 
 import com.github.nwillc.opa.query.Query;
-import com.github.nwillc.opa.transaction.Transaction;
+import com.github.nwillc.opa.transaction.*;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -58,20 +59,29 @@ public interface Dao<K, T extends HasKey<K>> {
      *
      * @param entity the enity to save or update
      */
-    default void save(final T entity) {
-        save(entity, null);
-    }
+    void save(final T entity);
 
-    void save(final T entity, Transaction transaction);
+    default void save(final T entity, Transaction transaction) {
+        Objects.requireNonNull(transaction);
+        Optional<T> stored = findOne(entity.getKey());
+        Memento<K, T> memento = stored.isPresent() ?
+                new UpdateMemento<>(this, entity.getKey()) :
+                new SaveMemento<>(this, entity.getKey());
+        save(entity);
+        transaction.add(memento);
+    }
 
     /**
      * Delete an based on its key.
      *
      * @param key the key of the object to delete
      */
-    default void delete(final K key) {
-        delete(key, null);
-    }
+    void delete(final K key);
 
-    void delete(final K key, Transaction transaction);
+    default void delete(final K key, Transaction transaction) {
+        Objects.requireNonNull(transaction);
+        Memento<K, T> memento = new DeleteMemento<>(this, key);
+        delete(key);
+        transaction.add(memento);
+    }
 }

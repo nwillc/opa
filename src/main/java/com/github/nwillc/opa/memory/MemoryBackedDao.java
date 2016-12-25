@@ -30,10 +30,7 @@ public class MemoryBackedDao<K, T extends HasKey<K>> implements Dao<K, T> {
     private final Map<K, T> entities = new ConcurrentHashMap<>();
 
     @Override
-    public void delete(final K key, Transaction transaction) {
-        if (transaction != null) {
-            transaction.add(new DeleteMemento<>(this, key));
-        }
+    public void delete(final K key) {
         entities.remove(key);
     }
 
@@ -55,15 +52,7 @@ public class MemoryBackedDao<K, T extends HasKey<K>> implements Dao<K, T> {
     }
 
     @Override
-    public void save(final T t, Transaction transaction) {
-        if (transaction != null) {
-            Memento<K, T> memento = entities.containsKey(t.getKey()) ?
-                    new UpdateMemento<>(this, t.getKey()) :
-                    new SaveMemento<>(this, t.getKey());
-
-            transaction.add(memento);
-        }
-
+    public void save(final T t) {
         entities.put(t.getKey(), t);
     }
 }
