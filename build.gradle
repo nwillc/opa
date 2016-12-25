@@ -21,9 +21,9 @@ dependencies {
     runtime 'org.tinylog:slf4j-binding:1.2-beta-1'
     testCompile 'junit:junit:4.12',
             'com.github.nwillc:jdk_contract_tests:1.8.2',
-            'org.mockito:mockito-core:2.3.6',
+            'org.mockito:mockito-core:2.4.3',
             'org.assertj:assertj-core:3.6.1',
-            'com.github.nwillc:opa-impl-tests:0.4.1'
+            'com.github.nwillc:opa-impl-tests:0.5.0'
 }
 
 configurations {
@@ -31,7 +31,7 @@ configurations {
 }
 
 group = "com.github.nwillc"
-version = "0.3.0"
+version = "0.3.1"
 targetCompatibility = "1.8"
 sourceCompatibility = "1.8"
 

@@ -63,6 +63,7 @@ public class CachingDao<K, T extends HasKey<K>> implements Dao<K, T>
 
     @Override
     public void save(final T entity) {
+        map.put(entity.getKey(),entity);
         dao.save(entity);
     }
 
