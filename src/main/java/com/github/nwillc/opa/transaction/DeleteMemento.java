@@ -8,7 +8,7 @@ import java.util.Optional;
 public class DeleteMemento<K, T extends HasKey<K>> extends Memento<K,T> {
     private final Optional<T> element;
 
-    DeleteMemento(Dao<K, T> dao, K key) {
+    public DeleteMemento(Dao<K, T> dao, K key) {
         super(dao, key);
         element = dao.findOne(key);
     }

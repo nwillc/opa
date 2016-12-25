@@ -5,7 +5,7 @@ import com.github.nwillc.opa.HasKey;
 
 public class SaveMemento<K, T extends HasKey<K>> extends Memento<K,T> {
 
-    SaveMemento(Dao<K, T> dao, K key) {
+    public SaveMemento(Dao<K, T> dao, K key) {
       super(dao, key);
     }
 

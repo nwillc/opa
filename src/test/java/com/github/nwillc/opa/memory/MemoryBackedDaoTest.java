@@ -17,11 +17,59 @@
 package com.github.nwillc.opa.memory;
 
 import com.github.nwillc.opa.Dao;
+import com.github.nwillc.opa.transaction.MementoTransaction;
+import com.github.nwillc.opa.transaction.Transaction;
 import com.github.nwillc.opa_impl_tests.DaoTest;
+import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class MemoryBackedDaoTest extends DaoTest {
     @Override
     public Dao<String, TestEntity> get() {
         return new MemoryBackedDao<>();
+    }
+
+    @Test
+    public void testTransactionalDelete() throws Exception {
+        Transaction transaction = new MementoTransaction();
+        TestEntity testEntity = new TestEntity("foo");
+        final Dao<String, TestEntity> dao = get();
+
+        dao.save(testEntity);
+        dao.delete(testEntity.getKey(), transaction);
+        assertThat(dao.findOne(testEntity.getKey()).isPresent()).isFalse();
+        transaction.rollback();
+        assertThat(dao.findOne(testEntity.getKey()).isPresent()).isTrue();
+    }
+
+    @Test
+    public void testTransactionalSave() throws Exception {
+        Transaction transaction = new MementoTransaction();
+        TestEntity testEntity = new TestEntity("foo");
+        final Dao<String, TestEntity> dao = get();
+
+        assertThat(dao.findOne(testEntity.getKey()).isPresent()).isFalse();
+        dao.save(testEntity, transaction);
+        assertThat(dao.findOne(testEntity.getKey()).isPresent()).isTrue();
+        transaction.rollback();
+        assertThat(dao.findOne(testEntity.getKey()).isPresent()).isFalse();
+    }
+
+    @Test
+    public void testTransactionalUpdate() throws Exception {
+        Transaction transaction = new MementoTransaction();
+        TestEntity testEntity = new TestEntity("foo", "bar");
+        final Dao<String, TestEntity> dao = get();
+
+        dao.save(testEntity);
+        assertThat(dao.findOne(testEntity.getKey()).get().getValue()).isEqualTo("bar");
+        TestEntity testEntity2 = new TestEntity("foo", "baz");
+
+        dao.save(testEntity2, transaction);
+        assertThat(dao.findOne(testEntity.getKey()).get().getValue()).isEqualTo("baz");
+
+        transaction.rollback();
+        assertThat(dao.findOne(testEntity.getKey()).get().getValue()).isEqualTo("bar");
     }
 }
