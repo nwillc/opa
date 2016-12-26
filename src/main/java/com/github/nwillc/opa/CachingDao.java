@@ -17,7 +17,6 @@
 package com.github.nwillc.opa;
 
 import com.github.nwillc.opa.query.Query;
-import com.github.nwillc.opa.transaction.Transaction;
 
 import java.util.Map;
 import java.util.Optional;

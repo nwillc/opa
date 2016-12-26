@@ -73,15 +73,6 @@ public class QueryGenerator<T> {
         return new Logical<>(Operator.OR, queries);
     }
 
-    /**
-     * @return generated Query
-     * @deprecated As of 0.1.5, replaced by {@link #getQuery()}
-     */
-    @Deprecated
-    public Query<T> getFilter() {
-      return getQuery();
-    }
-
     @Override
     public String toString() {
         return queries.stream().map(Query::toString).collect(Collectors.joining(", "));

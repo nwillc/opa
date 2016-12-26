@@ -34,6 +34,7 @@ public class MementoTransaction implements Transaction {
         mementos.clear();
     }
 
+    @Override
     public void add(Memento memento) {
         mementos.addLast(memento);
     }

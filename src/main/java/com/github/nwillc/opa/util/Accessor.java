@@ -111,7 +111,7 @@ public final class Accessor {
                 final Field field = classPtr.getDeclaredField(fieldName);
                 field.setAccessible(true);
                 return Optional.of(field);
-            } catch (NoSuchFieldException e) {
+            } catch (NoSuchFieldException e) {     //NOSONAR
                 classPtr = classPtr.getSuperclass();
             }
         } while (classPtr != null);

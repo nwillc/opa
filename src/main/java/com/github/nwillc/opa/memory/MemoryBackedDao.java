@@ -19,7 +19,6 @@ package com.github.nwillc.opa.memory;
 import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.HasKey;
 import com.github.nwillc.opa.query.Query;
-import com.github.nwillc.opa.transaction.*;
 
 import java.util.Map;
 import java.util.Optional;
