@@ -5,10 +5,10 @@ plugins {
     id 'maven-publish'
     id 'jacoco'
     id 'pmd'
-    id 'info.solidsoft.pitest' version '1.1.4'
-    id 'org.sonarqube' version '2.2.1'
+    id 'info.solidsoft.pitest' version '1.1.11'
+    id 'org.sonarqube' version '2.4'
     id 'com.jfrog.bintray' version '1.7.3'
-    id 'org.ajoberstar.github-pages' version '1.6.0'
+    id 'org.ajoberstar.github-pages' version '1.7.1'
     id 'com.github.nwillc.vplugin' version '2.0.1'
 }
 
@@ -24,8 +24,8 @@ dependencies {
     runtime 'org.tinylog:slf4j-binding:1.2-beta-1'
     testCompile 'junit:junit:4.12',
             'com.github.nwillc:jdk_contract_tests:1.8.2',
-            'org.mockito:mockito-core:2.4.3',
-            'org.assertj:assertj-core:3.6.1',
+            'org.mockito:mockito-core:' + mockito_core_version,
+            'org.assertj:assertj-core:' + assertj_version,
             'com.github.nwillc:opa-impl-tests:0.5.0'
 }
 
