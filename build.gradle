@@ -9,7 +9,7 @@ plugins {
     id 'org.sonarqube' version '2.4'
     id 'com.jfrog.bintray' version '1.7.3'
     id 'org.ajoberstar.github-pages' version '1.7.1'
-    id 'com.github.nwillc.vplugin' version '2.0.1'
+    id 'com.github.nwillc.vplugin' version '2.1.1'
 }
 
 repositories {
@@ -20,8 +20,8 @@ repositories {
 }
 
 dependencies {
-    compile  'org.tinylog:tinylog:1.2-beta-1'
-    runtime 'org.tinylog:slf4j-binding:1.2-beta-1'
+    compile  'org.tinylog:tinylog:1.2'
+    runtime 'org.tinylog:slf4j-binding:1.2'
     testCompile 'junit:junit:4.12',
             'com.github.nwillc:jdk_contract_tests:1.8.2',
             'org.mockito:mockito-core:' + mockito_core_version,
