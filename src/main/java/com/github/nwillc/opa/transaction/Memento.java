@@ -22,20 +22,21 @@ import com.github.nwillc.opa.HasKey;
 /**
  * A memento is designed to be enough context information of a persistence activity
  * to undo it at a later time.
+ *
  * @param <K> key type on the entities
  * @param <T> type of the entities
- *     @since 0.3.0
+ * @since 0.3.0
  */
-public class Memento<K, T extends HasKey<K>> implements Transaction {
-    private final Dao<K,T> dao;
+public class Memento<K, T extends HasKey<K>, R> implements Transaction {
+    private final Dao<K, T, R> dao;
     private final K key;
 
-    Memento(Dao<K, T> dao, K key) {
+    Memento(Dao<K, T, R> dao, K key) {
         this.dao = dao;
         this.key = key;
     }
 
-    Dao<K, T> getDao() {
+    Dao<K, T, R> getDao() {
         return dao;
     }
 

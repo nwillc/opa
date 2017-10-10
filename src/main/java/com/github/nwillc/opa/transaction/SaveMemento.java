@@ -19,10 +19,10 @@ package com.github.nwillc.opa.transaction;
 import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.HasKey;
 
-public class SaveMemento<K, T extends HasKey<K>> extends Memento<K,T> {
+public class SaveMemento<K, T extends HasKey<K>, R> extends Memento<K, T, R> {
 
-    public SaveMemento(Dao<K, T> dao, K key) {
-      super(dao, key);
+    public SaveMemento(Dao<K, T, R> dao, K key) {
+        super(dao, key);
     }
 
     @Override

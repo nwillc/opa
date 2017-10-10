@@ -22,46 +22,47 @@ import java.util.stream.Collectors;
 
 /**
  * Use this to build a query.
+ *
  * @param <T> type the query operates on
  */
-public class QueryGenerator<T> {
-    private Deque<Query<T>> queries = new ArrayDeque<>();
+public class QueryGenerator<T, R> {
+    private Deque<Query<T, R>> queries = new ArrayDeque<>();
     private final Class<T> tClass;
 
     public QueryGenerator(final Class<T> tClass) {
         this.tClass = tClass;
     }
 
-    public QueryGenerator<T> contains(final String key, final String value) throws NoSuchFieldException {
+    public QueryGenerator<T, R> contains(final String key, final String value) throws NoSuchFieldException {
         queries.addLast(new Comparison<>(tClass, key, value, Operator.CONTAINS));
         return this;
     }
 
-    public QueryGenerator<T> eq(final String key, final String value) throws NoSuchFieldException {
+    public QueryGenerator<T, R> eq(final String key, final String value) throws NoSuchFieldException {
         queries.addLast(new Comparison<>(tClass, key, value, Operator.EQ));
         return this;
     }
 
-    public QueryGenerator<T> not() {
+    public QueryGenerator<T, R> not() {
         queries.addFirst(new Logical<>(Operator.NOT, queries.removeFirst()));
         return this;
     }
 
-    public QueryGenerator<T> and() {
-        final Query<T> and = new Logical<>(Operator.AND, queries);
+    public QueryGenerator<T, R> and() {
+        final Query<T, R> and = new Logical<>(Operator.AND, queries);
         queries = new ArrayDeque<>();
         queries.addFirst(and);
         return this;
     }
 
-    public QueryGenerator<T> or() {
-        final Query<T> and = new Logical<>(Operator.OR, queries);
+    public QueryGenerator<T, R> or() {
+        final Query<T, R> and = new Logical<>(Operator.OR, queries);
         queries = new ArrayDeque<>();
         queries.addFirst(and);
         return this;
     }
 
-    public Query<T> getQuery() {
+    public Query<T, R> getQuery() {
         if (queries.isEmpty()) {
             return null;
         }

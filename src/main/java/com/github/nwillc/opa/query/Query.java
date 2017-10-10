@@ -16,13 +16,13 @@
 
 package com.github.nwillc.opa.query;
 
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
- * @see QueryGenerator
  * @param <T> type the query operates on
+ * @see QueryGenerator
  */
-public class Query<T> implements Consumer<QueryMapper<T>> {
+public class Query<T, R> implements Function<QueryMapper<T, R>, R> {
     private final Operator operator;
 
     public Query(final Operator operator) {
@@ -30,8 +30,8 @@ public class Query<T> implements Consumer<QueryMapper<T>> {
     }
 
     @Override
-    public void accept(final QueryMapper<T> tQueryMapper) {
-        tQueryMapper.accept(this);
+    public R apply(final QueryMapper<T, R> tQueryMapper) {
+        return tQueryMapper.apply(this);
     }
 
     public Operator getOperator() {

@@ -18,13 +18,25 @@ package com.github.nwillc.opa.query;
 
 import org.junit.Test;
 
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Predicate;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 public class QueryMapperTest {
 
     @Test
     public void testVisitor() throws Exception {
-        QueryGenerator<Bean> generator = new QueryGenerator<>(Bean.class);
-        generator.eq("foo","bar").eq("foo","baz").or();
-        generator.getQuery().accept(System.out::println);
+        final AtomicReference<String> str = new AtomicReference<>();
+
+        QueryGenerator<Bean, Predicate<Bean>> generator = new QueryGenerator<>(Bean.class);
+        generator.eq("foo", "bar").eq("foo", "baz").or();
+        generator.getQuery().apply(q -> {
+            str.set(q.toString());
+            return null;
+        });
+
+        assertThat(str.get()).isEqualTo("or(eq(\"foo\",\"bar\"),eq(\"foo\",\"baz\"))");
     }
 
     class Bean {

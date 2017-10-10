@@ -25,8 +25,7 @@ dependencies {
     testCompile 'junit:junit:4.12',
             'com.github.nwillc:jdk_contract_tests:1.8.2',
             'org.mockito:mockito-core:' + mockito_core_version,
-            'org.assertj:assertj-core:' + assertj_version,
-            'com.github.nwillc:opa-impl-tests:0.5.0'
+            'org.assertj:assertj-core:' + assertj_version
 }
 
 configurations {
@@ -34,7 +33,7 @@ configurations {
 }
 
 group = 'com.github.nwillc'
-version = '0.3.2-SNAPSHOT'
+version = '0.4.0-SNAPSHOT'
 targetCompatibility = '1.8'
 sourceCompatibility = '1.8'
 

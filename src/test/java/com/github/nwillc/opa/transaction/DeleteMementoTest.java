@@ -22,11 +22,13 @@ import com.github.nwillc.opa.memory.MemoryBackedDao;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.function.Predicate;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class DeleteMementoTest {
     public static final String KEY = "foo";
-    private Dao<String, TestEntity> dao;
+    private Dao<String, TestEntity, Predicate<TestEntity>> dao;
     private TestEntity instance;
 
     @Before

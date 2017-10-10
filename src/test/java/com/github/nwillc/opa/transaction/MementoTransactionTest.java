@@ -38,7 +38,7 @@ public class MementoTransactionTest {
         instance.add(m1);
         instance.add(m2);
         instance.commit();
-        InOrder inOrder = inOrder(m1,m2);
+        InOrder inOrder = inOrder(m1, m2);
         inOrder.verify(m1).commit();
         inOrder.verify(m2).commit();
     }
@@ -50,7 +50,7 @@ public class MementoTransactionTest {
         instance.add(m1);
         instance.add(m2);
         instance.rollback();
-        InOrder inOrder = inOrder(m2,m1);
+        InOrder inOrder = inOrder(m2, m1);
         inOrder.verify(m2).rollback();
         inOrder.verify(m1).rollback();
     }

@@ -15,9 +15,10 @@
  */
 
 /**
- *  A simplistic transaction package based on the memento pattern. A transaction is created, and then
- *  passed into modification requests. While the modifications may occur immediately, the transaction
- *  can be rolled back and the modifications undone.
- *  @since 0.3.0
+ * A simplistic transaction package based on the memento pattern. A transaction is created, and then
+ * passed into modification requests. While the modifications may occur immediately, the transaction
+ * can be rolled back and the modifications undone.
+ *
+ * @since 0.3.0
  */
 package com.github.nwillc.opa.transaction;

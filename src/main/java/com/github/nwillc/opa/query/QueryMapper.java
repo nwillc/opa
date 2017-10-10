@@ -16,9 +16,9 @@
 
 package com.github.nwillc.opa.query;
 
-import java.util.function.Consumer;
+import java.util.function.Function;
 
 @FunctionalInterface
-public interface QueryMapper<T> extends Consumer<Query<T>> {
+public interface QueryMapper<T, R> extends Function<Query<T, R>, R> {
 
 }

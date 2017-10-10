@@ -21,25 +21,25 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 
 /**
- * @see QueryGenerator
  * @param <T> type your doing a logical comparison on
+ * @see QueryGenerator
  */
-public class Logical<T> extends Query<T> {
-    private final Collection<Query<T>> queries;
+public class Logical<T, R> extends Query<T, R> {
+    private final Collection<Query<T, R>> queries;
 
-    public Logical(final Operator operator, final Query<T> query) {
+    public Logical(final Operator operator, final Query<T, R> query) {
         this(operator, Collections.singletonList(query));
     }
 
-    public Logical(final Operator operator, final Collection<Query<T>> queries) {
+    public Logical(final Operator operator, final Collection<Query<T, R>> queries) {
         super(operator);
         this.queries = queries;
     }
 
     @Override
-    public void accept(final QueryMapper<T> tQueryMapper) {
-        queries.forEach(tFilter -> tFilter.accept(tQueryMapper));
-        tQueryMapper.accept(this);
+    public R apply(final QueryMapper<T, R> tQueryMapper) {
+        queries.forEach(tFilter -> tFilter.apply(tQueryMapper));
+        return tQueryMapper.apply(this);
     }
 
     @Override

@@ -23,13 +23,14 @@ import java.util.Optional;
 
 /**
  * A memento of a delete.
+ *
  * @param <K>
  * @param <T>
  */
-public class DeleteMemento<K, T extends HasKey<K>> extends Memento<K,T> {
+public class DeleteMemento<K, T extends HasKey<K>, R> extends Memento<K, T, R> {
     private final Optional<T> element;
 
-    public DeleteMemento(Dao<K, T> dao, K key) {
+    public DeleteMemento(Dao<K, T, R> dao, K key) {
         super(dao, key);
         element = dao.findOne(key);
     }

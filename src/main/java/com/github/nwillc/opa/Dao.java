@@ -29,7 +29,7 @@ import java.util.stream.Stream;
  * @param <K> the type of the key for the persisted type
  * @param <T> the type being persisted
  */
-public interface Dao<K, T extends HasKey<K>> {
+public interface Dao<K, T extends HasKey<K>, R> {
 
     /**
      * Find an object based on the key.
@@ -52,7 +52,7 @@ public interface Dao<K, T extends HasKey<K>> {
      * @param query the query to base the search on
      * @return a stream of any objects that match
      */
-    Stream<T> find(Query<T> query);
+    Stream<T> find(Query<T, R> query);
 
     /**
      * Save the object, create it or update if it exists.
@@ -63,14 +63,15 @@ public interface Dao<K, T extends HasKey<K>> {
 
     /**
      * Save entity in a transaction which can be rolled back.
-     * @param entity the entity to save
+     *
+     * @param entity      the entity to save
      * @param transaction the transaction which this is a part of
      * @since 0.3.0
      */
     default void save(final T entity, Transaction transaction) {
         Objects.requireNonNull(transaction);
         Optional<T> stored = findOne(entity.getKey());
-        Memento<K, T> memento = stored.isPresent() ?
+        Memento<K, T, R> memento = stored.isPresent() ?
                 new UpdateMemento<>(this, entity.getKey()) :
                 new SaveMemento<>(this, entity.getKey());
         save(entity);
@@ -86,13 +87,14 @@ public interface Dao<K, T extends HasKey<K>> {
 
     /**
      * Delete entity in a transaction which can be rolled back.
-     * @param key the key of the entity to delete
+     *
+     * @param key         the key of the entity to delete
      * @param transaction the transaction which this is a part of
      * @since 0.3.0
      */
     default void delete(final K key, Transaction transaction) {
         Objects.requireNonNull(transaction);
-        Memento<K, T> memento = new DeleteMemento<>(this, key);
+        Memento<K, T, R> memento = new DeleteMemento<>(this, key);
         delete(key);
         transaction.add(memento);
     }

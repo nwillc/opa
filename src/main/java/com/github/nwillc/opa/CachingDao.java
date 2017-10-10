@@ -26,16 +26,16 @@ import java.util.stream.Stream;
 
 /**
  * A simple cache in front on another dao.
- * @since 0.2.0
+ *
  * @param <K> cache's key type
  * @param <T> cache's stored type
+ * @since 0.2.0
  */
-public class CachingDao<K, T extends HasKey<K>> implements Dao<K, T>
-{
-    private final Dao<K,T> dao;
-    private final Map<K,T> map = new ConcurrentHashMap<>();
+public class CachingDao<K, T extends HasKey<K>, R> implements Dao<K, T, R> {
+    private final Dao<K, T, R> dao;
+    private final Map<K, T> map = new ConcurrentHashMap<>();
 
-    public CachingDao(final Dao<K, T> dao) {
+    public CachingDao(final Dao<K, T, R> dao) {
         this.dao = dao;
     }
 
@@ -56,13 +56,13 @@ public class CachingDao<K, T extends HasKey<K>> implements Dao<K, T>
     }
 
     @Override
-    public Stream<T> find(final Query<T> query) {
+    public Stream<T> find(final Query<T, R> query) {
         return dao.find(query).peek(t -> map.put(t.getKey(), t));
     }
 
     @Override
     public void save(final T entity) {
-        map.put(entity.getKey(),entity);
+        map.put(entity.getKey(), entity);
         dao.save(entity);
     }
 

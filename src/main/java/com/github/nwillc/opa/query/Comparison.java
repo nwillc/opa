@@ -22,10 +22,11 @@ import java.util.function.Function;
 
 /**
  * A query based on a comparison.
- * @see QueryGenerator
+ *
  * @param <T> tyoe the comparison will operate on
+ * @see QueryGenerator
  */
-public class Comparison<T> extends Query<T> {
+public class Comparison<T, R> extends Query<T, R> {
     private final String value;
     private final String fieldName;
     private final Function<T, String> accessor;

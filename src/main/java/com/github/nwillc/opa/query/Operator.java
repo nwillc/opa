@@ -18,6 +18,7 @@ package com.github.nwillc.opa.query;
 
 /**
  * Operators that can a query can use.
+ *
  * @see QueryGenerator
  */
 public enum Operator {
