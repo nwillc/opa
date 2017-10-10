@@ -20,8 +20,12 @@ repositories {
 }
 
 dependencies {
-    compile  'org.tinylog:tinylog:1.2'
+    compile  'org.tinylog:tinylog:1.2',
+            'junit:junit:4.12',
+            'org.assertj:assertj-core:' + assertj_version
+
     runtime 'org.tinylog:slf4j-binding:1.2'
+
     testCompile 'junit:junit:4.12',
             'com.github.nwillc:jdk_contract_tests:1.8.2',
             'org.mockito:mockito-core:' + mockito_core_version,
