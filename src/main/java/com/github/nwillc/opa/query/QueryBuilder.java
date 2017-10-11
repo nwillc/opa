@@ -21,7 +21,29 @@ import java.util.Deque;
 import java.util.stream.Collectors;
 
 /**
- * Use this to build an OPA Query.
+ * Use this to build an OPA Query.  For example, assuming you had an entity like:
+ * <pre>
+ *     {@code
+ *      class KeyValue {
+ *          String key;
+ *          String value;
+ *      }
+ *     }
+ * </pre>
+ * And your persistence used Strings to represent its queries, the following would be some example
+ * QueryBuilder usages:
+ * <pre>
+ *     {@code
+ *          // Check for a key of "pi" and a value of "3.142"
+ *          new QueryBuilder(KeyValue.class).eq("key","pi").eq("value","3.142").and().build();
+ *
+ *          // Check for a key of "today" or "tomorrow"
+ *          new QueryBuilder(KeyValue.class).eq("key","today").eq("key","tomorrow").or().build();
+ *
+ *          // Check for an key "name" and a value containing "jon"
+ *          new QueryBuilder(KeyValue.class).eq("key","name").contains("value","jon").and().build();
+ *     }
+ * </pre>
  *
  * @param <T> type the query operates on
  * @param <R> type used by the persistence implementation to represent a query
