@@ -25,7 +25,7 @@ import java.util.function.Function;
  *
  * @param <T> type the comparison will operate on
  * @param <R> type used by the persistence implementation to represent a query
- * @see QueryGenerator
+ * @see QueryBuilder
  */
 public class Comparison<T, R> extends Query<T, R> {
     private final String value;

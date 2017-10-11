@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 /**
  * @param <T> type your doing a logical comparison on
  * @param <R> type used by the persistence implementation to represent a query
- * @see QueryGenerator
+ * @see QueryBuilder
  */
 public class Logical<T, R> extends Query<T, R> {
     private final Collection<Query<T, R>> queries;

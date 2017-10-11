@@ -19,7 +19,7 @@ package com.github.nwillc.opa.query;
 /**
  * Operators that a query can use.
  *
- * @see QueryGenerator
+ * @see QueryBuilder
  */
 public enum Operator {
     /**

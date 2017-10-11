@@ -21,49 +21,75 @@ import java.util.Deque;
 import java.util.stream.Collectors;
 
 /**
- * Use this to build a query.
+ * Use this to build an OPA Query.
  *
  * @param <T> type the query operates on
  * @param <R> type used by the persistence implementation to represent a query
  */
-public class QueryGenerator<T, R> {
+public class QueryBuilder<T, R> {
     private Deque<Query<T, R>> queries = new ArrayDeque<>();
     private final Class<T> tClass;
 
-    public QueryGenerator(final Class<T> tClass) {
+    public QueryBuilder(final Class<T> tClass) {
         this.tClass = tClass;
     }
 
-    public QueryGenerator<T, R> contains(final String key, final String value) throws NoSuchFieldException {
-        queries.addLast(new Comparison<>(tClass, key, value, Operator.CONTAINS));
+    /**
+     * An entity's field value should contains a substring.
+     * @param field the name of the field
+     * @param pattern  the pattern its value should contain
+     * @return the query builder
+     * @throws NoSuchFieldException if the entity does not contain the field
+     */
+    public QueryBuilder<T, R> contains(final String field, final String pattern) throws NoSuchFieldException {
+        queries.addLast(new Comparison<>(tClass, field, pattern, Operator.CONTAINS));
         return this;
     }
 
-    public QueryGenerator<T, R> eq(final String key, final String value) throws NoSuchFieldException {
-        queries.addLast(new Comparison<>(tClass, key, value, Operator.EQ));
+    /**
+     * An entity's field value should equal a value.
+     * @param field the name of the field
+     * @param value  the pattern its value should contain
+     * @return the query builder
+     * @throws NoSuchFieldException if the entity does not contain the field
+     */
+    public QueryBuilder<T, R> eq(final String field, final String value) throws NoSuchFieldException {
+        queries.addLast(new Comparison<>(tClass, field, value, Operator.EQ));
         return this;
     }
 
-    public QueryGenerator<T, R> not() {
+    /**
+     * Negate the prior query.
+     * @return the query builder.
+     */
+    public QueryBuilder<T, R> not() {
         queries.addFirst(new Logical<>(Operator.NOT, queries.removeFirst()));
         return this;
     }
 
-    public QueryGenerator<T, R> and() {
+    /**
+     * And the prior queries.
+     * @return the query builder.
+     */
+    public QueryBuilder<T, R> and() {
         final Query<T, R> and = new Logical<>(Operator.AND, queries);
         queries = new ArrayDeque<>();
         queries.addFirst(and);
         return this;
     }
 
-    public QueryGenerator<T, R> or() {
+    /**
+     * Or the prior queries.
+     * @return the query builder.
+     */
+    public QueryBuilder<T, R> or() {
         final Query<T, R> and = new Logical<>(Operator.OR, queries);
         queries = new ArrayDeque<>();
         queries.addFirst(and);
         return this;
     }
 
-    public Query<T, R> getQuery() {
+    public Query<T, R> build() {
         if (queries.isEmpty()) {
             return null;
         }

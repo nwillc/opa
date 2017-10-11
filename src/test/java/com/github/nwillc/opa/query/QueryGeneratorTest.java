@@ -26,23 +26,23 @@ import java.util.function.Predicate;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class QueryGeneratorTest {
-    private QueryGenerator<Bean, Predicate<TestEntity>> queryGenerator;
+    private QueryBuilder<Bean, Predicate<TestEntity>> queryGenerator;
 
     @Before
     public void setUp() throws Exception {
-        queryGenerator = new QueryGenerator<>(Bean.class);
+        queryGenerator = new QueryBuilder<>(Bean.class);
     }
 
     @Test
     public void testContains() throws Exception {
-        QueryGenerator generator = queryGenerator
+        QueryBuilder generator = queryGenerator
                 .contains("key", "42");
         assertThat(generator.toString()).isEqualTo("contains(\"key\",\"42\")");
     }
 
     @Test
     public void testNot() throws Exception {
-        QueryGenerator generator = queryGenerator
+        QueryBuilder generator = queryGenerator
                 .contains("key", "1")
                 .not();
         assertThat(generator.toString()).isEqualTo("not(contains(\"key\",\"1\"))");
@@ -50,7 +50,7 @@ public class QueryGeneratorTest {
 
     @Test
     public void testAnd() throws Exception {
-        QueryGenerator generator = queryGenerator
+        QueryBuilder generator = queryGenerator
                 .contains("key", "1")
                 .contains("key", "2")
                 .and();
@@ -60,7 +60,7 @@ public class QueryGeneratorTest {
 
     @Test
     public void testOr() throws Exception {
-        QueryGenerator generator = queryGenerator
+        QueryBuilder generator = queryGenerator
                 .contains("key", "1")
                 .contains("key", "2")
                 .or();
@@ -69,16 +69,16 @@ public class QueryGeneratorTest {
 
     @Test
     public void testNoOperations() throws Exception {
-        assertThat(queryGenerator.getQuery()).isNull();
+        assertThat(queryGenerator.build()).isNull();
     }
 
     @Test
     public void testSingleOperator() throws Exception {
-        QueryGenerator generator = queryGenerator.eq("key", "foo");
+        QueryBuilder generator = queryGenerator.eq("key", "foo");
 
         assertThat(generator.toString()).isEqualTo("eq(\"key\",\"foo\")");
 
-        Query<Bean, Predicate<TestEntity>> filter = generator.getQuery();
+        Query<Bean, Predicate<TestEntity>> filter = generator.build();
 
         assertThat(filter).isInstanceOf(Comparison.class);
         assertThat(filter.getOperator()).isEqualTo(Operator.EQ);
@@ -86,11 +86,11 @@ public class QueryGeneratorTest {
 
     @Test
     public void testAutoOrOperator() throws Exception {
-        QueryGenerator generator = queryGenerator.eq("key", "foo").eq("key", "bar");
+        QueryBuilder generator = queryGenerator.eq("key", "foo").eq("key", "bar");
 
         assertThat(generator.toString()).isEqualTo("eq(\"key\",\"foo\"), eq(\"key\",\"bar\")");
 
-        Query<Bean, Predicate<TestEntity>> filter = generator.getQuery();
+        Query<Bean, Predicate<TestEntity>> filter = generator.build();
 
         assertThat(filter).isInstanceOf(Logical.class);
         assertThat(filter.getOperator()).isEqualTo(Operator.OR);

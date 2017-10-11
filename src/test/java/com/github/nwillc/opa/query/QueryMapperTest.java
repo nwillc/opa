@@ -29,9 +29,9 @@ public class QueryMapperTest {
     public void testVisitor() throws Exception {
         final AtomicReference<String> str = new AtomicReference<>();
 
-        QueryGenerator<Bean, Predicate<Bean>> generator = new QueryGenerator<>(Bean.class);
+        QueryBuilder<Bean, Predicate<Bean>> generator = new QueryBuilder<>(Bean.class);
         generator.eq("foo", "bar").eq("foo", "baz").or();
-        generator.getQuery().apply(q -> {
+        generator.build().apply(q -> {
             str.set(q.toString());
             return null;
         });

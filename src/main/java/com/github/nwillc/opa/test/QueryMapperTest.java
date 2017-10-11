@@ -10,7 +10,7 @@ package com.github.nwillc.opa.test;
 
 import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.query.Query;
-import com.github.nwillc.opa.query.QueryGenerator;
+import com.github.nwillc.opa.query.QueryBuilder;
 import com.github.nwillc.opa.test.DaoTest.TestEntity;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,11 +31,11 @@ public abstract class QueryMapperTest<R> implements DaoSupplier<R> {
 
     @Test
     public void testEq() throws Exception {
-        QueryGenerator<TestEntity, R> generator = new QueryGenerator<TestEntity, R>(TestEntity.class).eq("value", "1");
+        QueryBuilder<TestEntity, R> generator = new QueryBuilder<TestEntity, R>(TestEntity.class).eq("value", "1");
 
         TestEntity testEntity = new TestEntity("key", "1");
 
-        Query<TestEntity, R> query = generator.getQuery();
+        Query<TestEntity, R> query = generator.build();
         assertThat(dao.find(query).count()).isEqualTo(0);
         dao.save(testEntity);
         assertThat(dao.find(query).count()).isEqualTo(1);
@@ -46,11 +46,11 @@ public abstract class QueryMapperTest<R> implements DaoSupplier<R> {
 
     @Test
     public void testContains() throws Exception {
-        QueryGenerator<TestEntity, R> generator = new QueryGenerator<TestEntity, R>(TestEntity.class).contains("value", "1");
+        QueryBuilder<TestEntity, R> generator = new QueryBuilder<TestEntity, R>(TestEntity.class).contains("value", "1");
 
         TestEntity testEntity = new TestEntity("key", "1 2 3");
 
-        Query<TestEntity, R> query = generator.getQuery();
+        Query<TestEntity, R> query = generator.build();
         assertThat(dao.find(query).count()).isEqualTo(0);
         dao.save(testEntity);
         assertThat(dao.find(query).count()).isEqualTo(1);
@@ -61,11 +61,11 @@ public abstract class QueryMapperTest<R> implements DaoSupplier<R> {
 
     @Test
     public void testNot() throws Exception {
-        QueryGenerator<TestEntity, R> generator = new QueryGenerator<TestEntity, R>(TestEntity.class).eq("value", "1").not();
+        QueryBuilder<TestEntity, R> generator = new QueryBuilder<TestEntity, R>(TestEntity.class).eq("value", "1").not();
 
         TestEntity testEntity = new TestEntity("key", "1");
 
-        Query<TestEntity, R> query = generator.getQuery();
+        Query<TestEntity, R> query = generator.build();
         assertThat(dao.find(query).count()).isEqualTo(0);
         dao.save(testEntity);
         assertThat(dao.find(query).count()).isEqualTo(0);
@@ -76,11 +76,11 @@ public abstract class QueryMapperTest<R> implements DaoSupplier<R> {
 
     @Test
     public void testAnd() throws Exception {
-        QueryGenerator<TestEntity, R> generator = new QueryGenerator<TestEntity, R>(TestEntity.class)
+        QueryBuilder<TestEntity, R> generator = new QueryBuilder<TestEntity, R>(TestEntity.class)
                 .eq("key", "1").eq("value", "1").and();
 
         TestEntity testEntity = new TestEntity("1", "1");
-        Query<TestEntity, R> query = generator.getQuery();
+        Query<TestEntity, R> query = generator.build();
         assertThat(dao.find(query).count()).isEqualTo(0);
         dao.save(testEntity);
         assertThat(dao.find(query).count()).isEqualTo(1);
@@ -96,11 +96,11 @@ public abstract class QueryMapperTest<R> implements DaoSupplier<R> {
 
     @Test
     public void testOr() throws Exception {
-        QueryGenerator<TestEntity, R> generator = new QueryGenerator<TestEntity, R>(TestEntity.class)
+        QueryBuilder<TestEntity, R> generator = new QueryBuilder<TestEntity, R>(TestEntity.class)
                 .eq("key", "1").eq("value", "1").or();
 
         TestEntity testEntity = new TestEntity("1", "1");
-        Query<TestEntity, R> query = generator.getQuery();
+        Query<TestEntity, R> query = generator.build();
         assertThat(dao.find(query).count()).isEqualTo(0);
         dao.save(testEntity);
         assertThat(dao.find(query).count()).isEqualTo(1);
