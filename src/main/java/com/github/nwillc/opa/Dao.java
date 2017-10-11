@@ -24,7 +24,8 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- * A simplistic data access object interface. Supporting create/update, deletion and retrieval.
+ * A simplistic data access object interface. Supporting create/update, deletion and retrieval
+ * with query criteria.
  *
  * @param <K> the type of the key for the persisted type
  * @param <T> the type being persisted

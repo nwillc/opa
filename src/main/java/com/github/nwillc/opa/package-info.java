@@ -15,7 +15,7 @@
  */
 
 /**
- * OPA is a lightweight object persistence approach. It provides basic CRUD operations in a
- * implementation independent manner.
+ * OPA is a lightweight object persistence approach. It provides basic CRUD operations, queries,
+ * and transactions in an implementation independent manner.
  */
 package com.github.nwillc.opa;

@@ -19,6 +19,8 @@ package com.github.nwillc.opa.query;
 import java.util.function.Function;
 
 /**
+ * This represents a query in a implementation independent manner.
+ *
  * @param <T> type the query operates on
  * @param <R> type used by the persistence implementation to represent a query
  * @see QueryGenerator
