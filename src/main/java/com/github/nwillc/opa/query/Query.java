@@ -20,6 +20,7 @@ import java.util.function.Function;
 
 /**
  * @param <T> type the query operates on
+ * @param <R> type used by the persistence implementation to represent a query
  * @see QueryGenerator
  */
 public class Query<T, R> implements Function<QueryMapper<T, R>, R> {

@@ -23,7 +23,8 @@ import java.util.function.Function;
 /**
  * A query based on a comparison.
  *
- * @param <T> tyoe the comparison will operate on
+ * @param <T> type the comparison will operate on
+ * @param <R> type used by the persistence implementation to represent a query
  * @see QueryGenerator
  */
 public class Comparison<T, R> extends Query<T, R> {

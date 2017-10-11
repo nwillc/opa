@@ -29,6 +29,7 @@ import java.util.stream.Stream;
  *
  * @param <K> cache's key type
  * @param <T> cache's stored type
+ * @param <R> type used by the persistence implementation to represent a query
  * @since 0.2.0
  */
 public class CachingDao<K, T extends HasKey<K>, R> implements Dao<K, T, R> {

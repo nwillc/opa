@@ -15,6 +15,7 @@
  */
 
 /**
- * A concrete implementation persisting data into in memory maps.
+ * A concrete implementation persisting data into memory only. Java Predicates are used
+ * as the internal query representation.
  */
 package com.github.nwillc.opa.memory;

@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
  * Use this to build a query.
  *
  * @param <T> type the query operates on
+ * @param <R> type used by the persistence implementation to represent a query
  */
 public class QueryGenerator<T, R> {
     private Deque<Query<T, R>> queries = new ArrayDeque<>();

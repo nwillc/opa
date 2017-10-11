@@ -18,6 +18,12 @@ package com.github.nwillc.opa.query;
 
 import java.util.function.Function;
 
+/**
+ * Functional interface for a function that maps an OPA Query to the persistence implementation's
+ * internal query representation.
+ * @param <T> The entity type being stored
+ * @param <R> type used by the persistence implementation to represent a query
+ */
 @FunctionalInterface
 public interface QueryMapper<T, R> extends Function<Query<T, R>, R> {
 

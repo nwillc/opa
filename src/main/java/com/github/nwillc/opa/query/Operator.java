@@ -17,14 +17,29 @@
 package com.github.nwillc.opa.query;
 
 /**
- * Operators that can a query can use.
+ * Operators that a query can use.
  *
  * @see QueryGenerator
  */
 public enum Operator {
+    /**
+     * A field is equal to a value.
+     */
     EQ,
+    /**
+     * A field contains a substring.
+     */
     CONTAINS,
+    /**
+     * Negation of a boolean operation.
+     */
     NOT,
+    /**
+     * Logical AND of boolean operations.
+     */
     AND,
+    /**
+     * Logical OR of boolean operations.
+     */
     OR
 }

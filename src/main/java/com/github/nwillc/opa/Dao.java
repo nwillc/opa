@@ -28,6 +28,7 @@ import java.util.stream.Stream;
  *
  * @param <K> the type of the key for the persisted type
  * @param <T> the type being persisted
+ * @param <R> type used by the persistence implementation to represent a query
  */
 public interface Dao<K, T extends HasKey<K>, R> {
 

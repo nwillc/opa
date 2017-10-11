@@ -24,8 +24,9 @@ import java.util.Optional;
 /**
  * A memento of a delete.
  *
- * @param <K>
- * @param <T>
+ * @param <K> The type of the keys.
+ * @param <T> The type of the entity
+ * @param <R> The implementation specific query representation.
  */
 public class DeleteMemento<K, T extends HasKey<K>, R> extends Memento<K, T, R> {
     private final Optional<T> element;

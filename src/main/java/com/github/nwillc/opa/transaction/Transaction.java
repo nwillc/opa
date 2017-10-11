@@ -30,7 +30,7 @@ public interface Transaction extends AutoCloseable {
     /**
      * If a transaction is closed without being committed it is rolled back.
      *
-     * @throws Exception
+     * @throws Exception if rollback has an exceptional condition.
      */
     @Override
     default void close() throws Exception {
