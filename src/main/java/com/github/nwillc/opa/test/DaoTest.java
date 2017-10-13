@@ -28,11 +28,11 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Fail.fail;
 
-public abstract class DaoTest<R> implements DaoSupplier<R> {
-    private Dao<String, TestEntity, R> dao;
+public abstract class DaoTest implements DaoSupplier {
+    private Dao<String, TestEntity> dao;
 
     @Override
-    public abstract Dao<String, TestEntity, R> get();
+    public abstract Dao<String, TestEntity> get();
 
     @Before
     public void setUp() {
@@ -80,7 +80,7 @@ public abstract class DaoTest<R> implements DaoSupplier<R> {
     public void testTransactionalDelete() throws Exception {
         Transaction transaction = new MementoTransaction();
         TestEntity testEntity = new TestEntity("foo");
-        final Dao<String, TestEntity, R> dao = get();
+        final Dao<String, TestEntity> dao = get();
 
         dao.save(testEntity);
         dao.delete(testEntity.getKey(), transaction);
@@ -93,7 +93,7 @@ public abstract class DaoTest<R> implements DaoSupplier<R> {
     public void testTransactionalSave() throws Exception {
         Transaction transaction = new MementoTransaction();
         TestEntity testEntity = new TestEntity("foo");
-        final Dao<String, TestEntity, R> dao = get();
+        final Dao<String, TestEntity> dao = get();
 
         assertThat(dao.findOne(testEntity.getKey()).isPresent()).isFalse();
         dao.save(testEntity, transaction);
@@ -106,7 +106,7 @@ public abstract class DaoTest<R> implements DaoSupplier<R> {
     public void testTransactionalUpdate() throws Exception {
         Transaction transaction = new MementoTransaction();
         TestEntity testEntity = new TestEntity("foo", "bar");
-        final Dao<String, TestEntity, R> dao = get();
+        final Dao<String, TestEntity> dao = get();
 
         dao.save(testEntity);
         assertThat(dao.findOne(testEntity.getKey()).get().getValue()).isEqualTo("bar");

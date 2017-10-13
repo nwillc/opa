@@ -18,7 +18,6 @@ package com.github.nwillc.opa.query;
 import org.junit.Test;
 
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Predicate;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -28,7 +27,7 @@ public class QueryMapperTest {
     public void testVisitor() throws Exception {
         final AtomicReference<String> str = new AtomicReference<>();
 
-        QueryBuilder<Bean, Predicate<Bean>> generator = new QueryBuilder<>(Bean.class);
+        QueryBuilder<Bean> generator = new QueryBuilder<>(Bean.class);
         generator.eq("foo", "bar").eq("foo", "baz").or();
         generator.build().apply(q -> {
             str.set(q.toString());

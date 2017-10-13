@@ -37,21 +37,19 @@ configurations {
 }
 
 group = 'com.github.nwillc'
-version = '0.4.1'
+version = '0.4.2'
 targetCompatibility = '1.8'
 sourceCompatibility = '1.8'
 
 test {
 
     beforeTest { descriptor ->
-        logger.lifecycle('\tRunning ' + descriptor.className + '.' + descriptor.name)
+        logger.lifecycle("\tRunning $descriptor.className.$descriptor.name")
     }
 
     afterSuite { descriptor, result ->
         if (descriptor.parent == null) {
-            logger.lifecycle('\tTests run: ' + result.testCount
-                    + ', Failures: ' + result.failedTestCount
-                    + ', Skipped: ' + result.skippedTestCount)
+            logger.lifecycle("\tTests run: $result.testCount, Failures: $result.failedTestCount, Skipped: $result.skippedTestCount")
         }
     }
 

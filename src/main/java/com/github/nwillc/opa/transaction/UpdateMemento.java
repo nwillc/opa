@@ -20,10 +20,10 @@ import com.github.nwillc.opa.HasKey;
 
 import java.util.Optional;
 
-public class UpdateMemento<K, T extends HasKey<K>, R> extends Memento<K, T, R> {
+public class UpdateMemento<K, T extends HasKey<K>, R> extends Memento<K, T> {
     private final Optional<T> entity;
 
-    public UpdateMemento(Dao<K, T, R> dao, K key) {
+    public UpdateMemento(Dao<K, T> dao, K key) {
         super(dao, key);
         entity = dao.findOne(key);
     }

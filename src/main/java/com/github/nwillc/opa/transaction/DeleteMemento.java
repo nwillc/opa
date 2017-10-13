@@ -25,12 +25,11 @@ import java.util.Optional;
  *
  * @param <K> The type of the keys.
  * @param <T> The type of the entity
- * @param <R> The implementation specific query representation.
  */
-public class DeleteMemento<K, T extends HasKey<K>, R> extends Memento<K, T, R> {
+public class DeleteMemento<K, T extends HasKey<K>> extends Memento<K, T> {
     private final Optional<T> element;
 
-    public DeleteMemento(Dao<K, T, R> dao, K key) {
+    public DeleteMemento(Dao<K, T> dao, K key) {
         super(dao, key);
         element = dao.findOne(key);
     }

@@ -26,16 +26,16 @@ import com.github.nwillc.opa.HasKey;
  * @param <T> type of the entities
  * @since 0.3.0
  */
-public class Memento<K, T extends HasKey<K>, R> implements Transaction {
-    private final Dao<K, T, R> dao;
+public class Memento<K, T extends HasKey<K>> implements Transaction {
+    private final Dao<K, T> dao;
     private final K key;
 
-    Memento(Dao<K, T, R> dao, K key) {
+    Memento(Dao<K, T> dao, K key) {
         this.dao = dao;
         this.key = key;
     }
 
-    Dao<K, T, R> getDao() {
+    Dao<K, T> getDao() {
         return dao;
     }
 

@@ -21,10 +21,9 @@ import java.util.function.Function;
  * This represents a query in a implementation independent manner.
  *
  * @param <T> type the query operates on
- * @param <R> type used by the persistence implementation to represent a query
  * @see QueryBuilder
  */
-public class Query<T, R> implements Function<QueryMapper<T, R>, R> {
+public class Query<T> implements Function<QueryMapper<T>, Object> {
     private final Operator operator;
 
     public Query(final Operator operator) {
@@ -32,7 +31,7 @@ public class Query<T, R> implements Function<QueryMapper<T, R>, R> {
     }
 
     @Override
-    public R apply(final QueryMapper<T, R> tQueryMapper) {
+    public Object apply(final QueryMapper<T> tQueryMapper) {
         return tQueryMapper.apply(this);
     }
 

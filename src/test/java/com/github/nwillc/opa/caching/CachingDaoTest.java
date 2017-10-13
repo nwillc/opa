@@ -20,18 +20,15 @@ import com.github.nwillc.opa.CachingDao;
 import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.memory.MemoryBackedDao;
 import com.github.nwillc.opa.test.DaoTest;
-import com.github.nwillc.opa.test.DaoTest.TestEntity;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.function.Predicate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
-public class CachingDaoTest extends DaoTest<Predicate<TestEntity>> {
-    private Dao<String, TestEntity, Predicate<TestEntity>> backingDao;
-    private Dao<String, TestEntity, Predicate<TestEntity>> cachingDao;
+public class CachingDaoTest extends DaoTest {
+    private Dao<String, TestEntity> backingDao;
+    private Dao<String, TestEntity> cachingDao;
 
     @Override
     @Before
@@ -42,7 +39,7 @@ public class CachingDaoTest extends DaoTest<Predicate<TestEntity>> {
     }
 
     @Override
-    public Dao<String, TestEntity, Predicate<TestEntity>> get() {
+    public Dao<String, TestEntity> get() {
         return cachingDao;
     }
 

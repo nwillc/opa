@@ -14,6 +14,6 @@
  */
 
 /**
- *  Test suite which can be used to test DAO implementations.
+ * Test suite which can be used to test DAO implementations.
  */
 package com.github.nwillc.opa.test;

@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public class MemoryBackedDao<K, T extends HasKey<K>> implements Dao<K, T, Predicate<T>> {
+public class MemoryBackedDao<K, T extends HasKey<K>> implements Dao<K, T> {
     private final Map<K, T> entities = new ConcurrentHashMap<>();
 
     @Override
@@ -44,9 +44,10 @@ public class MemoryBackedDao<K, T extends HasKey<K>> implements Dao<K, T, Predic
     }
 
     @Override
-    public Stream<T> find(final Query<T, Predicate<T>> query) {
+    @SuppressWarnings("unchecked")
+    public Stream<T> find(final Query<T> query) {
         final MemoryQueryMapper<T> mapper = new MemoryQueryMapper<>();
-        return findAll().filter(query.apply(mapper));
+        return findAll().filter((Predicate<T>) query.apply(mapper));
     }
 
     @Override

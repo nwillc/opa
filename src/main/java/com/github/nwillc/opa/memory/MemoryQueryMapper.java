@@ -25,12 +25,12 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class MemoryQueryMapper<T> implements QueryMapper<T, Predicate<T>> {
+public class MemoryQueryMapper<T> implements QueryMapper<T> {
     private final Deque<Predicate<T>> predicates = new ArrayDeque<>();
 
     @Override
     @SuppressWarnings("unchecked")
-    public Predicate<T> apply(final Query<T, Predicate<T>> tQuery) {
+    public Predicate<T> apply(final Query<T> tQuery) {
         Predicate<T> one, two;
         Function<T, String> accessor;
         String value;

@@ -28,9 +28,8 @@ import java.util.stream.Stream;
  *
  * @param <K> the type of the key for the persisted type
  * @param <T> the type being persisted
- * @param <R> type used by the persistence implementation to represent a query
  */
-public interface Dao<K, T extends HasKey<K>, R> {
+public interface Dao<K, T extends HasKey<K>> {
 
     /**
      * Find an object based on the key.
@@ -53,7 +52,7 @@ public interface Dao<K, T extends HasKey<K>, R> {
      * @param query the query to base the search on
      * @return a stream of any objects that match
      */
-    Stream<T> find(Query<T, R> query);
+    Stream<T> find(Query<T> query);
 
     /**
      * Save the object, create it or update if it exists.
@@ -72,7 +71,7 @@ public interface Dao<K, T extends HasKey<K>, R> {
     default void save(final T entity, Transaction transaction) {
         Objects.requireNonNull(transaction);
         Optional<T> stored = findOne(entity.getKey());
-        Memento<K, T, R> memento = stored.isPresent() ?
+        Memento<K, T> memento = stored.isPresent() ?
                 new UpdateMemento<>(this, entity.getKey()) :
                 new SaveMemento<>(this, entity.getKey());
         save(entity);
@@ -95,7 +94,7 @@ public interface Dao<K, T extends HasKey<K>, R> {
      */
     default void delete(final K key, Transaction transaction) {
         Objects.requireNonNull(transaction);
-        Memento<K, T, R> memento = new DeleteMemento<>(this, key);
+        Memento<K, T> memento = new DeleteMemento<>(this, key);
         delete(key);
         transaction.add(memento);
     }

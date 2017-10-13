@@ -20,5 +20,5 @@ import com.github.nwillc.opa.test.DaoTest.TestEntity;
 
 import java.util.function.Supplier;
 
-public interface DaoSupplier<R> extends Supplier<Dao<String, TestEntity, R>> {
+public interface DaoSupplier extends Supplier<Dao<String, TestEntity>> {
 }

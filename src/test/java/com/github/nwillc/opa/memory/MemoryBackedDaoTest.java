@@ -17,13 +17,10 @@ package com.github.nwillc.opa.memory;
 
 import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.test.DaoTest;
-import com.github.nwillc.opa.test.DaoTest.TestEntity;
 
-import java.util.function.Predicate;
-
-public class MemoryBackedDaoTest extends DaoTest<Predicate<TestEntity>> {
+public class MemoryBackedDaoTest extends DaoTest {
     @Override
-    public Dao<String, TestEntity, Predicate<TestEntity>> get() {
+    public Dao<String, TestEntity> get() {
         return new MemoryBackedDao<>();
     }
 }

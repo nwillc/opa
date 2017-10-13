@@ -16,16 +16,13 @@
 package com.github.nwillc.opa.query;
 
 import com.github.nwillc.opa.HasKey;
-import com.github.nwillc.opa.test.DaoTest.TestEntity;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.function.Predicate;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class QueryBuilderTest {
-    private QueryBuilder<Bean, Predicate<TestEntity>> queryGenerator;
+    private QueryBuilder<Bean> queryGenerator;
 
     @Before
     public void setUp() throws Exception {
@@ -77,7 +74,7 @@ public class QueryBuilderTest {
 
         assertThat(generator.toString()).isEqualTo("eq(\"key\",\"foo\")");
 
-        Query<Bean, Predicate<TestEntity>> filter = generator.build();
+        Query<Bean> filter = generator.build();
 
         assertThat(filter).isInstanceOf(Comparison.class);
         assertThat(filter.getOperator()).isEqualTo(Operator.EQ);
@@ -89,7 +86,7 @@ public class QueryBuilderTest {
 
         assertThat(generator.toString()).isEqualTo("eq(\"key\",\"foo\"), eq(\"key\",\"bar\")");
 
-        Query<Bean, Predicate<TestEntity>> filter = generator.build();
+        Query<Bean> filter = generator.build();
 
         assertThat(filter).isInstanceOf(Logical.class);
         assertThat(filter.getOperator()).isEqualTo(Operator.OR);
