@@ -45,7 +45,6 @@ import java.util.stream.Collectors;
  * </pre>
  *
  * @param <T> type the query operates on
- * @param <R> type used by the persistence implementation to represent a query
  */
 public class QueryBuilder<T> {
     private Deque<Query<T>> queries = new ArrayDeque<>();

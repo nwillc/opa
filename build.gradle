@@ -1,43 +1,41 @@
-
 plugins {
     id 'java'
     id 'maven'
     id 'maven-publish'
     id 'jacoco'
     id 'pmd'
-    id 'info.solidsoft.pitest' version '1.1.11'
-    id 'org.sonarqube' version '2.4'
+    id 'info.solidsoft.pitest' version '1.2.2'
+    id 'org.sonarqube' version '2.5'
     id 'com.jfrog.bintray' version '1.7.3'
-    id 'org.ajoberstar.github-pages' version '1.7.1'
+    id 'org.ajoberstar.github-pages' version '1.7.2'
     id 'com.github.nwillc.vplugin' version '2.1.1'
 }
 
 repositories {
     mavenLocal()
     jcenter()
-    maven { url 'http://jcenter.bintray.com' }
-    mavenCentral()
-}
-
-dependencies {
-    compile  'org.tinylog:tinylog:1.2',
-            'junit:junit:4.12',
-            'org.assertj:assertj-core:' + assertj_version
-
-    runtime 'org.tinylog:slf4j-binding:1.2'
-
-    testCompile 'junit:junit:4.12',
-            'com.github.nwillc:jdk_contract_tests:1.8.2',
-            'org.mockito:mockito-core:' + mockito_core_version,
-            'org.assertj:assertj-core:' + assertj_version
 }
 
 configurations {
     compile.exclude group: 'org.slf4j', module: 'slf4j-simple'
+    all*.exclude group: 'org.junit.jupiter'
+}
+
+dependencies {
+    compile "org.tinylog:tinylog:$tinylog_version",
+            "junit:junit:$junit_version",
+            "org.assertj:assertj-core:$assertj_version"
+
+    runtime "org.tinylog:slf4j-binding:$tinylog_version"
+
+    testCompile "junit:junit:$junit_version",
+            "com.github.nwillc:jdk_contract_tests:$jdk_contracts_version",
+            "org.mockito:mockito-core:$mockito_core_version",
+            "org.assertj:assertj-core:$assertj_version"
 }
 
 group = 'com.github.nwillc'
-version = '0.4.2'
+version = '0.4.3-SNAPSHOT'
 targetCompatibility = '1.8'
 sourceCompatibility = '1.8'
 
@@ -148,6 +146,7 @@ githubPages {
 
 pitest {
     threads = 4
+    pitestVersion = '1.2.4'
     timestampedReports = false
     outputFormats = ['XML', 'HTML']
 }
