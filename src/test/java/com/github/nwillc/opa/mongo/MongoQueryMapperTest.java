@@ -13,12 +13,21 @@
  * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.github.nwillc.opa.test;
+package com.github.nwillc.opa.mongo;
 
+
+import com.github.fakemongo.junit.FongoRule;
 import com.github.nwillc.opa.Dao;
-import com.github.nwillc.opa.test.DaoTest.TestEntity;
+import com.github.nwillc.opa.junit.AbstractDaoTest.TestEntity;
+import com.github.nwillc.opa.junit.QueryMapperTest;
+import org.junit.Rule;
 
-import java.util.function.Supplier;
+public class MongoQueryMapperTest extends QueryMapperTest {
+    @Rule
+    public FongoRule fongoRule = new FongoRule();
 
-public interface DaoSupplier extends Supplier<Dao<String, TestEntity>> {
+    @Override
+    public Dao<String, TestEntity> get() {
+        return new MongoDbDao<>(fongoRule.getMongoClient(), "testdb", TestEntity.class);
+    }
 }

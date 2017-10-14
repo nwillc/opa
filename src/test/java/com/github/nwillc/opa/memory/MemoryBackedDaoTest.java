@@ -16,9 +16,9 @@
 package com.github.nwillc.opa.memory;
 
 import com.github.nwillc.opa.Dao;
-import com.github.nwillc.opa.test.DaoTest;
+import com.github.nwillc.opa.junit.AbstractDaoTest;
 
-public class MemoryBackedDaoTest extends DaoTest {
+public class MemoryBackedDaoTest extends AbstractDaoTest {
     @Override
     public Dao<String, TestEntity> get() {
         return new MemoryBackedDao<>();

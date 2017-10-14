@@ -19,14 +19,14 @@ package com.github.nwillc.opa.caching;
 import com.github.nwillc.opa.CachingDao;
 import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.memory.MemoryBackedDao;
-import com.github.nwillc.opa.test.DaoTest;
+import com.github.nwillc.opa.junit.AbstractDaoTest;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
-public class CachingDaoTest extends DaoTest {
+public class CachingDaoTest extends AbstractDaoTest {
     private Dao<String, TestEntity> backingDao;
     private Dao<String, TestEntity> cachingDao;
 

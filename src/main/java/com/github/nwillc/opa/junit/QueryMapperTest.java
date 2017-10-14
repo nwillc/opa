@@ -13,12 +13,12 @@
  * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.github.nwillc.opa.test;
+package com.github.nwillc.opa.junit;
 
 import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.query.Query;
 import com.github.nwillc.opa.query.QueryBuilder;
-import com.github.nwillc.opa.test.DaoTest.TestEntity;
+import com.github.nwillc.opa.junit.AbstractDaoTest.TestEntity;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -13,7 +13,7 @@
  * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.github.nwillc.opa.test;
+package com.github.nwillc.opa.junit;
 
 import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.HasKey;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Fail.fail;
 
-public abstract class DaoTest implements DaoSupplier {
+public abstract class AbstractDaoTest implements DaoSupplier {
     private Dao<String, TestEntity> dao;
 
     @Override

@@ -23,6 +23,10 @@ configurations {
 
 dependencies {
     compile "org.tinylog:tinylog:$tinylog_version",
+            "com.fasterxml.jackson.core:jackson-core:$jackson_fasterxml_version",
+            "com.fasterxml.jackson.core:jackson-databind:$jackson_fasterxml_version",
+            "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:$jackson_fasterxml_version",
+            "org.mongodb:mongo-java-driver:$mongo_driver_version",
             "junit:junit:$junit_version",
             "org.assertj:assertj-core:$assertj_version"
 
@@ -31,11 +35,12 @@ dependencies {
     testCompile "junit:junit:$junit_version",
             "com.github.nwillc:jdk_contract_tests:$jdk_contracts_version",
             "org.mockito:mockito-core:$mockito_core_version",
-            "org.assertj:assertj-core:$assertj_version"
+            "org.assertj:assertj-core:$assertj_version",
+            "com.github.fakemongo:fongo:$fongo_version"
 }
 
 group = 'com.github.nwillc'
-version = '0.4.3-SNAPSHOT'
+version = '0.5.0-SNAPSHOT'
 targetCompatibility = '1.8'
 sourceCompatibility = '1.8'
 
