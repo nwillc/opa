@@ -21,6 +21,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class TransactionTest {
     @Test
+    public void testDefaultMethods() throws Exception {
+        Transaction transaction = new Transaction() {
+        };
+
+        transaction.commit();
+        transaction.rollback();
+        transaction.add(null);
+    }
+
+    @Test
     public void close() throws Exception {
         T2 transaction1;
         try (T2 transaction = new T2()) {
