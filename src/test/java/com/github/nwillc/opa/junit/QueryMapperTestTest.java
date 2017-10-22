@@ -16,7 +16,7 @@
 package com.github.nwillc.opa.junit;
 
 import com.github.nwillc.opa.Dao;
-import com.github.nwillc.opa.memory.MemoryBackedDao;
+import com.github.nwillc.opa.impl.memory.MemoryBackedDao;
 
 
 public class QueryMapperTestTest extends QueryMapperTest {

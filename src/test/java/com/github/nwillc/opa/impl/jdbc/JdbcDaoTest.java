@@ -13,8 +13,14 @@
  * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-/**
- * A concrete implementation persisting data into memory only. Java Predicates are used
- * as the internal query representation.
- */
-package com.github.nwillc.opa.memory;
+package com.github.nwillc.opa.impl.jdbc;
+
+import com.github.nwillc.opa.Dao;
+import com.github.nwillc.opa.junit.AbstractDaoTest;
+
+public class JdbcDaoTest extends AbstractDaoTest {
+    @Override
+    public Dao<String, TestEntity> get() {
+        return new JdbcDao<String, TestEntity>();
+    }
+}

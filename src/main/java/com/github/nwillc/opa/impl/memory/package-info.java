@@ -13,19 +13,8 @@
  * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.github.nwillc.opa.mongo;
-
-import com.github.fakemongo.junit.FongoRule;
-import com.github.nwillc.opa.Dao;
-import com.github.nwillc.opa.junit.AbstractDaoTest;
-import org.junit.Rule;
-
-public class MongoDbDaoTest extends AbstractDaoTest {
-    @Rule
-    public FongoRule fongoRule = new FongoRule();
-
-    @Override
-    public Dao<String, TestEntity> get() {
-        return new MongoDbDao<>(fongoRule.getMongoClient(), "testdb", TestEntity.class);
-    }
-}
+/**
+ * A concrete implementation persisting data into memory only. Java Predicates are used
+ * as the internal query representation.
+ */
+package com.github.nwillc.opa.impl.memory;

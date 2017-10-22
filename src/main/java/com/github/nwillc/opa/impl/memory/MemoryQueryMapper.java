@@ -13,7 +13,7 @@
  * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.github.nwillc.opa.memory;
+package com.github.nwillc.opa.impl.memory;
 
 import com.github.nwillc.opa.query.Comparison;
 import com.github.nwillc.opa.query.Query;

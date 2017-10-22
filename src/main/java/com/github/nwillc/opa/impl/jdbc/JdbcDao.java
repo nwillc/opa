@@ -13,7 +13,42 @@
  * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+package com.github.nwillc.opa.impl.jdbc;
+
+import com.github.nwillc.opa.Dao;
+import com.github.nwillc.opa.HasKey;
+import com.github.nwillc.opa.query.Query;
+
+import java.util.Optional;
+import java.util.stream.Stream;
+
 /**
- * An simple implementation based on MongoDb persistence.
+ *
  */
-package com.github.nwillc.opa.mongo;
+public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
+
+    @Override
+    public Optional<T> findOne(K key) {
+        return null;
+    }
+
+    @Override
+    public Stream<T> findAll() {
+        return null;
+    }
+
+    @Override
+    public Stream<T> find(Query<T> query) {
+        return null;
+    }
+
+    @Override
+    public void save(T entity) {
+
+    }
+
+    @Override
+    public void delete(K key) {
+
+    }
+}

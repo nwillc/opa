@@ -13,29 +13,14 @@
  * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.github.nwillc.opa.memory;
+package com.github.nwillc.opa.impl.memory;
 
 import com.github.nwillc.opa.Dao;
-import com.github.nwillc.opa.query.Query;
-import com.github.nwillc.opa.query.QueryMapper;
-import com.github.nwillc.opa.junit.AbstractDaoTest.TestEntity;
-import com.github.nwillc.opa.junit.QueryMapperTest;
-import org.junit.Test;
+import com.github.nwillc.opa.junit.AbstractDaoTest;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-public class MemoryQueryMapperTest extends QueryMapperTest {
-
+public class MemoryBackedDaoTest extends AbstractDaoTest {
     @Override
     public Dao<String, TestEntity> get() {
         return new MemoryBackedDao<>();
-    }
-
-    @Test
-    public void testException() throws Exception {
-        Query<TestEntity> query = new Query<>(null);
-        QueryMapper<TestEntity> queryMapper = new MemoryQueryMapper<>();
-
-        assertThatThrownBy(() -> queryMapper.apply(query)).isInstanceOf(NullPointerException.class);
     }
 }

@@ -13,14 +13,7 @@
  * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.github.nwillc.opa.junit;
-
-import com.github.nwillc.opa.Dao;
-import com.github.nwillc.opa.impl.memory.MemoryBackedDao;
-
-public class AbstractDaoTestTest extends AbstractDaoTest {
-    @Override
-    public Dao<String, TestEntity> get() {
-        return new MemoryBackedDao<>();
-    }
-}
+/**
+ * An simple implementation based on MongoDb persistence.
+ */
+package com.github.nwillc.opa.impl.mongo;

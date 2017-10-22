@@ -17,7 +17,7 @@ package com.github.nwillc.opa.transaction;
 
 import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.HasKey;
-import com.github.nwillc.opa.memory.MemoryBackedDao;
+import com.github.nwillc.opa.impl.memory.MemoryBackedDao;
 import org.junit.Before;
 import org.junit.Test;
 

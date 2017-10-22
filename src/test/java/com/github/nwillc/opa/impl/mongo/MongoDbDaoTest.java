@@ -13,14 +13,19 @@
  * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.github.nwillc.opa.memory;
+package com.github.nwillc.opa.impl.mongo;
 
+import com.github.fakemongo.junit.FongoRule;
 import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.junit.AbstractDaoTest;
+import org.junit.Rule;
 
-public class MemoryBackedDaoTest extends AbstractDaoTest {
+public class MongoDbDaoTest extends AbstractDaoTest {
+    @Rule
+    public FongoRule fongoRule = new FongoRule();
+
     @Override
     public Dao<String, TestEntity> get() {
-        return new MemoryBackedDao<>();
+        return new MongoDbDao<>(fongoRule.getMongoClient(), "testdb", TestEntity.class);
     }
 }

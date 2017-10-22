@@ -13,14 +13,15 @@
  * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.github.nwillc.opa.junit;
+package com.github.nwillc.opa.impl.jdbc;
 
 import com.github.nwillc.opa.Dao;
-import com.github.nwillc.opa.impl.memory.MemoryBackedDao;
+import com.github.nwillc.opa.junit.AbstractDaoTest;
+import com.github.nwillc.opa.junit.QueryMapperTest;
 
-public class AbstractDaoTestTest extends AbstractDaoTest {
+public class JdbcQueryMapperTest extends QueryMapperTest {
     @Override
-    public Dao<String, TestEntity> get() {
-        return new MemoryBackedDao<>();
+    public Dao<String, AbstractDaoTest.TestEntity> get() {
+        return new JdbcDao<String, AbstractDaoTest.TestEntity>();
     }
 }

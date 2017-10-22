@@ -13,7 +13,7 @@
  * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.github.nwillc.opa.mongo;
+package com.github.nwillc.opa.impl.mongo;
 
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
