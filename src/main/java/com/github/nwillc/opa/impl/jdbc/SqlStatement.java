@@ -15,17 +15,13 @@
 
 package com.github.nwillc.opa.impl.jdbc;
 
-import com.github.nwillc.opa.Dao;
-import com.github.nwillc.opa.SqlTestDatabase;
-import com.github.nwillc.opa.junit.AbstractDaoTest;
 
-public class JdbcDaoTest extends AbstractDaoTest {
-    @Override
-    public Dao<String, TestEntity> get() {
-        try {
-            return new JdbcDao<String, TestEntity>(new SqlTestDatabase());
-        } catch (Exception e) {
-            throw new RuntimeException("Could not create db", e);
-        }
+public interface SqlStatement {
+    String getSql();
+
+    Object[] getArgs();
+
+    default  String getFormattedSql() {
+        return String.format(getSql(), getArgs());
     }
 }

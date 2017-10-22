@@ -15,6 +15,7 @@
 
 package com.github.nwillc.opa.impl.jdbc;
 
+import com.github.nwillc.funjdbc.DbAccessor;
 import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.HasKey;
 import com.github.nwillc.opa.query.Query;
@@ -26,6 +27,11 @@ import java.util.stream.Stream;
  *
  */
 public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
+    private final DbAccessor dao;
+
+    public JdbcDao(DbAccessor dao) {
+        this.dao = dao;
+    }
 
     @Override
     public Optional<T> findOne(K key) {

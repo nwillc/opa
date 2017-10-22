@@ -16,12 +16,17 @@
 package com.github.nwillc.opa.impl.jdbc;
 
 import com.github.nwillc.opa.Dao;
+import com.github.nwillc.opa.SqlTestDatabase;
 import com.github.nwillc.opa.junit.AbstractDaoTest;
 import com.github.nwillc.opa.junit.QueryMapperTest;
 
 public class JdbcQueryMapperTest extends QueryMapperTest {
     @Override
     public Dao<String, AbstractDaoTest.TestEntity> get() {
-        return new JdbcDao<String, AbstractDaoTest.TestEntity>();
+        try {
+            return new JdbcDao<String, AbstractDaoTest.TestEntity>(new SqlTestDatabase());
+        } catch (Exception e) {
+            throw new RuntimeException("Could not create db", e);
+        }
     }
 }

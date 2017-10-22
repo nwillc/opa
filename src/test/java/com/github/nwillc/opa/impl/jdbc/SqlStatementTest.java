@@ -15,17 +15,35 @@
 
 package com.github.nwillc.opa.impl.jdbc;
 
-import com.github.nwillc.opa.Dao;
-import com.github.nwillc.opa.SqlTestDatabase;
-import com.github.nwillc.opa.junit.AbstractDaoTest;
+import org.junit.Test;
 
-public class JdbcDaoTest extends AbstractDaoTest {
-    @Override
-    public Dao<String, TestEntity> get() {
-        try {
-            return new JdbcDao<String, TestEntity>(new SqlTestDatabase());
-        } catch (Exception e) {
-            throw new RuntimeException("Could not create db", e);
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class SqlStatementTest {
+    @Test
+    public void testFormat() throws Exception {
+        final SqlStatement sql = new TestSql("%s-%s", "hello", "world");
+        assertThat(sql.getFormattedSql()).isEqualTo("hello-world");
+    }
+
+    private static class TestSql implements SqlStatement {
+        private final String sql;
+        private final Object[] args;
+
+        public TestSql(String sql, Object... args) {
+            this.sql = sql;
+            this.args = args;
+        }
+
+        @Override
+        public String getSql() {
+            return sql;
+        }
+
+        @Override
+        public Object[] getArgs() {
+            return args;
         }
     }
+
 }
