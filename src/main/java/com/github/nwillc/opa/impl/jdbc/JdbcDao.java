@@ -34,15 +34,18 @@ public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
     private final SqlEntry<T> saveFormatter;
     private final SqlEntry<K> findFormatter;
     private final SqlEntry<K> deleteFormatter;
+    private final String queryAll;
     private final Extractor<T> extractor;
 
     public JdbcDao(DbAccessor dao,
                    SqlEntry<T> saveFormatter, SqlEntry<K> findFormatter, SqlEntry<K> deleteFormatter,
+                   String queryAll,
                    Extractor<T> extractor) {
         this.dao = dao;
         this.saveFormatter = saveFormatter;
         this.findFormatter = findFormatter;
         this.deleteFormatter = deleteFormatter;
+        this.queryAll = queryAll;
         this.extractor = extractor;
     }
 
@@ -58,7 +61,11 @@ public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
 
     @Override
     public Stream<T> findAll() {
-        return null;
+        try {
+            return dao.dbQuery(extractor, queryAll);
+        } catch (SQLException e) {
+            throw new UncheckedSQLException("findAll failed", e);
+        }
     }
 
     @Override

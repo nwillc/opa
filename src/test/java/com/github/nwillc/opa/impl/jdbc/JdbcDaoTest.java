@@ -29,6 +29,7 @@ public class JdbcDaoTest extends AbstractDaoTest {
         try {
             return new JdbcDao<>(new SqlTestDatabase(),
                     new SaveSql(), new FindSql(), new DeleteSql(),
+                    "SELECT DISTINCT key, value FROM TestEntity",
                     new TEExtractor());
         } catch (Exception e) {
             throw new RuntimeException("Could not create db", e);

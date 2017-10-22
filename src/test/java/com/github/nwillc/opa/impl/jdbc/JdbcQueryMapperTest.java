@@ -24,7 +24,7 @@ public class JdbcQueryMapperTest extends QueryMapperTest {
     @Override
     public Dao<String, AbstractDaoTest.TestEntity> get() {
         try {
-            return new JdbcDao<String, AbstractDaoTest.TestEntity>(new SqlTestDatabase(), null,null, null, null);
+            return new JdbcDao<String, AbstractDaoTest.TestEntity>(new SqlTestDatabase(), null, null,null, null, null);
         } catch (Exception e) {
             throw new RuntimeException("Could not create db", e);
         }
