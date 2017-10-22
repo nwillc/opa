@@ -33,14 +33,16 @@ public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
     private final DbAccessor dao;
     private final SqlEntry<T> saveFormatter;
     private final SqlEntry<K> findFormatter;
+    private final SqlEntry<K> deleteFormatter;
     private final Extractor<T> extractor;
 
     public JdbcDao(DbAccessor dao,
-                   SqlEntry<T> saveFormatter, SqlEntry<K> findFormatter,
+                   SqlEntry<T> saveFormatter, SqlEntry<K> findFormatter, SqlEntry<K> deleteFormatter,
                    Extractor<T> extractor) {
         this.dao = dao;
         this.saveFormatter = saveFormatter;
         this.findFormatter = findFormatter;
+        this.deleteFormatter = deleteFormatter;
         this.extractor = extractor;
     }
 
@@ -76,6 +78,11 @@ public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
 
     @Override
     public void delete(K key) {
-
+        final SqlStatement sqlStatement = deleteFormatter.apply(key);
+        try {
+            dao.dbUpdate(sqlStatement.getSql(), sqlStatement.getArgs());
+        } catch (SQLException e) {
+            throw new UncheckedSQLException("Delete failed", e);
+        }
     }
 }

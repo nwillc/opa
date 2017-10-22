@@ -28,7 +28,7 @@ public class JdbcDaoTest extends AbstractDaoTest {
     public Dao<String, TestEntity> get() {
         try {
             return new JdbcDao<>(new SqlTestDatabase(),
-                    new SaveSql(), new FindSql(),
+                    new SaveSql(), new FindSql(), new DeleteSql(),
                     new TEExtractor());
         } catch (Exception e) {
             throw new RuntimeException("Could not create db", e);
@@ -39,6 +39,23 @@ public class JdbcDaoTest extends AbstractDaoTest {
         @Override
         public TestEntity extract(ResultSet rs) throws SQLException {
           return  new TestEntity(rs.getString(1), rs.getString(2));
+        }
+    }
+
+    private static class DeleteSql implements SqlEntry<String> {
+        @Override
+        public SqlStatement apply(String s) {
+            return new SqlStatement() {
+                @Override
+                public String getSql() {
+                    return "DELETE FROM TestEntity WHERE key = '%s'";
+                }
+
+                @Override
+                public Object[] getArgs() {
+                    return new Object[]{s};
+                }
+            };
         }
     }
 
