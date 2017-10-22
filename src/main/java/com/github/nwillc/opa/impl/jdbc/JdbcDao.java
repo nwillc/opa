@@ -16,10 +16,13 @@
 package com.github.nwillc.opa.impl.jdbc;
 
 import com.github.nwillc.funjdbc.DbAccessor;
+import com.github.nwillc.funjdbc.UncheckedSQLException;
+import com.github.nwillc.funjdbc.functions.Extractor;
 import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.HasKey;
 import com.github.nwillc.opa.query.Query;
 
+import java.sql.SQLException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -28,14 +31,27 @@ import java.util.stream.Stream;
  */
 public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
     private final DbAccessor dao;
+    private final SqlEntry<T> saveFormatter;
+    private final SqlEntry<K> findFormatter;
+    private final Extractor<T> extractor;
 
-    public JdbcDao(DbAccessor dao) {
+    public JdbcDao(DbAccessor dao,
+                   SqlEntry<T> saveFormatter, SqlEntry<K> findFormatter,
+                   Extractor<T> extractor) {
         this.dao = dao;
+        this.saveFormatter = saveFormatter;
+        this.findFormatter = findFormatter;
+        this.extractor = extractor;
     }
 
     @Override
     public Optional<T> findOne(K key) {
-        return null;
+        final SqlStatement sqlStatement = findFormatter.apply(key);
+        try {
+            return dao.dbFind(extractor, sqlStatement.getSql(), sqlStatement.getArgs());
+        } catch (SQLException e) {
+           throw new UncheckedSQLException("Find failed", e);
+        }
     }
 
     @Override
@@ -50,7 +66,12 @@ public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
 
     @Override
     public void save(T entity) {
-
+        final SqlStatement sqlStatement = saveFormatter.apply(entity);
+        try {
+            dao.dbUpdate(sqlStatement.getSql(), sqlStatement.getArgs());
+        } catch (SQLException e) {
+            throw new UncheckedSQLException("Save failed", e);
+        }
     }
 
     @Override
