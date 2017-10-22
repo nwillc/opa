@@ -28,7 +28,8 @@ public class JdbcDaoTest extends AbstractDaoTest {
     public Dao<String, TestEntity> get() {
         try {
             return new JdbcDao<>(new SqlTestDatabase(),
-                    new SaveSql(), new FindSql(), new DeleteSql(),
+                    new SaveSql(), new UpdateSql(),
+                    new FindSql(), new DeleteSql(),
                     "SELECT DISTINCT key, value FROM TestEntity",
                     new TEExtractor());
         } catch (Exception e) {
@@ -40,6 +41,23 @@ public class JdbcDaoTest extends AbstractDaoTest {
         @Override
         public TestEntity extract(ResultSet rs) throws SQLException {
           return  new TestEntity(rs.getString(1), rs.getString(2));
+        }
+    }
+
+    private static class UpdateSql implements SqlEntry<TestEntity> {
+        @Override
+        public SqlStatement apply(TestEntity testEntity) {
+            return new SqlStatement() {
+                @Override
+                public String getSql() {
+                    return "UPDATE TestEntity SET value = '%s' WHERE key = '%s'";
+                }
+
+                @Override
+                public Object[] getArgs() {
+                    return new Object[]{testEntity.getValue(), testEntity.getKey()};
+                }
+            };
         }
     }
 

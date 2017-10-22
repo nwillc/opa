@@ -32,17 +32,20 @@ import java.util.stream.Stream;
 public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
     private final DbAccessor dao;
     private final SqlEntry<T> saveFormatter;
+    private final SqlEntry<T> updateFormatter;
     private final SqlEntry<K> findFormatter;
     private final SqlEntry<K> deleteFormatter;
     private final String queryAll;
     private final Extractor<T> extractor;
 
     public JdbcDao(DbAccessor dao,
-                   SqlEntry<T> saveFormatter, SqlEntry<K> findFormatter, SqlEntry<K> deleteFormatter,
+                   SqlEntry<T> saveFormatter, SqlEntry<T> updateFormatter,
+                   SqlEntry<K> findFormatter, SqlEntry<K> deleteFormatter,
                    String queryAll,
                    Extractor<T> extractor) {
         this.dao = dao;
         this.saveFormatter = saveFormatter;
+        this.updateFormatter = updateFormatter;
         this.findFormatter = findFormatter;
         this.deleteFormatter = deleteFormatter;
         this.queryAll = queryAll;
@@ -75,11 +78,22 @@ public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
 
     @Override
     public void save(T entity) {
-        final SqlStatement sqlStatement = saveFormatter.apply(entity);
-        try {
-            dao.dbUpdate(sqlStatement.getSql(), sqlStatement.getArgs());
-        } catch (SQLException e) {
-            throw new UncheckedSQLException("Save failed", e);
+        final Optional<T> found = findOne(entity.getKey());
+        if (found.isPresent()) {
+            final SqlStatement sqlStatement = updateFormatter.apply(entity);
+            try {
+                dao.dbUpdate(sqlStatement.getSql(), sqlStatement.getArgs());
+            } catch (SQLException e) {
+                throw new UncheckedSQLException("Save failed", e);
+            }
+
+        } else {
+            final SqlStatement sqlStatement = saveFormatter.apply(entity);
+            try {
+                dao.dbUpdate(sqlStatement.getSql(), sqlStatement.getArgs());
+            } catch (SQLException e) {
+                throw new UncheckedSQLException("Save failed", e);
+            }
         }
     }
 
