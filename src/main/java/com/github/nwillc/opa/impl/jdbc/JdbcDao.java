@@ -79,21 +79,18 @@ public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
     @Override
     public void save(T entity) {
         final Optional<T> found = findOne(entity.getKey());
-        if (found.isPresent()) {
-            final SqlStatement sqlStatement = updateFormatter.apply(entity);
-            try {
-                dao.dbUpdate(sqlStatement.getSql(), sqlStatement.getArgs());
-            } catch (SQLException e) {
-                throw new UncheckedSQLException("Save failed", e);
-            }
+        final SqlStatement sqlStatement;
 
+        if (found.isPresent()) {
+            sqlStatement =  updateFormatter.apply(entity);
         } else {
-            final SqlStatement sqlStatement = saveFormatter.apply(entity);
-            try {
-                dao.dbUpdate(sqlStatement.getSql(), sqlStatement.getArgs());
-            } catch (SQLException e) {
-                throw new UncheckedSQLException("Save failed", e);
-            }
+            sqlStatement = saveFormatter.apply(entity);
+        }
+
+        try {
+            dao.dbUpdate(sqlStatement.getSql(), sqlStatement.getArgs());
+        } catch (SQLException e) {
+            throw new UncheckedSQLException("Save failed", e);
         }
     }
 
