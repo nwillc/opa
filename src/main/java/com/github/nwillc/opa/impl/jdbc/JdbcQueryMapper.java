@@ -27,6 +27,11 @@ import java.util.stream.Collectors;
 public class JdbcQueryMapper<T> implements QueryMapper<T> {
     private Deque<String> strings = new ArrayDeque<>();
     private Deque<Object> args = new ArrayDeque<>();
+    private final String select;
+
+    JdbcQueryMapper(String select) {
+        this.select = select;
+    }
 
     @Override
     public Object apply(Query<T> tQuery) {
@@ -66,7 +71,7 @@ public class JdbcQueryMapper<T> implements QueryMapper<T> {
         return new SqlStatement() {
             @Override
             public String getSql() {
-                return "SELECT * FROM TestEntity WHERE " + strings.stream().collect(Collectors.joining(" "));
+                return select + " WHERE " + strings.stream().collect(Collectors.joining(" "));
             }
 
             @Override

@@ -24,7 +24,7 @@ import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public abstract class QueryMapperTest<R> implements DaoSupplier {
+public abstract class QueryMapperTest implements DaoSupplier {
     private Dao<String, TestEntity> dao;
 
     @Override

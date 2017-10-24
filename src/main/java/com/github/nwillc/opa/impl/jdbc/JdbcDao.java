@@ -74,7 +74,7 @@ public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
     @Override
     public Stream<T> find(Query<T> query) {
         System.out.println("Query: " + query);
-        final JdbcQueryMapper<T> mapper = new JdbcQueryMapper<>();
+        final JdbcQueryMapper<T> mapper = new JdbcQueryMapper<>(queryAll);
         final SqlStatement sqlStatement = (SqlStatement) query.apply(mapper);
         System.out.println("SQL: " + sqlStatement.getFormattedSql());
         try {
