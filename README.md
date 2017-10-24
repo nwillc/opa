@@ -10,5 +10,5 @@ See the [Javadoc](https://nwillc.github.io/opa/javadoc/)
 
 
 -----
-![Coverage](https://codecov.io/gh/nwillc/opa/branch/master/graphs/badge.svg?branch=master)
+[![Coverage](https://codecov.io/gh/nwillc/opa/branch/master/graphs/badge.svg?branch=master)](https://codecov.io/gh/nwillc/opa)
 
