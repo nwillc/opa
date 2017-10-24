@@ -24,13 +24,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class JdbcDaoTest extends AbstractDaoTest {
+
     @Override
     public Dao<String, TestEntity> get() {
+        return getDao();
+    }
+
+    public static Dao<String, TestEntity> getDao() {
         try {
             return new JdbcDao<>(new SqlTestDatabase(),
                     new SaveSql(), new UpdateSql(),
                     new FindSql(), new DeleteSql(),
-                    "SELECT DISTINCT key, value FROM TestEntity",
+                    "SELECT DISTINCT * FROM TestEntity",
                     new TEExtractor());
         } catch (Exception e) {
             throw new RuntimeException("Could not create db", e);
@@ -40,7 +45,7 @@ public class JdbcDaoTest extends AbstractDaoTest {
     private static class TEExtractor implements Extractor<TestEntity> {
         @Override
         public TestEntity extract(ResultSet rs) throws SQLException {
-          return  new TestEntity(rs.getString(1), rs.getString(2));
+            return new TestEntity(rs.getString("key"), rs.getString("value"));
         }
     }
 
@@ -84,7 +89,7 @@ public class JdbcDaoTest extends AbstractDaoTest {
             return new SqlStatement() {
                 @Override
                 public String getSql() {
-                    return "SELECT key, value FROM TestEntity WHERE key = '%s'";
+                    return "SELECT * FROM TestEntity WHERE key = '%s'";
                 }
 
                 @Override

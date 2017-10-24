@@ -73,7 +73,15 @@ public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
 
     @Override
     public Stream<T> find(Query<T> query) {
-        return null;
+        System.out.println("Query: " + query);
+        final JdbcQueryMapper<T> mapper = new JdbcQueryMapper<>();
+        final SqlStatement sqlStatement = (SqlStatement) query.apply(mapper);
+        System.out.println("SQL: " + sqlStatement.getFormattedSql());
+        try {
+            return dao.dbQuery(extractor, sqlStatement.getSql(), sqlStatement.getArgs());
+        } catch (SQLException e) {
+            throw new UncheckedSQLException("find failed", e);
+        }
     }
 
     @Override

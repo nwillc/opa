@@ -83,10 +83,10 @@ public abstract class QueryMapperTest<R> implements DaoSupplier {
 
     @Test
     public void testAnd() throws Exception {
-        QueryBuilder<TestEntity> generator = new QueryBuilder<TestEntity>(TestEntity.class)
-                .eq("key", "1").eq("value", "1").and();
+        QueryBuilder<TestEntity> generator = new QueryBuilder<>(TestEntity.class)
+                .eq("key", "1").eq("value", "3").and();
 
-        TestEntity testEntity = new TestEntity("1", "1");
+        TestEntity testEntity = new TestEntity("1", "3");
         Query<TestEntity> query = generator.build();
         assertThat(dao.find(query).count()).isEqualTo(0);
         dao.save(testEntity);
@@ -104,9 +104,9 @@ public abstract class QueryMapperTest<R> implements DaoSupplier {
     @Test
     public void testOr() throws Exception {
         QueryBuilder<TestEntity> generator = new QueryBuilder<>(TestEntity.class)
-                .eq("key", "1").eq("value", "1").or();
+                .eq("key", "1").eq("value", "3").or();
 
-        TestEntity testEntity = new TestEntity("1", "1");
+        TestEntity testEntity = new TestEntity("1", "3");
         Query<TestEntity> query = generator.build();
         assertThat(dao.find(query).count()).isEqualTo(0);
         dao.save(testEntity);
@@ -115,8 +115,8 @@ public abstract class QueryMapperTest<R> implements DaoSupplier {
         dao.save(testEntity);
         assertThat(dao.find(query).count()).isEqualTo(1);
         dao.delete("1");
-        testEntity.setValue("1");
         testEntity.setKey("2");
+        testEntity.setValue("3");
         dao.save(testEntity);
         assertThat(dao.find(query).count()).isEqualTo(1);
     }

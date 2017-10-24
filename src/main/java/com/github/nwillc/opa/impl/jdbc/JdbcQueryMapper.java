@@ -15,8 +15,64 @@
 
 package com.github.nwillc.opa.impl.jdbc;
 
-/**
- *
- */
-public class JdbcQueryMapper {
+import com.github.nwillc.opa.query.Comparison;
+import com.github.nwillc.opa.query.Query;
+import com.github.nwillc.opa.query.QueryMapper;
+
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.stream.Collectors;
+
+
+public class JdbcQueryMapper<T> implements QueryMapper<T> {
+    private Deque<String> strings = new ArrayDeque<>();
+    private Deque<Object> args = new ArrayDeque<>();
+
+    @Override
+    public Object apply(Query<T> tQuery) {
+         String one, two;
+
+        switch (tQuery.getOperator()) {
+            case EQ:
+                strings.add("%s = '%s'");
+                args.add(((Comparison) tQuery).getFieldName());
+                args.add(((Comparison) tQuery).getValue());
+                break;
+            case CONTAINS:
+                strings.add("%s like '%%%s%%'");
+                args.add(((Comparison) tQuery).getFieldName());
+                args.add(((Comparison) tQuery).getValue());
+                break;
+            case NOT:
+                strings.push("NOT (");
+                strings.add(")");
+                break;
+            case AND:
+                one = strings.pop();
+                two = strings.pop();
+                strings.push(one);
+                strings.push("AND");
+                strings.push(two);
+                break;
+            case OR:
+                one = strings.pop();
+                two = strings.pop();
+                strings.push(one);
+                strings.push("OR");
+                strings.push(two);
+                break;
+        }
+
+        return new SqlStatement() {
+            @Override
+            public String getSql() {
+                return "SELECT * FROM TestEntity WHERE " + strings.stream().collect(Collectors.joining(" "));
+            }
+
+            @Override
+            public Object[] getArgs() {
+                return args.toArray();
+            }
+        };
+    }
 }
