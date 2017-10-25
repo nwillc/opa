@@ -9,3 +9,5 @@ See the [Javadoc](https://nwillc.github.io/opa/javadoc/)
 -----
 [![Coverage](https://codecov.io/gh/nwillc/opa/branch/master/graphs/badge.svg?branch=master)](https://codecov.io/gh/nwillc/opa)
 [![license](https://img.shields.io/github/license/nwillc/opa.svg)](https://tldrlegal.com/license/-isc-license)
+[![Travis](https://img.shields.io/travis/rust-lang/rust.svg)](https://travis-ci.org/nwillc/opa)
+[![Bintray](https://img.shields.io/bintray/v/nwillc/maven/opa.svg)](https://bintray.com/nwillc/maven/opa)
