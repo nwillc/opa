@@ -1,6 +1,6 @@
 # OPA!
 
-This framework provides a simple Object Persistence Approach. The emphasis is on independence from the persistence mechanics. Only simple operations and queries are provided, however the framework is trivial to implement over almost any persistence. This is appropriate for simple storage where the storage might change or where multiple storage mechanisms may be used simultaneously.
+This framework provides a simple Object Persistence Approach. The emphasis is on independence from the persistence mechanics. Only simple operations and queries are provided, however the framework is trivial to implement over almost any persistence. Memory, Mongo and JDBC implementations are provided as examples. This is appropriate for simple storage where the storage might change or where multiple storage mechanisms may be used simultaneously.
 
 ## Documentation
 
