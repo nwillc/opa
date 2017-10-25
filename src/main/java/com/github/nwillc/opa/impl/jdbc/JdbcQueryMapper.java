@@ -15,6 +15,7 @@
 
 package com.github.nwillc.opa.impl.jdbc;
 
+import com.github.nwillc.funjdbc.SqlStatement;
 import com.github.nwillc.opa.query.Comparison;
 import com.github.nwillc.opa.query.Query;
 import com.github.nwillc.opa.query.QueryMapper;
@@ -24,6 +25,11 @@ import java.util.Deque;
 import java.util.stream.Collectors;
 
 
+/**
+ * A {@link com.github.nwillc.opa.query.QueryMapper} implementation that converts a
+ * {@link com.github.nwillc.opa.query.Query} to a {@link com.github.nwillc.funjdbc.SqlStatement}.
+ * @param <T> The entity type.
+ */
 public class JdbcQueryMapper<T> implements QueryMapper<T> {
     private Deque<String> strings = new ArrayDeque<>();
     private Deque<Object> args = new ArrayDeque<>();
@@ -35,7 +41,7 @@ public class JdbcQueryMapper<T> implements QueryMapper<T> {
 
     @Override
     public Object apply(Query<T> tQuery) {
-         String one, two;
+        String one, two;
 
         switch (tQuery.getOperator()) {
             case EQ:
@@ -68,16 +74,7 @@ public class JdbcQueryMapper<T> implements QueryMapper<T> {
                 break;
         }
 
-        return new SqlStatement() {
-            @Override
-            public String getSql() {
-                return select + " WHERE " + strings.stream().collect(Collectors.joining(" "));
-            }
-
-            @Override
-            public Object[] getArgs() {
-                return args.toArray();
-            }
-        };
+        return new SqlStatement(select + " WHERE " + strings.stream().collect(Collectors.joining(" ")),
+                args.toArray());
     }
 }

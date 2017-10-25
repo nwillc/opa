@@ -16,6 +16,7 @@
 package com.github.nwillc.opa.impl.jdbc;
 
 import com.github.nwillc.funjdbc.DbAccessor;
+import com.github.nwillc.funjdbc.SqlStatement;
 import com.github.nwillc.funjdbc.UncheckedSQLException;
 import com.github.nwillc.funjdbc.functions.Extractor;
 import com.github.nwillc.opa.Dao;
@@ -27,7 +28,9 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- *
+ *   A DAO implementation employing a JDBC persistence implementation.
+ *   @param <K> The entity key type
+ *   @param <T> The entity type
  */
 public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
     private final DbAccessor dao;
@@ -35,14 +38,12 @@ public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
     private final SqlEntry<T> updateFormatter;
     private final SqlEntry<K> findFormatter;
     private final SqlEntry<K> deleteFormatter;
-    private final String queryAll;
+    private final SqlStatement queryAll;
     private final Extractor<T> extractor;
 
     public JdbcDao(DbAccessor dao,
-                   SqlEntry<T> saveFormatter, SqlEntry<T> updateFormatter,
-                   SqlEntry<K> findFormatter, SqlEntry<K> deleteFormatter,
-                   String queryAll,
-                   Extractor<T> extractor) {
+                   Extractor<T> extractor, SqlStatement queryAll, SqlEntry<T> saveFormatter, SqlEntry<T> updateFormatter,
+                   SqlEntry<K> findFormatter, SqlEntry<K> deleteFormatter) {
         this.dao = dao;
         this.saveFormatter = saveFormatter;
         this.updateFormatter = updateFormatter;
@@ -54,11 +55,10 @@ public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
 
     @Override
     public Optional<T> findOne(K key) {
-        final SqlStatement sqlStatement = findFormatter.apply(key);
         try {
-            return dao.dbFind(extractor, sqlStatement.getSql(), sqlStatement.getArgs());
+            return dao.dbFind(extractor, findFormatter.apply(key));
         } catch (SQLException e) {
-           throw new UncheckedSQLException("Find failed", e);
+            throw new UncheckedSQLException("Find failed", e);
         }
     }
 
@@ -73,12 +73,9 @@ public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
 
     @Override
     public Stream<T> find(Query<T> query) {
-        System.out.println("Query: " + query);
-        final JdbcQueryMapper<T> mapper = new JdbcQueryMapper<>(queryAll);
-        final SqlStatement sqlStatement = (SqlStatement) query.apply(mapper);
-        System.out.println("SQL: " + sqlStatement.getFormattedSql());
+        final JdbcQueryMapper<T> mapper = new JdbcQueryMapper<>(queryAll.toString());
         try {
-            return dao.dbQuery(extractor, sqlStatement.getSql(), sqlStatement.getArgs());
+            return dao.dbQuery(extractor, (SqlStatement) query.apply(mapper));
         } catch (SQLException e) {
             throw new UncheckedSQLException("find failed", e);
         }
@@ -90,13 +87,13 @@ public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
         final SqlStatement sqlStatement;
 
         if (found.isPresent()) {
-            sqlStatement =  updateFormatter.apply(entity);
+            sqlStatement = updateFormatter.apply(entity);
         } else {
             sqlStatement = saveFormatter.apply(entity);
         }
 
         try {
-            dao.dbUpdate(sqlStatement.getSql(), sqlStatement.getArgs());
+            dao.dbUpdate(sqlStatement);
         } catch (SQLException e) {
             throw new UncheckedSQLException("Save failed", e);
         }
@@ -104,9 +101,8 @@ public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
 
     @Override
     public void delete(K key) {
-        final SqlStatement sqlStatement = deleteFormatter.apply(key);
         try {
-            dao.dbUpdate(sqlStatement.getSql(), sqlStatement.getArgs());
+            dao.dbUpdate(deleteFormatter.apply(key));
         } catch (SQLException e) {
             throw new UncheckedSQLException("Delete failed", e);
         }

@@ -14,6 +14,6 @@
  */
 
 /**
- *  Dao implementations based on specific persistence mechanisms.
+ * Dao implementations based on specific persistence mechanisms.
  */
 package com.github.nwillc.opa.impl;

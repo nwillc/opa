@@ -15,6 +15,7 @@
 
 package com.github.nwillc.opa.impl.jdbc;
 
+import com.github.nwillc.funjdbc.SqlStatement;
 import com.github.nwillc.funjdbc.functions.Extractor;
 import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.SqlTestDatabase;
@@ -33,10 +34,9 @@ public class JdbcDaoTest extends AbstractDaoTest {
     public static Dao<String, TestEntity> getDao() {
         try {
             return new JdbcDao<>(new SqlTestDatabase(),
-                    new SaveSql(), new UpdateSql(),
-                    new FindSql(), new DeleteSql(),
-                    "SELECT DISTINCT * FROM TestEntity",
-                    new TEExtractor());
+                    new TEExtractor(), new SqlStatement("SELECT DISTINCT * FROM TestEntity"), new SaveSql(), new UpdateSql(),
+                    new FindSql(), new DeleteSql()
+            );
         } catch (Exception e) {
             throw new RuntimeException("Could not create db", e);
         }
@@ -52,68 +52,30 @@ public class JdbcDaoTest extends AbstractDaoTest {
     private static class UpdateSql implements SqlEntry<TestEntity> {
         @Override
         public SqlStatement apply(TestEntity testEntity) {
-            return new SqlStatement() {
-                @Override
-                public String getSql() {
-                    return "UPDATE TestEntity SET value = '%s' WHERE key = '%s'";
-                }
-
-                @Override
-                public Object[] getArgs() {
-                    return new Object[]{testEntity.getValue(), testEntity.getKey()};
-                }
-            };
+            return new SqlStatement("UPDATE TestEntity SET value = '%s' WHERE key = '%s'",
+                    testEntity.getValue(), testEntity.getKey());
         }
     }
 
     private static class DeleteSql implements SqlEntry<String> {
         @Override
         public SqlStatement apply(String s) {
-            return new SqlStatement() {
-                @Override
-                public String getSql() {
-                    return "DELETE FROM TestEntity WHERE key = '%s'";
-                }
-
-                @Override
-                public Object[] getArgs() {
-                    return new Object[]{s};
-                }
-            };
+            return new SqlStatement("DELETE FROM TestEntity WHERE key = '%s'", s);
         }
     }
 
     private static class FindSql implements SqlEntry<String> {
         @Override
         public SqlStatement apply(String s) {
-            return new SqlStatement() {
-                @Override
-                public String getSql() {
-                    return "SELECT * FROM TestEntity WHERE key = '%s'";
-                }
-
-                @Override
-                public Object[] getArgs() {
-                    return new Object[]{s};
-                }
-            };
+            return new SqlStatement("SELECT * FROM TestEntity WHERE key = '%s'", s);
         }
     }
 
     private static class SaveSql implements SqlEntry<TestEntity> {
         @Override
         public SqlStatement apply(TestEntity testEntity) {
-            return new SqlStatement() {
-                @Override
-                public String getSql() {
-                    return "INSERT INTO TestEntity (key, value) VALUES ('%s', '%s')";
-                }
-
-                @Override
-                public Object[] getArgs() {
-                    return new Object[]{testEntity.getKey(), testEntity.getValue()};
-                }
-            };
+            return new SqlStatement("INSERT INTO TestEntity (key, value) VALUES ('%s', '%s')",
+                    testEntity.getKey(), testEntity.getValue());
         }
     }
 }

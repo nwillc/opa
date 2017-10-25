@@ -15,7 +15,14 @@
 
 package com.github.nwillc.opa.impl.jdbc;
 
+import com.github.nwillc.funjdbc.SqlStatement;
+
 import java.util.function.Function;
 
+/**
+ * Create a SqlStatement based on a specific entity type.
+ *
+ * @param <T> The entity type
+ */
 public interface SqlEntry<T> extends Function<T, SqlStatement> {
 }

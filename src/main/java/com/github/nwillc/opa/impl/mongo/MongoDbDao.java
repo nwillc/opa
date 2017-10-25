@@ -48,7 +48,7 @@ public class MongoDbDao<K, T extends HasKey<K>> implements Dao<K, T> {
                       final Class<T> tClass) {
         this(client, databaseName, KEY_FIELD_DEFAULT, tClass);
     }
-    
+
     public MongoDbDao(final MongoClient client,
                       final String databaseName, final String keyFieldName,
                       final Class<T> tClass) {

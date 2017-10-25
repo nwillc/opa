@@ -25,6 +25,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+/**
+ * A Dao implementation which maintains its store only in memory.
+ * @param <K> The key type of the entities
+ * @param <T> The Entity type
+ */
 public class MemoryBackedDao<K, T extends HasKey<K>> implements Dao<K, T> {
     private final Map<K, T> entities = new ConcurrentHashMap<>();
 

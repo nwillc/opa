@@ -14,6 +14,6 @@
  */
 
 /**
- *  A proof of concept JDBC based Dao. This is a crude, but functional implementation.
+ * A proof of concept JDBC based Dao. This is a crude, but functional implementation.
  */
 package com.github.nwillc.opa.impl.jdbc;
