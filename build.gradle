@@ -44,7 +44,7 @@ dependencies {
 }
 
 group = 'com.github.nwillc'
-version = '0.6.1'
+version = '0.6.2-SNAPSHOT'
 targetCompatibility = '1.8'
 sourceCompatibility = '1.8'
 

@@ -72,7 +72,7 @@ public class SqlTestDatabase implements DbAccessor {
         public void perform() throws Exception {
             try (Connection c = getConnection();
                  Statement statement = c.createStatement()) {
-                statement.execute("CREATE TABLE TestEntity ( key CHAR(20), value CHAR(20) )");
+                statement.execute("CREATE TABLE TestEntity ( key CHAR(20), value CHAR(20), PRIMARY KEY(key) )");
             }
         }
     }
