@@ -7,3 +7,6 @@ build
 env.sh
 env.sh
 out
+.classpath
+.project
+.settings
