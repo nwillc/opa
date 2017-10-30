@@ -15,10 +15,8 @@
 
 package com.github.nwillc.opa.impl.jdbc;
 
-import com.github.nwillc.funjdbc.DbAccessor;
 import com.github.nwillc.funjdbc.SqlStatement;
 import com.github.nwillc.funjdbc.UncheckedSQLException;
-import com.github.nwillc.funjdbc.functions.Extractor;
 import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.HasKey;
 import com.github.nwillc.opa.query.Query;
@@ -28,35 +26,22 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
- *   A DAO implementation employing a JDBC persistence implementation.
- *   @param <K> The entity key type
- *   @param <T> The entity type
+ * A DAO implementation employing a JDBC persistence implementation.
+ *
+ * @param <K> The entity key type
+ * @param <T> The entity type
  */
 public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
-    private final DbAccessor dao;
-    private final SqlEntry<T> saveFormatter;
-    private final SqlEntry<T> updateFormatter;
-    private final SqlEntry<K> findFormatter;
-    private final SqlEntry<K> deleteFormatter;
-    private final SqlStatement queryAll;
-    private final Extractor<T> extractor;
+    private final JdbcDaoConfiguration<K, T> configuration;
 
-    public JdbcDao(DbAccessor dao,
-                   Extractor<T> extractor, SqlStatement queryAll, SqlEntry<T> saveFormatter, SqlEntry<T> updateFormatter,
-                   SqlEntry<K> findFormatter, SqlEntry<K> deleteFormatter) {
-        this.dao = dao;
-        this.saveFormatter = saveFormatter;
-        this.updateFormatter = updateFormatter;
-        this.findFormatter = findFormatter;
-        this.deleteFormatter = deleteFormatter;
-        this.queryAll = queryAll;
-        this.extractor = extractor;
+    public JdbcDao(JdbcDaoConfiguration<K, T> configuration) {
+        this.configuration = configuration;
     }
 
     @Override
     public Optional<T> findOne(K key) {
         try {
-            return dao.dbFind(extractor, findFormatter.apply(key));
+            return configuration.dbFind(configuration.getExtractor(), configuration.getRetrieve().apply(key));
         } catch (SQLException e) {
             throw new UncheckedSQLException("Find failed", e);
         }
@@ -65,7 +50,7 @@ public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
     @Override
     public Stream<T> findAll() {
         try {
-            return dao.dbQuery(extractor, queryAll);
+            return configuration.dbQuery(configuration.getExtractor(), configuration.getQueryAll());
         } catch (SQLException e) {
             throw new UncheckedSQLException("findAll failed", e);
         }
@@ -73,9 +58,9 @@ public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
 
     @Override
     public Stream<T> find(Query<T> query) {
-        final JdbcQueryMapper<T> mapper = new JdbcQueryMapper<>(queryAll.toString());
+        final JdbcQueryMapper<T> mapper = new JdbcQueryMapper<>(configuration.getQueryAll().toString());
         try {
-            return dao.dbQuery(extractor, (SqlStatement) query.apply(mapper));
+            return configuration.dbQuery(configuration.getExtractor(), (SqlStatement) query.apply(mapper));
         } catch (SQLException e) {
             throw new UncheckedSQLException("find failed", e);
         }
@@ -87,13 +72,13 @@ public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
         final SqlStatement sqlStatement;
 
         if (found.isPresent()) {
-            sqlStatement = updateFormatter.apply(entity);
+            sqlStatement = configuration.getUpdate().apply(entity);
         } else {
-            sqlStatement = saveFormatter.apply(entity);
+            sqlStatement = configuration.getCreate().apply(entity);
         }
 
         try {
-            dao.dbUpdate(sqlStatement);
+            configuration.dbUpdate(sqlStatement);
         } catch (SQLException e) {
             throw new UncheckedSQLException("Save failed", e);
         }
@@ -102,7 +87,7 @@ public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
     @Override
     public void delete(K key) {
         try {
-            dao.dbUpdate(deleteFormatter.apply(key));
+            configuration.dbUpdate(configuration.getDelete().apply(key));
         } catch (SQLException e) {
             throw new UncheckedSQLException("Delete failed", e);
         }

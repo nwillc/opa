@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 /**
  * A {@link com.github.nwillc.opa.query.QueryMapper} implementation that converts a
  * {@link com.github.nwillc.opa.query.Query} to a {@link com.github.nwillc.funjdbc.SqlStatement}.
+ *
  * @param <T> The entity type.
  */
 public class JdbcQueryMapper<T> implements QueryMapper<T> {
