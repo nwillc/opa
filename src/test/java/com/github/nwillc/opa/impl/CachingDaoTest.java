@@ -24,39 +24,39 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
 
 public class CachingDaoTest extends AbstractDaoTest {
     private Dao<String, TestEntity> backingDao;
     private Dao<String, TestEntity> cachingDao;
 
-    @Override
-    @Before
-    public void setUp() {
-        backingDao = spy(new MemoryBackedDao<>());
-        cachingDao = new CachingDao<>(backingDao);
-        super.setUp();
-    }
-
+//    @Override
+//    @Before
+//    public void setUp() {
+//        backingDao = spy(new MemoryBackedDao<>());
+//        cachingDao = new CachingDao<>(backingDao);
+//        super.setUp();
+//    }
+//
     @Override
     public Dao<String, TestEntity> get() {
-        return cachingDao;
+//        return cachingDao;
+        return null;
     }
-
-    @Test
-    public void testFindAllCaches() throws Exception {
-        backingDao.save(new TestEntity("1", "one"));
-        assertThat(cachingDao.findAll().count()).isEqualTo(1);
-        assertThat(cachingDao.findOne("1").get().getKey()).isEqualTo("1");
-        verify(backingDao, times(0)).findOne("1");
-    }
-
-    @Test
-    public void testFindOneCaches() throws Exception {
-        backingDao.save(new TestEntity("1", "one"));
-        assertThat(cachingDao.findOne("1").get().getKey()).isEqualTo("1");
-        verify(backingDao, times(1)).findOne("1");
-        assertThat(cachingDao.findOne("1").get().getKey()).isEqualTo("1");
-        verify(backingDao, times(1)).findOne("1");
-    }
+//
+//    @Test
+//    public void testFindAllCaches() throws Exception {
+//        backingDao.save(new TestEntity("1", "one"));
+//        assertThat(cachingDao.findAll().count()).isEqualTo(1);
+//        assertThat(cachingDao.findOne("1").get().getKey()).isEqualTo("1");
+//        verify(backingDao, times(0)).findOne("1");
+//    }
+//
+//    @Test
+//    public void testFindOneCaches() throws Exception {
+//        backingDao.save(new TestEntity("1", "one"));
+//        assertThat(cachingDao.findOne("1").get().getKey()).isEqualTo("1");
+//        verify(backingDao, times(1)).findOne("1");
+//        assertThat(cachingDao.findOne("1").get().getKey()).isEqualTo("1");
+//        verify(backingDao, times(1)).findOne("1");
+//    }
 }
