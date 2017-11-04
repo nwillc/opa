@@ -13,8 +13,10 @@
  * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.github.nwillc.opa;
+package com.github.nwillc.opa.impl;
 
+import com.github.nwillc.opa.Dao;
+import com.github.nwillc.opa.HasKey;
 import com.github.nwillc.opa.query.Query;
 
 import java.util.Map;

@@ -13,50 +13,60 @@
  * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-package com.github.nwillc.opa.caching;
+package com.github.nwillc.opa.impl;
 
 
-import com.github.nwillc.opa.CachingDao;
 import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.impl.memory.MemoryBackedDao;
 import com.github.nwillc.opa.junit.AbstractDaoTest;
+import mockit.Expectations;
+import mockit.Verifications;
+import mockit.integration.junit4.JMockit;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@RunWith(JMockit.class)
 public class CachingDaoTest extends AbstractDaoTest {
     private Dao<String, TestEntity> backingDao;
     private Dao<String, TestEntity> cachingDao;
 
-//    @Override
-//    @Before
-//    public void setUp() {
-//        backingDao = spy(new MemoryBackedDao<>());
-//        cachingDao = new CachingDao<>(backingDao);
-//        super.setUp();
-//    }
-//
+    @Override
+    @Before
+    public void setUp() {
+        backingDao = new MemoryBackedDao<>();
+        cachingDao = new CachingDao<>(backingDao);
+        super.setUp();
+    }
+
     @Override
     public Dao<String, TestEntity> get() {
-//        return cachingDao;
-        return null;
+        return cachingDao;
     }
-//
-//    @Test
-//    public void testFindAllCaches() throws Exception {
-//        backingDao.save(new TestEntity("1", "one"));
-//        assertThat(cachingDao.findAll().count()).isEqualTo(1);
-//        assertThat(cachingDao.findOne("1").get().getKey()).isEqualTo("1");
-//        verify(backingDao, times(0)).findOne("1");
-//    }
-//
-//    @Test
-//    public void testFindOneCaches() throws Exception {
-//        backingDao.save(new TestEntity("1", "one"));
-//        assertThat(cachingDao.findOne("1").get().getKey()).isEqualTo("1");
-//        verify(backingDao, times(1)).findOne("1");
-//        assertThat(cachingDao.findOne("1").get().getKey()).isEqualTo("1");
-//        verify(backingDao, times(1)).findOne("1");
-//    }
+
+    @Test
+    public void testFindAllCaches() throws Exception {
+        new Expectations(MemoryBackedDao.class){{
+             backingDao.findOne(anyString); times = 0;
+        }};
+        backingDao.save(new TestEntity("1", "one"));
+        assertThat(cachingDao.findAll().count()).isEqualTo(1);
+        assertThat(cachingDao.findOne("1").get().getKey()).isEqualTo("1");
+    }
+
+    @Test
+    public void testFindOneCaches() throws Exception {
+        new Expectations(MemoryBackedDao.class){{
+            backingDao.findOne("1"); times = 1; result = Optional.of(new TestEntity("1", "one"));
+        }};
+        assertThat(cachingDao.findOne("1").get().getKey()).isEqualTo("1");
+        new Expectations(MemoryBackedDao.class){{
+            backingDao.findOne("1"); times = 0;
+        }};
+        assertThat(cachingDao.findOne("1").get().getKey()).isEqualTo("1");
+    }
 }

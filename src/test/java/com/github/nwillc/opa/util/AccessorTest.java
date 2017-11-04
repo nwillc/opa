@@ -17,16 +17,19 @@ package com.github.nwillc.opa.util;
 
 import com.github.nwillc.contracts.UtilityClassContract;
 import com.github.nwillc.opa.HasKey;
+import mockit.Mocked;
+import mockit.Verifications;
+import mockit.integration.junit4.JMockit;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.UUID;
 import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
 
+@RunWith(JMockit.class)
 public class AccessorTest extends UtilityClassContract {
 
     @Override
@@ -82,12 +85,13 @@ public class AccessorTest extends UtilityClassContract {
     }
 
     @Test
-    public void testGetter() throws Exception {
-        Bean bean = new Bean("foo");
-        Bean spy = spy(bean);
+    public void testGetter(@Mocked Bean bean) throws Exception {
         Function<Bean, String> accessor = Accessor.getFunction("key", Bean.class);
-        accessor.apply(spy);
-        verify(spy).getKey();
+        accessor.apply(bean);
+        new Verifications() {{
+            bean.getKey();
+            times = 1;
+        }};
     }
 
     @Test

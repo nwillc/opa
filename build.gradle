@@ -53,10 +53,10 @@ dependencies {
     testCompile "junit:junit:$junit_version",
             "com.h2database:h2:$h2database_version",
             "com.github.nwillc:jdk_contract_tests:$jdk_contracts_version",
-            "org.mockito:mockito-core:$mockito_core_version",
             "org.assertj:assertj-core:$assertj_version",
             "com.github.fakemongo:fongo:$fongo_version",
-            'org.apache.commons:commons-dbcp2:2.1.1'
+            "org.apache.commons:commons-dbcp2:$dbcp2_version",
+            "org.jmockit:jmockit:$jmockit_version"
 }
 
 group = 'com.github.nwillc'
@@ -65,7 +65,8 @@ targetCompatibility = '1.8'
 sourceCompatibility = '1.8'
 
 test {
-
+    jvmArgs "-Djdk.attach.allowAttachSelf"
+    
     beforeTest { descriptor ->
         logger.lifecycle("\tRunning $descriptor.className.$descriptor.name")
     }

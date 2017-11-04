@@ -15,17 +15,17 @@
 
 package com.github.nwillc.opa.impl.jdbc;
 
-import com.github.nwillc.funjdbc.DbAccessor;
 import com.github.nwillc.funjdbc.SqlStatement;
 import com.github.nwillc.funjdbc.functions.Extractor;
 import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.SqlTestDatabase;
 import com.github.nwillc.opa.junit.AbstractDaoTest;
+import mockit.integration.junit4.JMockit;
+import org.junit.runner.RunWith;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@RunWith(JMockit.class)
 public class JdbcDaoTest extends AbstractDaoTest {
 
     @Override
