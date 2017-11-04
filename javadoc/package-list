@@ -1,4 +1,5 @@
 com.github.nwillc.opa
+com.github.nwillc.opa.impl
 com.github.nwillc.opa.impl.jdbc
 com.github.nwillc.opa.impl.memory
 com.github.nwillc.opa.impl.mongo
