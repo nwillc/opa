@@ -16,10 +16,10 @@
 package com.github.nwillc.opa.impl.memory;
 
 import com.github.nwillc.opa.Dao;
-import com.github.nwillc.opa.query.Query;
-import com.github.nwillc.opa.query.QueryMapper;
 import com.github.nwillc.opa.junit.AbstractDaoTest.TestEntity;
 import com.github.nwillc.opa.junit.QueryMapperTest;
+import com.github.nwillc.opa.query.Query;
+import com.github.nwillc.opa.query.QueryMapper;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

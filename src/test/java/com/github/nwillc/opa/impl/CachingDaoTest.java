@@ -20,7 +20,6 @@ import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.impl.memory.MemoryBackedDao;
 import com.github.nwillc.opa.junit.AbstractDaoTest;
 import mockit.Expectations;
-import mockit.Verifications;
 import mockit.integration.junit4.JMockit;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,7 +36,7 @@ public class CachingDaoTest extends AbstractDaoTest {
 
     @Override
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         backingDao = new MemoryBackedDao<>();
         cachingDao = new CachingDao<>(backingDao);
         super.setUp();
@@ -50,8 +49,9 @@ public class CachingDaoTest extends AbstractDaoTest {
 
     @Test
     public void testFindAllCaches() throws Exception {
-        new Expectations(MemoryBackedDao.class){{
-             backingDao.findOne(anyString); times = 0;
+        new Expectations(MemoryBackedDao.class) {{
+            backingDao.findOne(anyString);
+            times = 0;
         }};
         backingDao.save(new TestEntity("1", "one"));
         assertThat(cachingDao.findAll().count()).isEqualTo(1);
@@ -60,12 +60,15 @@ public class CachingDaoTest extends AbstractDaoTest {
 
     @Test
     public void testFindOneCaches() throws Exception {
-        new Expectations(MemoryBackedDao.class){{
-            backingDao.findOne("1"); times = 1; result = Optional.of(new TestEntity("1", "one"));
+        new Expectations(MemoryBackedDao.class) {{
+            backingDao.findOne("1");
+            times = 1;
+            result = Optional.of(new TestEntity("1", "one"));
         }};
         assertThat(cachingDao.findOne("1").get().getKey()).isEqualTo("1");
-        new Expectations(MemoryBackedDao.class){{
-            backingDao.findOne("1"); times = 0;
+        new Expectations(MemoryBackedDao.class) {{
+            backingDao.findOne("1");
+            times = 0;
         }};
         assertThat(cachingDao.findOne("1").get().getKey()).isEqualTo("1");
     }

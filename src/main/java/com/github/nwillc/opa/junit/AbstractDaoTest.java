@@ -35,7 +35,7 @@ public abstract class AbstractDaoTest implements DaoSupplier {
     public abstract Dao<String, TestEntity> get();
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         dao = get();
         assertThat(dao).isNotNull();
     }

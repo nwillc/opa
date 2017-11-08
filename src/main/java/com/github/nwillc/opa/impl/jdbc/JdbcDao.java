@@ -38,6 +38,10 @@ public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
         this.configuration = configuration;
     }
 
+    public JdbcDaoConfiguration<K, T> getConfiguration() {
+        return configuration;
+    }
+
     @Override
     public Optional<T> findOne(K key) {
         try {

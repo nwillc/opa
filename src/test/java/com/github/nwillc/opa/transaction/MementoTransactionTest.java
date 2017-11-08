@@ -41,8 +41,10 @@ public class MementoTransactionTest {
         instance.add(memento2);
         instance.commit();
         new FullVerificationsInOrder() {{
-            memento1.commit(); times = 1;
-            memento2.commit(); times = 1;
+            memento1.commit();
+            times = 1;
+            memento2.commit();
+            times = 1;
         }};
     }
 

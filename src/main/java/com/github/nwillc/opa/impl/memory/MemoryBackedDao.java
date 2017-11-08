@@ -27,6 +27,7 @@ import java.util.stream.Stream;
 
 /**
  * A Dao implementation which maintains its store only in memory.
+ *
  * @param <K> The key type of the entities
  * @param <T> The Entity type
  */

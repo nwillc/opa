@@ -16,24 +16,89 @@
 package com.github.nwillc.opa.impl.jdbc;
 
 import com.github.nwillc.funjdbc.SqlStatement;
+import com.github.nwillc.funjdbc.UncheckedSQLException;
 import com.github.nwillc.funjdbc.functions.Extractor;
 import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.SqlTestDatabase;
 import com.github.nwillc.opa.junit.AbstractDaoTest;
+import com.github.nwillc.opa.query.Query;
+import mockit.Expectations;
+import mockit.Mocked;
 import mockit.integration.junit4.JMockit;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.sql.Connection;
 import java.sql.SQLException;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @RunWith(JMockit.class)
 public class JdbcDaoTest extends AbstractDaoTest {
+
 
     @Override
     public Dao<String, TestEntity> get() {
         return getDao();
     }
 
-    public static Dao<String, TestEntity> getDao() {
+    @Test
+    public void testFindOneException() throws Exception {
+        final JdbcDao<String, TestEntity> dao = getDao();
+        TestDbConfiguration configuration = (TestDbConfiguration) dao.getConfiguration();
+        new Expectations(TestDbConfiguration.class) {{
+            configuration.getConnection();
+            result = new SQLException();
+        }};
+        assertThatThrownBy(() -> dao.findOne("")).isInstanceOf(UncheckedSQLException.class);
+    }
+
+    @Test
+    public void testFindAllException() throws Exception {
+        final JdbcDao<String, TestEntity> dao = getDao();
+        TestDbConfiguration configuration = (TestDbConfiguration) dao.getConfiguration();
+        new Expectations(TestDbConfiguration.class) {{
+            configuration.getConnection();
+            result = new SQLException();
+        }};
+        assertThatThrownBy(() -> dao.findAll()).isInstanceOf(UncheckedSQLException.class);
+    }
+
+    @Test
+    public void testFindException(@Mocked Query query) throws Exception {
+        final JdbcDao<String, TestEntity> dao = getDao();
+        TestDbConfiguration configuration = (TestDbConfiguration) dao.getConfiguration();
+        new Expectations(TestDbConfiguration.class) {{
+            configuration.getConnection();
+            result = new SQLException();
+        }};
+        assertThatThrownBy(() -> dao.find(query)).isInstanceOf(UncheckedSQLException.class);
+    }
+
+    @Test
+    public void testSaveException(@Mocked TestEntity entity) throws Exception {
+        final JdbcDao<String, TestEntity> dao = getDao();
+        TestDbConfiguration configuration = (TestDbConfiguration) dao.getConfiguration();
+        new Expectations(TestDbConfiguration.class) {{
+            configuration.getConnection();
+            result = new SQLException();
+        }};
+        assertThatThrownBy(() -> dao.save(entity)).isInstanceOf(UncheckedSQLException.class);
+    }
+
+    @Test
+    public void testDeleteException() throws Exception {
+        final JdbcDao<String, TestEntity> dao = getDao();
+        TestDbConfiguration configuration = (TestDbConfiguration) dao.getConfiguration();
+        new Expectations(TestDbConfiguration.class) {{
+            configuration.getConnection();
+            result = new SQLException();
+        }};
+        assertThatThrownBy(() -> dao.delete("")).isInstanceOf(UncheckedSQLException.class);
+    }
+
+
+    public static JdbcDao<String, TestEntity> getDao() {
         try {
             return new JdbcDao<>(new TestDbConfiguration());
         } catch (Exception e) {
@@ -42,7 +107,13 @@ public class JdbcDaoTest extends AbstractDaoTest {
     }
 
     private static class TestDbConfiguration extends SqlTestDatabase implements JdbcDaoConfiguration<String, TestEntity> {
+
         public TestDbConfiguration() throws ClassNotFoundException, SQLException {
+        }
+
+        @Override
+        public Connection getConnection() throws SQLException {
+            return super.getConnection();
         }
 
         @Override
