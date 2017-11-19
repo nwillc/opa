@@ -15,13 +15,85 @@
 
 package com.github.nwillc.opa.impl.jdbc;
 
+import com.github.nwillc.funjdbc.SqlStatement;
 import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.junit.AbstractDaoTest;
 import com.github.nwillc.opa.junit.QueryMapperTest;
+import com.github.nwillc.opa.query.Query;
+import com.github.nwillc.opa.query.QueryBuilder;
+import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class JdbcQueryMapperTest extends QueryMapperTest {
     @Override
     public Dao<String, AbstractDaoTest.TestEntity> get() {
         return JdbcDaoTest.getDao();
+    }
+
+    @Test
+    public void testSqlEq() throws Exception {
+        final Query<LabelValue> query = new QueryBuilder<>(LabelValue.class)
+                .eq("label", "LABEL")
+                .build();
+
+        final JdbcQueryMapper<LabelValue> queryMapper = new JdbcQueryMapper<>(null);
+        final Object apply = query.apply(queryMapper);
+        assertThat(apply.toString()).isEqualTo("label = 'LABEL'");
+    }
+
+    @Test
+    public void testSqlContains() throws Exception {
+        final Query<LabelValue> query = new QueryBuilder<>(LabelValue.class)
+                .contains("label", "LABEL")
+                .build();
+
+        final JdbcQueryMapper<LabelValue> queryMapper = new JdbcQueryMapper<>(null);
+        final Object apply = query.apply(queryMapper);
+        assertThat(apply.toString()).isEqualTo("label like '%LABEL%'");
+    }
+
+    @Test
+    public void testSqlNot() throws Exception {
+        final Query<LabelValue> query = new QueryBuilder<>(LabelValue.class)
+                .eq("value", "VALUE")
+                .not()
+                .build();
+
+        final JdbcQueryMapper<LabelValue> queryMapper = new JdbcQueryMapper<>(null);
+        final Object apply = query.apply(queryMapper);
+        assertThat(apply.toString()).isEqualTo("NOT ( value = 'VALUE' )");
+    }
+
+    @Test
+    public void testSqlAnd() throws Exception {
+        final Query<LabelValue> query = new QueryBuilder<>(LabelValue.class)
+                .eq("value", "VALUE")
+                .contains("label", "LABEL")
+                .and()
+                .build();
+
+        final JdbcQueryMapper<LabelValue> queryMapper = new JdbcQueryMapper<>(null);
+        final Object apply = query.apply(queryMapper);
+        assertThat(apply.toString()).isEqualTo("value = 'VALUE' AND label like '%LABEL%'");
+    }
+
+    @Test
+    public void testSqlOr() throws Exception {
+        final Query<LabelValue> query = new QueryBuilder<>(LabelValue.class)
+                .eq("value", "VALUE")
+                .eq("label", "VALUE")
+                .contains("label", "LABEL")
+                .or()
+                .build();
+
+        final JdbcQueryMapper<LabelValue> queryMapper = new JdbcQueryMapper<>(null);
+        final Object apply = query.apply(queryMapper);
+        assertThat(apply.toString()).isEqualTo("value = 'VALUE' OR label = 'VALUE' OR label like '%LABEL%'");
+    }
+
+    private class LabelValue {
+        String label;
+        String value;
     }
 }

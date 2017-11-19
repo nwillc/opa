@@ -64,8 +64,9 @@ public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
     public Stream<T> find(Query<T> query) {
         final JdbcQueryMapper<T> mapper = new JdbcQueryMapper<>(configuration.getQueryAll().toString());
         try {
-            return configuration.dbQuery(configuration.getExtractor(), (SqlStatement) query.apply(mapper));
-        } catch (SQLException e) {
+            final SqlStatement sqlStatement = new SqlStatement("%s WHERE %s", configuration.getQueryAll().toString(), query.apply(mapper).toString());
+            return configuration.dbQuery(configuration.getExtractor(), sqlStatement);
+        } catch (Exception e) {
             throw new UncheckedSQLException("find failed", e);
         }
     }

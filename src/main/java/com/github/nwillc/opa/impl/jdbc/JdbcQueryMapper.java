@@ -17,6 +17,7 @@ package com.github.nwillc.opa.impl.jdbc;
 
 import com.github.nwillc.funjdbc.SqlStatement;
 import com.github.nwillc.opa.query.Comparison;
+import com.github.nwillc.opa.query.Logical;
 import com.github.nwillc.opa.query.Query;
 import com.github.nwillc.opa.query.QueryMapper;
 
@@ -32,50 +33,42 @@ import java.util.stream.Collectors;
  * @param <T> The entity type.
  */
 public class JdbcQueryMapper<T> implements QueryMapper<T> {
-    private Deque<String> strings = new ArrayDeque<>();
-    private Deque<Object> args = new ArrayDeque<>();
-    private final String select;
+    private Deque<String> phrases = new ArrayDeque<>();
 
     JdbcQueryMapper(String select) {
-        this.select = select;
+
     }
 
     @Override
     public Object apply(Query<T> tQuery) {
-        String one, two;
+        final String collect;
 
         switch (tQuery.getOperator()) {
             case EQ:
-                strings.add("%s = '%s'");
-                args.add(((Comparison) tQuery).getFieldName());
-                args.add(((Comparison) tQuery).getValue());
+                phrases.addLast(String.format("%s = '%s'",
+                        ((Comparison) tQuery).getFieldName(),
+                        ((Comparison) tQuery).getValue()));
                 break;
             case CONTAINS:
-                strings.add("%s like '%%%s%%'");
-                args.add(((Comparison) tQuery).getFieldName());
-                args.add(((Comparison) tQuery).getValue());
+                phrases.addLast(String.format("%s like '%%%s%%'",
+                        ((Comparison) tQuery).getFieldName(),
+                        ((Comparison) tQuery).getValue()));
                 break;
             case NOT:
-                strings.push("NOT (");
-                strings.add(")");
+                final String last = phrases.removeLast();
+                phrases.addLast("NOT ( " + last + " )");
                 break;
             case AND:
-                one = strings.pop();
-                two = strings.pop();
-                strings.push(one);
-                strings.push("AND");
-                strings.push(two);
+                collect = phrases.stream().collect(Collectors.joining(" AND "));
+                phrases = new ArrayDeque<>();
+                phrases.addLast(collect);
                 break;
             case OR:
-                one = strings.pop();
-                two = strings.pop();
-                strings.push(one);
-                strings.push("OR");
-                strings.push(two);
+                collect = phrases.stream().collect(Collectors.joining(" OR "));
+                phrases = new ArrayDeque<>();
+                phrases.addLast(collect);
                 break;
         }
-
-        return new SqlStatement(select + " WHERE " + strings.stream().collect(Collectors.joining(" ")),
-                args.toArray());
+        return phrases.getFirst();
     }
 }

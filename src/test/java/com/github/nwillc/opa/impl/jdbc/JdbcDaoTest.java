@@ -22,6 +22,7 @@ import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.SqlTestDatabase;
 import com.github.nwillc.opa.junit.AbstractDaoTest;
 import com.github.nwillc.opa.query.Query;
+import com.github.nwillc.opa.query.QueryMapper;
 import mockit.Expectations;
 import mockit.Mocked;
 import mockit.integration.junit4.JMockit;
@@ -67,10 +68,9 @@ public class JdbcDaoTest extends AbstractDaoTest {
     @Test
     public void testFindException(@Mocked Query query) throws Exception {
         final JdbcDao<String, TestEntity> dao = getDao();
-        TestDbConfiguration configuration = (TestDbConfiguration) dao.getConfiguration();
-        new Expectations(TestDbConfiguration.class) {{
-            configuration.getConnection();
-            result = new SQLException();
+        new Expectations() {{
+            query.apply((QueryMapper)any);
+            result = "";
         }};
         assertThatThrownBy(() -> dao.find(query)).isInstanceOf(UncheckedSQLException.class);
     }
