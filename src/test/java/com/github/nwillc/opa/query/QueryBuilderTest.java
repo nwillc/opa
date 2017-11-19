@@ -20,6 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 public class QueryBuilderTest {
     private QueryBuilder<Bean> queryGenerator;
@@ -45,6 +46,11 @@ public class QueryBuilderTest {
     }
 
     @Test
+    public void testNotOfNothing() throws Exception {
+        assertThatThrownBy(() -> queryGenerator.not()).isInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
     public void testAnd() throws Exception {
         QueryBuilder generator = queryGenerator
                 .contains("key", "1")
@@ -55,12 +61,22 @@ public class QueryBuilderTest {
     }
 
     @Test
+    public void testAndOfTooLittle() throws Exception {
+        assertThatThrownBy(() -> queryGenerator.contains("key", "1").and()).isInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
     public void testOr() throws Exception {
         QueryBuilder generator = queryGenerator
                 .contains("key", "1")
                 .contains("key", "2")
                 .or();
         assertThat(generator.toString()).isEqualTo("or(contains(\"key\",\"1\"),contains(\"key\",\"2\"))");
+    }
+
+    @Test
+    public void testOrOfTooLittle() throws Exception {
+        assertThatThrownBy(() -> queryGenerator.contains("key","1").or()).isInstanceOf(IllegalStateException.class);
     }
 
     @Test

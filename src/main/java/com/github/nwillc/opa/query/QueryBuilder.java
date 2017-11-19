@@ -86,6 +86,9 @@ public class QueryBuilder<T> {
      * @return the query builder.
      */
     public QueryBuilder<T> not() {
+        if (queries.isEmpty()) {
+            throw new IllegalStateException("Nothing to negate");
+        }
         queries.addFirst(new Logical<>(Operator.NOT, queries.removeFirst()));
         return this;
     }
@@ -96,6 +99,9 @@ public class QueryBuilder<T> {
      * @return the query builder.
      */
     public QueryBuilder<T> and() {
+        if (queries.size() < 2) {
+            throw new IllegalStateException("And requires multiple queries");
+        }
         final Query<T> and = new Logical<>(Operator.AND, queries);
         queries = new ArrayDeque<>();
         queries.addFirst(and);
@@ -108,6 +114,9 @@ public class QueryBuilder<T> {
      * @return the query builder.
      */
     public QueryBuilder<T> or() {
+        if (queries.size() < 2) {
+            throw new IllegalStateException("Or requires multiple queries");
+        }
         final Query<T> and = new Logical<>(Operator.OR, queries);
         queries = new ArrayDeque<>();
         queries.addFirst(and);
