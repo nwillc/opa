@@ -12,7 +12,7 @@ buildscript {
     dependencies {
         classpath 'gradle.plugin.com.github.nwillc:vplugin:2.1.1',
                 'org.ajoberstar:gradle-git:1.7.2',
-                'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3',
+                'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0',
                 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.2.2'
     }
 }
@@ -60,12 +60,12 @@ dependencies {
 }
 
 group = 'com.github.nwillc'
-version = '0.6.5-SNAPSHOT'
+version = '0.6.5'
 targetCompatibility = '1.8'
 sourceCompatibility = '1.8'
 
 test {
-    jvmArgs "-Djdk.attach.allowAttachSelf"
+    jvmArgs = [ '-Djdk.attach.allowAttachSelf', '-Dtinylog.level=debug']
     
     beforeTest { descriptor ->
         logger.lifecycle("\tRunning $descriptor.className.$descriptor.name")
@@ -79,6 +79,7 @@ test {
 
     testLogging {
         exceptionFormat 'full'
+        showStandardStreams true
     }
 }
 
