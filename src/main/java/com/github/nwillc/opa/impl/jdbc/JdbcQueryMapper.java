@@ -59,12 +59,14 @@ public class JdbcQueryMapper<T> implements QueryMapper<T> {
                 phrases.addLast("NOT ( " + last + " )");
                 break;
             case AND:
-                collect = phrases.stream().collect(Collectors.joining(" AND "));
+                collect = phrases.stream().collect(Collectors
+                        .joining(" AND ", "( ", " )"));
                 phrases = new ArrayDeque<>();
                 phrases.addLast(collect);
                 break;
             case OR:
-                collect = phrases.stream().collect(Collectors.joining(" OR "));
+                collect = phrases.stream().collect(Collectors
+                        .joining(" OR ", "( ", " )"));
                 phrases = new ArrayDeque<>();
                 phrases.addLast(collect);
                 break;

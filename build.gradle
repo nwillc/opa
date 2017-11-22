@@ -11,7 +11,7 @@ buildscript {
     }
     dependencies {
         classpath 'gradle.plugin.com.github.nwillc:vplugin:2.1.1',
-                'org.ajoberstar:gradle-git:1.7.2',
+                'org.ajoberstar:gradle-git-publish:0.3.2',
                 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0',
                 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.2.2'
     }
@@ -22,7 +22,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'jacoco'
 apply plugin: 'pmd'
 apply plugin: 'com.github.nwillc.vplugin'
-apply plugin: 'org.ajoberstar.github-pages'
+apply plugin: 'org.ajoberstar.git-publish'
 apply plugin: 'com.jfrog.bintray'
 apply plugin: 'info.solidsoft.pitest'
 
@@ -60,7 +60,7 @@ dependencies {
 }
 
 group = 'com.github.nwillc'
-version = '0.6.7'
+version = '0.6.8'
 targetCompatibility = '1.8'
 sourceCompatibility = '1.8'
 
@@ -164,12 +164,17 @@ pmd {
     ]
 }
 
-githubPages {
-    pages {
-        from javadoc
-        into 'javadoc'
+gitPublish {
+    repoUri = 'git@github.com:nwillc/opa.git'
+    branch = 'gh-pages'
+    contents {
+        from (javadoc) {
+            into 'javadoc'
+        }
     }
 }
+
+gitPublishCopy.dependsOn javadoc
 
 pitest {
     threads = 4

@@ -75,7 +75,7 @@ public class JdbcQueryMapperTest extends QueryMapperTest {
 
         final JdbcQueryMapper<LabelValue> queryMapper = new JdbcQueryMapper<>(null);
         final Object apply = query.apply(queryMapper);
-        assertThat(apply.toString()).isEqualTo("value = 'VALUE' AND label like '%LABEL%'");
+        assertThat(apply.toString()).isEqualTo("( value = 'VALUE' AND label like '%LABEL%' )");
     }
 
     @Test
@@ -89,7 +89,22 @@ public class JdbcQueryMapperTest extends QueryMapperTest {
 
         final JdbcQueryMapper<LabelValue> queryMapper = new JdbcQueryMapper<>(null);
         final Object apply = query.apply(queryMapper);
-        assertThat(apply.toString()).isEqualTo("value = 'VALUE' OR label = 'VALUE' OR label like '%LABEL%'");
+        assertThat(apply.toString()).isEqualTo("( value = 'VALUE' OR label = 'VALUE' OR label like '%LABEL%' )");
+    }
+
+    @Test
+    public void testSqlAndOr() throws Exception {
+        final Query<LabelValue> query = new QueryBuilder<>(LabelValue.class)
+                .eq("value", "VALUE")
+                .eq("label", "VALUE")
+                .or()
+                .contains("label", "LABEL")
+                .and()
+                .build();
+
+        final JdbcQueryMapper<LabelValue> queryMapper = new JdbcQueryMapper<>(null);
+        final Object apply = query.apply(queryMapper);
+        assertThat(apply.toString()).isEqualTo("( ( value = 'VALUE' OR label = 'VALUE' ) AND label like '%LABEL%' )");
     }
 
     private class LabelValue {
