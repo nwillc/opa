@@ -35,10 +35,6 @@ import java.util.stream.Collectors;
 public class JdbcQueryMapper<T> implements QueryMapper<T> {
     private Deque<String> phrases = new ArrayDeque<>();
 
-    JdbcQueryMapper(String select) {
-
-    }
-
     @Override
     public Object apply(Query<T> tQuery) {
         final String collect;

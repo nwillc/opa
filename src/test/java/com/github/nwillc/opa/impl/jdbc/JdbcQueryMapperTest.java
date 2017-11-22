@@ -15,7 +15,6 @@
 
 package com.github.nwillc.opa.impl.jdbc;
 
-import com.github.nwillc.funjdbc.SqlStatement;
 import com.github.nwillc.opa.Dao;
 import com.github.nwillc.opa.junit.AbstractDaoTest;
 import com.github.nwillc.opa.junit.QueryMapperTest;
@@ -37,7 +36,7 @@ public class JdbcQueryMapperTest extends QueryMapperTest {
                 .eq("label", "LABEL")
                 .build();
 
-        final JdbcQueryMapper<LabelValue> queryMapper = new JdbcQueryMapper<>(null);
+        final JdbcQueryMapper<LabelValue> queryMapper = new JdbcQueryMapper<>();
         final Object apply = query.apply(queryMapper);
         assertThat(apply.toString()).isEqualTo("label = 'LABEL'");
     }
@@ -48,7 +47,7 @@ public class JdbcQueryMapperTest extends QueryMapperTest {
                 .contains("label", "LABEL")
                 .build();
 
-        final JdbcQueryMapper<LabelValue> queryMapper = new JdbcQueryMapper<>(null);
+        final JdbcQueryMapper<LabelValue> queryMapper = new JdbcQueryMapper<>();
         final Object apply = query.apply(queryMapper);
         assertThat(apply.toString()).isEqualTo("label like '%LABEL%'");
     }
@@ -60,7 +59,7 @@ public class JdbcQueryMapperTest extends QueryMapperTest {
                 .not()
                 .build();
 
-        final JdbcQueryMapper<LabelValue> queryMapper = new JdbcQueryMapper<>(null);
+        final JdbcQueryMapper<LabelValue> queryMapper = new JdbcQueryMapper<>();
         final Object apply = query.apply(queryMapper);
         assertThat(apply.toString()).isEqualTo("NOT ( value = 'VALUE' )");
     }
@@ -73,7 +72,7 @@ public class JdbcQueryMapperTest extends QueryMapperTest {
                 .and()
                 .build();
 
-        final JdbcQueryMapper<LabelValue> queryMapper = new JdbcQueryMapper<>(null);
+        final JdbcQueryMapper<LabelValue> queryMapper = new JdbcQueryMapper<>();
         final Object apply = query.apply(queryMapper);
         assertThat(apply.toString()).isEqualTo("( value = 'VALUE' AND label like '%LABEL%' )");
     }
@@ -87,7 +86,7 @@ public class JdbcQueryMapperTest extends QueryMapperTest {
                 .or()
                 .build();
 
-        final JdbcQueryMapper<LabelValue> queryMapper = new JdbcQueryMapper<>(null);
+        final JdbcQueryMapper<LabelValue> queryMapper = new JdbcQueryMapper<>();
         final Object apply = query.apply(queryMapper);
         assertThat(apply.toString()).isEqualTo("( value = 'VALUE' OR label = 'VALUE' OR label like '%LABEL%' )");
     }
@@ -102,7 +101,7 @@ public class JdbcQueryMapperTest extends QueryMapperTest {
                 .and()
                 .build();
 
-        final JdbcQueryMapper<LabelValue> queryMapper = new JdbcQueryMapper<>(null);
+        final JdbcQueryMapper<LabelValue> queryMapper = new JdbcQueryMapper<>();
         final Object apply = query.apply(queryMapper);
         assertThat(apply.toString()).isEqualTo("( ( value = 'VALUE' OR label = 'VALUE' ) AND label like '%LABEL%' )");
     }

@@ -94,7 +94,7 @@ public class QueryBuilder<T> {
     }
 
     /**
-     * And the prior queries.
+     * And all the prior queries.
      *
      * @return the query builder.
      */
@@ -109,7 +109,7 @@ public class QueryBuilder<T> {
     }
 
     /**
-     * Or the prior queries.
+     * Or all the prior queries.
      *
      * @return the query builder.
      */

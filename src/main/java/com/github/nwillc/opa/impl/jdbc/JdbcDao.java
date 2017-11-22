@@ -62,7 +62,7 @@ public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
 
     @Override
     public Stream<T> find(Query<T> query) {
-        final JdbcQueryMapper<T> mapper = new JdbcQueryMapper<>(configuration.getQueryAll().toString());
+        final JdbcQueryMapper<T> mapper = new JdbcQueryMapper<>();
         try {
             final SqlStatement sqlStatement = new SqlStatement("%s WHERE %s", configuration.getQueryAll().toString(), query.apply(mapper).toString());
             return configuration.dbQuery(configuration.getExtractor(), sqlStatement);
