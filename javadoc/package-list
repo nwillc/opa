@@ -1,9 +1,0 @@
-com.github.nwillc.opa
-com.github.nwillc.opa.impl
-com.github.nwillc.opa.impl.jdbc
-com.github.nwillc.opa.impl.memory
-com.github.nwillc.opa.impl.mongo
-com.github.nwillc.opa.junit
-com.github.nwillc.opa.query
-com.github.nwillc.opa.transaction
-com.github.nwillc.opa.util

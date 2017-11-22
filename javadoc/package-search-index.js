@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"com.github.nwillc.opa"},{"l":"com.github.nwillc.opa.impl"},{"l":"com.github.nwillc.opa.impl.jdbc"},{"l":"com.github.nwillc.opa.impl.memory"},{"l":"com.github.nwillc.opa.impl.mongo"},{"l":"com.github.nwillc.opa.junit"},{"l":"com.github.nwillc.opa.query"},{"l":"com.github.nwillc.opa.transaction"},{"l":"com.github.nwillc.opa.util"}]
