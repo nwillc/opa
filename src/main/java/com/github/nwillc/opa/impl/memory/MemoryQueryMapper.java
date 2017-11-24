@@ -20,18 +20,18 @@ import com.github.nwillc.opa.query.Query;
 import com.github.nwillc.opa.query.QueryMapper;
 
 import java.util.ArrayDeque;
+import java.util.Collection;
 import java.util.Deque;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class MemoryQueryMapper<T> implements QueryMapper<T> {
-    private final Deque<Predicate<T>> predicates = new ArrayDeque<>();
+    private Deque<Predicate<T>> predicates = new ArrayDeque<>();
 
     @Override
     @SuppressWarnings("unchecked")
     public Predicate<T> apply(final Query<T> tQuery) {
-        Predicate<T> one, two;
         Function<T, String> accessor;
         String value;
 
@@ -49,22 +49,47 @@ public class MemoryQueryMapper<T> implements QueryMapper<T> {
                 predicates.addLast(t -> accessor.apply(t).contains(value));
                 break;
             case NOT:
-                one = predicates.removeLast();
-                predicates.addLast(t -> !one.test(t));
+                final Predicate<T> predicate = predicates.removeLast();
+                predicates.addLast(predicate.negate());
                 break;
             case AND:
-                one = predicates.removeLast();
-                two = predicates.removeLast();
-                predicates.addLast(t -> one.test(t)
-                        && two.test(t));
+                final AllMatch allMatch = new AllMatch(predicates);
+                predicates = new ArrayDeque<>();
+                predicates.addLast(allMatch);
                 break;
             case OR:
-                one = predicates.removeLast();
-                two = predicates.removeLast();
-                predicates.addLast(t -> one.test(t) || two.test(t));
+                final AnyMatch anyMatch = new AnyMatch(predicates);
+                predicates = new ArrayDeque<>();
+                predicates.addLast(anyMatch);
                 break;
         }
 
         return predicates.getFirst();
+    }
+
+    private class AllMatch implements Predicate<T> {
+        private final Collection<Predicate<T>> predicates;
+
+        private AllMatch(Collection<Predicate<T>> predicates) {
+            this.predicates = predicates;
+        }
+
+        @Override
+        public boolean test(T t) {
+            return predicates.stream().allMatch(p -> p.test(t));
+        }
+    }
+
+    private class AnyMatch implements Predicate<T> {
+        private final Collection<Predicate<T>> predicates;
+
+        private AnyMatch(Collection<Predicate<T>> predicates) {
+            this.predicates = predicates;
+        }
+
+        @Override
+        public boolean test(T t) {
+            return predicates.stream().anyMatch(p -> p.test(t));
+        }
     }
 }

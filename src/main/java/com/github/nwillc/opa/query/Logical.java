@@ -44,6 +44,6 @@ public class Logical<T> extends Query<T> {
     @Override
     public String toString() {
         return getOperator().name().toLowerCase() +
-                '(' + queries.stream().map(Query::toString).collect(Collectors.joining(",")) + ')';
+                queries.stream().map(Query::toString).collect(Collectors.joining(",","(",")"));
     }
 }
