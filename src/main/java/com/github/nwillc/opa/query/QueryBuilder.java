@@ -33,11 +33,21 @@ import java.util.stream.Collectors;
  * QueryBuilder usages:
  * <pre>
  *     {@code
- *          // Check for a key of "pi" and a value of "3.142"
- *          new QueryBuilder(KeyValue.class).eq("key","pi").eq("value","3.142").and().build();
+ *          // Check for a key not equal to "pi" and a value of "3.142"
+ *          new QueryBuilder(KeyValue.class)
+ *              .eq("key","pi")
+ *              .not()
+ *              .eq("value","3.142")
+ *              .and()
+ *              .build();
  *
- *          // Check for a key of "today" or "tomorrow"
- *          new QueryBuilder(KeyValue.class).eq("key","today").eq("key","tomorrow").or().build();
+ *          // Check for a key of "yesterday" or "today" or "tomorrow"
+ *          new QueryBuilder(KeyValue.class)
+ *              .eq("key","yesterday")
+ *              .eq("key","today")
+ *              .eq("key","tomorrow")
+ *              .or()
+ *              .build();
  *
  *          // Check for an key "name" and a value containing "jon"
  *          new QueryBuilder(KeyValue.class).eq("key","name").contains("value","jon").and().build();

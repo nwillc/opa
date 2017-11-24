@@ -16,10 +16,7 @@
 package com.github.nwillc.opa.impl.jdbc;
 
 import com.github.nwillc.funjdbc.SqlStatement;
-import com.github.nwillc.opa.query.Comparison;
-import com.github.nwillc.opa.query.Logical;
-import com.github.nwillc.opa.query.Query;
-import com.github.nwillc.opa.query.QueryMapper;
+import com.github.nwillc.opa.query.*;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -32,9 +29,7 @@ import java.util.stream.Collectors;
  *
  * @param <T> The entity type.
  */
-public class JdbcQueryMapper<T> implements QueryMapper<T> {
-    private Deque<String> phrases = new ArrayDeque<>();
-
+public class JdbcQueryMapper<T> extends DequeQueryMapper<String, T> {
     @Override
     public Object apply(Query<T> tQuery) {
         final String collect;

@@ -16,6 +16,7 @@
 package com.github.nwillc.opa.impl.mongo;
 
 import com.github.nwillc.opa.query.Comparison;
+import com.github.nwillc.opa.query.DequeQueryMapper;
 import com.github.nwillc.opa.query.Query;
 import com.github.nwillc.opa.query.QueryMapper;
 import com.mongodb.client.model.Filters;
@@ -24,9 +25,7 @@ import org.bson.conversions.Bson;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-public class MongoQueryMapper<T> implements QueryMapper<T> {
-    private Deque<Bson> bsons = new ArrayDeque<>();
-
+public class MongoQueryMapper<T> extends DequeQueryMapper<Bson,T> {
     @Override
     public Object apply(Query<T> tQuery) {
         String fieldName, value;
@@ -36,29 +35,29 @@ public class MongoQueryMapper<T> implements QueryMapper<T> {
             case EQ:
                 fieldName = ((Comparison<T>) tQuery).getFieldName();
                 value = ((Comparison<T>) tQuery).getValue();
-                bsons.addLast(Filters.eq(fieldName, value));
+                phrases.addLast(Filters.eq(fieldName, value));
                 break;
             case CONTAINS:
                 fieldName = ((Comparison<T>) tQuery).getFieldName();
                 value = ((Comparison<T>) tQuery).getValue();
-                bsons.addLast(Filters.regex(fieldName, ".*" + value + ".*", "i"));
+                phrases.addLast(Filters.regex(fieldName, ".*" + value + ".*", "i"));
                 break;
             case NOT:
-                bson = bsons.removeLast();
-                bsons.addLast(Filters.not(bson));
+                bson = phrases.removeLast();
+                phrases.addLast(Filters.not(bson));
                 break;
             case AND:
-                bson = Filters.and(bsons);
-                bsons = new ArrayDeque<>();
-                bsons.addLast(bson);
+                bson = Filters.and(phrases);
+                phrases = new ArrayDeque<>();
+                phrases.addLast(bson);
                 break;
             case OR:
-                bson = Filters.or(bsons);
-                bsons = new ArrayDeque<>();
-                bsons.addLast(bson);
+                bson = Filters.or(phrases);
+                phrases = new ArrayDeque<>();
+                phrases.addLast(bson);
                 break;
         }
 
-        return bsons.getFirst();
+        return phrases.getFirst();
     }
 }

@@ -16,6 +16,7 @@
 package com.github.nwillc.opa.impl.memory;
 
 import com.github.nwillc.opa.query.Comparison;
+import com.github.nwillc.opa.query.DequeQueryMapper;
 import com.github.nwillc.opa.query.Query;
 import com.github.nwillc.opa.query.QueryMapper;
 
@@ -26,9 +27,7 @@ import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class MemoryQueryMapper<T> implements QueryMapper<T> {
-    private Deque<Predicate<T>> predicates = new ArrayDeque<>();
-
+public class MemoryQueryMapper<T> extends DequeQueryMapper<Predicate<T>,T> {
     @Override
     @SuppressWarnings("unchecked")
     public Predicate<T> apply(final Query<T> tQuery) {
@@ -41,30 +40,30 @@ public class MemoryQueryMapper<T> implements QueryMapper<T> {
             case EQ:
                 accessor = ((Comparison) tQuery).getAccessor();
                 value = ((Comparison) tQuery).getValue();
-                predicates.addLast(t -> accessor.apply(t).equals(value));
+                phrases.addLast(t -> accessor.apply(t).equals(value));
                 break;
             case CONTAINS:
                 accessor = ((Comparison) tQuery).getAccessor();
                 value = ((Comparison) tQuery).getValue();
-                predicates.addLast(t -> accessor.apply(t).contains(value));
+                phrases.addLast(t -> accessor.apply(t).contains(value));
                 break;
             case NOT:
-                final Predicate<T> predicate = predicates.removeLast();
-                predicates.addLast(predicate.negate());
+                final Predicate<T> predicate = phrases.removeLast();
+                phrases.addLast(predicate.negate());
                 break;
             case AND:
-                final AllMatch allMatch = new AllMatch(predicates);
-                predicates = new ArrayDeque<>();
-                predicates.addLast(allMatch);
+                final AllMatch allMatch = new AllMatch(phrases);
+                phrases = new ArrayDeque<>();
+                phrases.addLast(allMatch);
                 break;
             case OR:
-                final AnyMatch anyMatch = new AnyMatch(predicates);
-                predicates = new ArrayDeque<>();
-                predicates.addLast(anyMatch);
+                final AnyMatch anyMatch = new AnyMatch(phrases);
+                phrases = new ArrayDeque<>();
+                phrases.addLast(anyMatch);
                 break;
         }
 
-        return predicates.getFirst();
+        return phrases.getFirst();
     }
 
     private class AllMatch implements Predicate<T> {
