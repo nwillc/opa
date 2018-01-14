@@ -37,7 +37,7 @@ public class QueryMapperTest {
         assertThat(str.get()).isEqualTo("or(eq(\"foo\",\"bar\"),eq(\"foo\",\"baz\"))");
     }
 
-    class Bean {
-        String foo;
+    public class Bean {
+        public String foo;
     }
 }

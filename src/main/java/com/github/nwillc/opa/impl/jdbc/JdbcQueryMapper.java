@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 nwillc@gmail.com
+ * Copyright 2018 nwillc@gmail.com
  *
  * Permission to use, copy, modify, and/or distribute this software for any purpose with or without
  * fee is hereby granted, provided that the above copyright notice and this permission notice appear
@@ -15,11 +15,11 @@
 
 package com.github.nwillc.opa.impl.jdbc;
 
-import com.github.nwillc.funjdbc.SqlStatement;
-import com.github.nwillc.opa.query.*;
+import com.github.nwillc.opa.query.Comparison;
+import com.github.nwillc.opa.query.DequeQueryMapper;
+import com.github.nwillc.opa.query.Query;
 
 import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.stream.Collectors;
 
 

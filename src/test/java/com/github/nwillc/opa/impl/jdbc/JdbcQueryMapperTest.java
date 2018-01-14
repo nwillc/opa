@@ -106,8 +106,8 @@ public class JdbcQueryMapperTest extends QueryMapperTest {
         assertThat(apply.toString()).isEqualTo("( ( value = 'VALUE' OR label = 'VALUE' ) AND label like '%LABEL%' )");
     }
 
-    private class LabelValue {
-        String label;
-        String value;
+    public class LabelValue {
+        public String label;
+        public String value;
     }
 }

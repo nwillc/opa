@@ -28,7 +28,7 @@ public class ComparisonTest {
         assertThat(comparison.getFieldName()).isEqualTo("label");
     }
 
-    static class Bean {
-        String label;
+     public class Bean {
+        public String label;
     }
 }
