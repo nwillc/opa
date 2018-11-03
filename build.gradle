@@ -10,9 +10,9 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'gradle.plugin.com.github.nwillc:vplugin:2.1.1',
+        classpath "gradle.plugin.com.github.nwillc:vplugin:$vplugin_version",
                 'org.ajoberstar:gradle-git-publish:0.3.2',
-                'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.0',
+                "com.jfrog.bintray.gradle:gradle-bintray-plugin:$bintray_plugin_version",
                 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.2.2'
     }
 }
@@ -47,7 +47,7 @@ dependencies {
             "junit:junit:$junit_version",
             "org.assertj:assertj-core:$assertj_version",
             "com.github.nwillc:fun-jdbc:$fun_jdbc_version",
-            "net.openhft:compiler:2.3.0"
+            "net.openhft:compiler:$openhft_version"
 
     runtime "org.tinylog:slf4j-binding:$tinylog_version"
 
@@ -61,7 +61,7 @@ dependencies {
 }
 
 group = 'com.github.nwillc'
-version = '0.6.10-SNAPSHOT'
+version = '0.6.10'
 targetCompatibility = '1.8'
 sourceCompatibility = '1.8'
 

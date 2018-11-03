@@ -45,7 +45,7 @@ public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
     @Override
     public Optional<T> findOne(K key) {
         try {
-            return configuration.dbFind(configuration.getExtractor(), configuration.getRetrieve().apply(key));
+            return configuration.dbFind(configuration.getRetrieve().apply(key), configuration.getExtractor());
         } catch (SQLException e) {
             throw new UncheckedSQLException("Find failed", e);
         }
@@ -54,7 +54,7 @@ public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
     @Override
     public Stream<T> findAll() {
         try {
-            return configuration.dbQuery(configuration.getExtractor(), configuration.getQueryAll());
+            return configuration.dbQuery(configuration.getQueryAll(), configuration.getExtractor());
         } catch (SQLException e) {
             throw new UncheckedSQLException("findAll failed", e);
         }
@@ -65,7 +65,7 @@ public class JdbcDao<K, T extends HasKey<K>> implements Dao<K, T> {
         final JdbcQueryMapper<T> mapper = new JdbcQueryMapper<>();
         try {
             final SqlStatement sqlStatement = new SqlStatement("%s WHERE %s", configuration.getQueryAll().toString(), query.apply(mapper).toString());
-            return configuration.dbQuery(configuration.getExtractor(), sqlStatement);
+            return configuration.dbQuery(sqlStatement, configuration.getExtractor());
         } catch (Exception e) {
             throw new UncheckedSQLException("find failed", e);
         }

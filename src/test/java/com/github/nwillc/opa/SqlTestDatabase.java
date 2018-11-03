@@ -16,8 +16,6 @@
 package com.github.nwillc.opa;
 
 import com.github.nwillc.funjdbc.DbAccessor;
-import com.github.nwillc.funjdbc.migrate.Manager;
-import com.github.nwillc.funjdbc.migrate.MigrationBase;
 import org.apache.commons.dbcp2.*;
 import org.apache.commons.pool2.ObjectPool;
 import org.apache.commons.pool2.impl.GenericObjectPool;
@@ -25,7 +23,8 @@ import org.apache.commons.pool2.impl.GenericObjectPool;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
+
+import static com.github.nwillc.funjdbc.SqlStatement.sql;
 
 public class SqlTestDatabase implements DbAccessor {
     private final static String DRIVER = "org.h2.Driver";
@@ -37,11 +36,7 @@ public class SqlTestDatabase implements DbAccessor {
         Class.forName(DRIVER);
         String name = String.format("db%04d", instanceId++);
         dataSource = setupDataSource(URL + name);
-        Manager manager = Manager.getInstance();
-        manager.setConnectionProvider(this);
-        manager.enableMigrations();
-        manager.add(new CreateMigration());
-        manager.doMigrations();
+        dbUpdate(sql("CREATE TABLE TestEntity ( key CHAR(20), value CHAR(20), PRIMARY KEY(key) )"));
     }
 
     private static DataSource setupDataSource(String connectURI) {
@@ -55,25 +50,5 @@ public class SqlTestDatabase implements DbAccessor {
     @Override
     public Connection getConnection() throws SQLException {
         return dataSource.getConnection();
-    }
-
-    static class CreateMigration extends MigrationBase {
-        @Override
-        public String getDescription() {
-            return "Create Schema";
-        }
-
-        @Override
-        public String getIdentifier() {
-            return "1";
-        }
-
-        @Override
-        public void perform() throws Exception {
-            try (Connection c = getConnection();
-                 Statement statement = c.createStatement()) {
-                statement.execute("CREATE TABLE TestEntity ( key CHAR(20), value CHAR(20), PRIMARY KEY(key) )");
-            }
-        }
     }
 }
